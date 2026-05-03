@@ -1,0 +1,16 @@
+api_platform:
+    title: 'Manga Reader API'
+    description: 'API for manga-reader application'
+    version: '1.0.0'
+    mapping:
+        paths: ['%kernel.project_dir%/src/ApiResource', '%kernel.project_dir%/src/Entity']
+    
+    # Enable OpenAPI and documentation
+    enable_swagger: true
+    enable_docs: true
+    enable_entrypoint: true
+    
+    # Enable all documentation UIs
+    enable_swagger_ui: true
+    enable_re_doc: true
+    enable_scalar: true

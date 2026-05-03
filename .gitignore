@@ -1,0 +1,21 @@
+# Symfony backend
+/backend/var/
+/backend/vendor/
+/backend/.env.local
+/backend/.php-cs-fixer.cache
+
+# Next.js frontend
+/frontend/node_modules/
+/frontend/.next/
+/frontend/out/
+/frontend/.env.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

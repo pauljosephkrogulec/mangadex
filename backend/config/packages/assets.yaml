@@ -1,0 +1,10 @@
+framework:
+    assets:
+        # Configures the base path for all assets
+        base_path: ''
+        # Enables versioning for cache busting (optional)
+        # version: 'v1'
+        # Configure packages if needed
+        packages:
+            # API Platform assets don't need a specific package
+            # but the asset() function needs the framework.assets config to be present
