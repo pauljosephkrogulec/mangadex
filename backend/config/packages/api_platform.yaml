@@ -10,7 +10,14 @@ api_platform:
     enable_docs: true
     enable_entrypoint: true
     
-    # Enable all documentation UIs
-    enable_swagger_ui: true
-    enable_re_doc: true
-    enable_scalar: true
+    # Enable all documentation UIs (disable in prod via env)
+    enable_swagger_ui: '%env(bool:API_PLATFORM_ENABLE_UI)%'
+    enable_re_doc: '%env(bool:API_PLATFORM_ENABLE_UI)%'
+    enable_scalar: '%env(bool:API_PLATFORM_ENABLE_UI)%'
+    
+    # Collection settings (pagination)
+    collection:
+        pagination:
+            enabled: true
+            page_parameter_name: 'page'
+            items_per_page_parameter_name: 'itemsPerPage'

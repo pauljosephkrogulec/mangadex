@@ -1,4 +1,4 @@
-FROM php:8.4-cli
+FROM php:8.4-cli AS builder
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -11,7 +11,8 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
-    && docker-php-ext-install zip intl pcntl mbstring gd \
+    libpq-dev \
+    && docker-php-ext-install zip intl pcntl mbstring gd pdo pdo_pgsql pgsql \
     && pecl install apcu && docker-php-ext-enable apcu \
     && pecl install pcov && docker-php-ext-enable pcov
 
@@ -23,9 +24,29 @@ WORKDIR /app
 # Copy backend code
 COPY . .
 
-# Install PHP dependencies
+# Install PHP dependencies (including dev for now, can use --no-dev in prod)
 RUN composer install --no-interaction --optimize-autoloader
 
-EXPOSE 8000
+# Production stage
+FROM php:8.4-fpm
 
-CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
+# Install production dependencies
+RUN apt-get update && apt-get install -y \
+    libzip-dev \
+    libicu-dev \
+    libonig-dev \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    libpq-dev \
+    && docker-php-ext-install zip intl pcntl mbstring gd pdo pdo_pgsql pgsql \
+    && pecl install apcu && docker-php-ext-enable apcu \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder /app /app
+
+WORKDIR /app
+
+EXPOSE 9000
+
+CMD ["php-fpm"]
