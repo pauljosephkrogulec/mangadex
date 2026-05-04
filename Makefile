@@ -64,5 +64,15 @@ start-frontend:
 test-backend:
 	docker compose exec backend php bin/phpunit
 
+test-frontend:
+	docker compose exec frontend npm run test
+
+test-frontend-coverage:
+	docker compose exec frontend npm run test:coverage
+
+test-coverage:
+	docker compose exec backend php bin/phpunit --coverage-text
+	docker compose exec frontend npm run test:coverage
+
 clear-cache:
 	docker compose exec backend php bin/console cache:clear

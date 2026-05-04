@@ -14,6 +14,7 @@ A manga reading platform inspired by [MangaDex](https://mangadex.org), built wit
 - **Symfony 8.0** (PHP 8.4+)
 - **API Platform 4.3** for REST API
 - **Doctrine ORM** with PostgreSQL
+- **Lexik JWT Authentication Bundle** for JWT auth
 - **Nelmio CORS Bundle** for cross-origin requests
 
 ### Infrastructure
@@ -81,13 +82,71 @@ Then visit http://localhost in your browser.
 | `make install-backend` | Install backend dependencies |
 | `make lint-frontend` | Run frontend linter |
 | `make test-backend` | Run backend tests |
+| `make test-frontend` | Run frontend tests |
+| `make test-frontend-coverage` | Run frontend tests with coverage |
 | `make clear-cache` | Clear backend cache |
+
+## Testing
+
+### Running Tests
+
+```bash
+make test-coverage
+```
+
+This runs both backend and frontend tests with coverage reports:
+- **Backend**: PHPUnit with PCOV coverage driver
+- **Frontend**: Jest with coverage thresholds (90%)
+
+### Test Coverage
+
+| Component | Coverage |
+|-----------|----------|
+| Backend (JwtAuthService) | 100% lines, 100% methods |
+| Frontend (auth.ts, LoginForm.tsx) | 100% branches, 100% lines |
+
+### Fixtures
+
+Backend uses `doctrine/doctrine-fixtures-bundle` for test fixtures:
+- `src/DataFixtures/AppFixtures.php` - Minimal fixture (JWT auth uses in-memory user)
 
 ## API Documentation
 
 Once the backend is running, you can access the API documentation at:
 - Swagger UI: http://localhost/api/docs
 - API Platform: http://localhost/api
+
+## JWT Authentication
+
+The API uses JWT (JSON Web Token) authentication for secure access to protected endpoints.
+
+### Login
+
+Send a POST request to `/api/login_check` with email and password:
+
+```bash
+curl -X POST http://localhost/api/login_check \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@example.com","password":"password123"}'
+```
+
+Response:
+```json
+{"token":"eyJ0eXAiOiJKV1QiLCJhbGc..."}
+```
+
+### Using the Token
+
+Include the token in the `Authorization` header for protected endpoints:
+
+```bash
+curl -X GET http://localhost/api \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+
+### Frontend Integration
+
+The frontend includes a login form component at `frontend/src/components/auth/LoginForm.tsx` and authentication utilities at `frontend/src/lib/auth.ts`.
 
 ## Environment Variables
 

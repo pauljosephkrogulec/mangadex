@@ -7,8 +7,13 @@ RUN apt-get update && apt-get install -y \
     curl \
     libzip-dev \
     libicu-dev \
-    && docker-php-ext-install zip intl pcntl \
-    && pecl install apcu && docker-php-ext-enable apcu
+    libonig-dev \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    && docker-php-ext-install zip intl pcntl mbstring gd \
+    && pecl install apcu && docker-php-ext-enable apcu \
+    && pecl install pcov && docker-php-ext-enable pcov
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
@@ -18,9 +23,8 @@ WORKDIR /app
 # Copy backend code
 COPY . .
 
-# Install PHP dependencies including TwigBundle
-RUN composer require symfony/twig-bundle --no-interaction && \
-    composer install --no-interaction --no-dev --optimize-autoloader
+# Install PHP dependencies
+RUN composer install --no-interaction --optimize-autoloader
 
 EXPOSE 8000
 
