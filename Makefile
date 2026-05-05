@@ -48,3 +48,9 @@ test-backend:
 
 clear-cache:
 	docker compose exec backend php bin/console cache:clear
+
+cleanup-files:
+	docker compose exec backend php bin/console app:cleanup-orphaned-files --no-interaction
+
+cleanup-files-dry-run:
+	docker compose exec backend php bin/console app:cleanup-orphaned-files --dry-run

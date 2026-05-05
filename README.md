@@ -86,6 +86,32 @@ Then visit http://localhost in your browser.
 | `make test-frontend-coverage` | Run frontend tests with coverage |
 | `make clear-cache` | Clear backend cache |
 
+## File Cleanup
+
+Orphaned files in `uploads/` (files not referenced in the database) are handled automatically:
+
+- **Automatic**: When a `CoverArt` or `Chapter` entity is deleted, files are automatically removed via Doctrine event subscriber
+- **Manual cleanup**: Use the CLI command to scan and remove orphaned files
+
+### CLI Command
+
+```bash
+# List orphaned files without deleting (dry run)
+docker compose exec backend php bin/console app:cleanup-orphaned-files --dry-run
+
+# Delete orphaned files
+docker compose exec backend php bin/console app:cleanup-orphaned-files
+
+# Clean only covers or chapters
+docker compose exec backend php bin/console app:cleanup-orphaned-files --covers-only
+docker compose exec backend php bin/console app:cleanup-orphaned-files --chapters-only
+```
+
+**Schedule daily cleanup** (add to crontab):
+```cron
+0 2 * * * cd /path/to/mangadex && docker compose exec -T backend php bin/console app:cleanup-orphaned-files --no-interaction
+```
+
 ## Testing
 
 ### Running Tests
