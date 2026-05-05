@@ -36,7 +36,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     'volume' => 'exact',
     'isPrimary' => 'exact'
 ])]
-#[ApiFilter(OrderFilter::class, properties: ['volume', 'isPrimary'])]
+#[ApiFilter(OrderFilter::class, properties: ['volume', 'isPrimary', 'createdAt'])]
 class CoverArt
 {
     #[ORM\Id]
@@ -44,6 +44,10 @@ class CoverArt
     #[ORM\Column]
     #[Groups(['cover_art:read', 'manga:read'])]
     private ?int $id = null;
+
+    #[ORM\Column(type: 'datetime')]
+    #[Groups(['cover_art:read'])]
+    private \DateTime $createdAt;
 
     #[ORM\ManyToOne(targetEntity: Manga::class, inversedBy: 'coverArts')]
     #[ORM\JoinColumn(nullable: false)]
@@ -65,9 +69,19 @@ class CoverArt
     #[Groups(['cover_art:read', 'cover_art:write', 'manga:read'])]
     private bool $isPrimary = false;
 
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
     }
 
     public function getManga(): Manga

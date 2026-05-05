@@ -36,7 +36,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     'name' => 'partial',
     'website' => 'partial'
 ])]
-#[ApiFilter(OrderFilter::class, properties: ['name'])]
+#[ApiFilter(OrderFilter::class, properties: ['name', 'createdAt'])]
 class ScanlationGroup
 {
     #[ORM\Id]
@@ -44,6 +44,10 @@ class ScanlationGroup
     #[ORM\Column]
     #[Groups(['scanlation_group:read', 'chapter:read'])]
     private ?int $id = null;
+
+    #[ORM\Column(type: 'datetime')]
+    #[Groups(['scanlation_group:read'])]
+    private \DateTime $createdAt;
 
     #[ORM\Column(length: 255, unique: true)]
     #[Assert\NotBlank]
@@ -63,12 +67,18 @@ class ScanlationGroup
 
     public function __construct()
     {
+        $this->createdAt = new \DateTime();
         $this->chapters = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
     }
 
     public function getName(): string

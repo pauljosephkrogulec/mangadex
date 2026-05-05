@@ -38,7 +38,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     'language' => 'exact',
     'volume' => 'exact'
 ])]
-#[ApiFilter(OrderFilter::class, properties: ['chapterNumber', 'volume', 'language'])]
+#[ApiFilter(OrderFilter::class, properties: ['chapterNumber', 'volume', 'language', 'createdAt'])]
 #[ApiFilter(RangeFilter::class, properties: ['chapterNumber'])]
 class Chapter
 {
@@ -47,6 +47,10 @@ class Chapter
     #[ORM\Column]
     #[Groups(['chapter:read'])]
     private ?int $id = null;
+
+    #[ORM\Column(type: 'datetime')]
+    #[Groups(['chapter:read'])]
+    private \DateTime $createdAt;
 
     #[ORM\ManyToOne(targetEntity: Manga::class, inversedBy: 'chapters')]
     #[ORM\JoinColumn(nullable: false)]
@@ -85,9 +89,19 @@ class Chapter
     #[Groups(['chapter:read', 'chapter:write'])]
     private array $pages = [];
 
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
     }
 
     public function getManga(): Manga

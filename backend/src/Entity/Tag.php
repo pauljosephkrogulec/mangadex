@@ -37,7 +37,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     'name' => 'partial',
     'groupName' => 'exact'
 ])]
-#[ApiFilter(OrderFilter::class, properties: ['name', 'groupName'])]
+#[ApiFilter(OrderFilter::class, properties: ['name', 'groupName', 'createdAt'])]
 class Tag
 {
     #[ORM\Id]
@@ -45,6 +45,10 @@ class Tag
     #[ORM\Column]
     #[Groups(['tag:read', 'manga:read'])]
     private ?int $id = null;
+
+    #[ORM\Column(type: 'datetime')]
+    #[Groups(['tag:read'])]
+    private \DateTime $createdAt;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
@@ -72,12 +76,18 @@ class Tag
 
     public function __construct()
     {
+        $this->createdAt = new \DateTime();
         $this->manga = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
     }
 
     public function getName(): string

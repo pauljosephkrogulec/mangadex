@@ -35,7 +35,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     'visibility' => 'exact',
     'user' => 'exact'
 ])]
-#[ApiFilter(OrderFilter::class, properties: ['name', 'visibility'])]
+#[ApiFilter(OrderFilter::class, properties: ['name', 'visibility', 'createdAt'])]
 class CustomList
 {
     #[ORM\Id]
@@ -43,6 +43,10 @@ class CustomList
     #[ORM\Column]
     #[Groups(['custom_list:read'])]
     private ?int $id = null;
+
+    #[ORM\Column(type: 'datetime')]
+    #[Groups(['custom_list:read'])]
+    private \DateTime $createdAt;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
@@ -61,9 +65,19 @@ class CustomList
     #[Groups(['custom_list:read', 'custom_list:write'])]
     private User $user;
 
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
     }
 
     public function getName(): string

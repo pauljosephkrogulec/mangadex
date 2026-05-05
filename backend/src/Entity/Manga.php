@@ -46,7 +46,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     'contentRating' => 'exact',
     'year' => 'exact'
 ])]
-#[ApiFilter(OrderFilter::class, properties: ['title', 'year', 'status'])]
+#[ApiFilter(OrderFilter::class, properties: ['title', 'year', 'status', 'createdAt'])]
 #[ApiFilter(RangeFilter::class, properties: ['year'])]
 class Manga
 {
@@ -55,6 +55,10 @@ class Manga
     #[ORM\Column]
     #[Groups(['manga:read', 'chapter:read'])]
     private ?int $id = null;
+
+    #[ORM\Column(type: 'datetime')]
+    #[Groups(['manga:read', 'manga:list'])]
+    private \DateTime $createdAt;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
@@ -107,6 +111,7 @@ class Manga
 
     public function __construct()
     {
+        $this->createdAt = new \DateTime();
         $this->creators = new ArrayCollection();
         $this->tags = new ArrayCollection();
         $this->chapters = new ArrayCollection();
@@ -116,6 +121,11 @@ class Manga
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
     }
 
     public function getTitle(): string

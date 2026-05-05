@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     'name' => 'partial',
     'type' => 'exact'
 ])]
-#[ApiFilter(OrderFilter::class, properties: ['name', 'type'])]
+#[ApiFilter(OrderFilter::class, properties: ['name', 'type', 'createdAt'])]
 class Creator
 {
     #[ORM\Id]
@@ -31,6 +31,10 @@ class Creator
     #[ORM\Column]
     #[Groups(['creator:read', 'manga:read'])]
     private ?int $id = null;
+
+    #[ORM\Column(type: 'datetime')]
+    #[Groups(['creator:read'])]
+    private \DateTime $createdAt;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
@@ -50,12 +54,18 @@ class Creator
 
     public function __construct()
     {
+        $this->createdAt = new \DateTime();
         $this->manga = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
     }
 
     public function getName(): string
