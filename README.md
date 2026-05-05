@@ -25,7 +25,7 @@ A manga reading platform inspired by [MangaDex](https://mangadex.org), built wit
 ## Project Structure
 
 ```
-manga-reader/
+mangadex/
 ├── backend/          # Symfony API backend
 ├── frontend/         # Next.js frontend
 ├── nginx/            # Nginx configuration
@@ -61,6 +61,21 @@ docker compose exec backend php bin/console doctrine:migrations:migrate --no-int
 
 Then visit http://localhost in your browser.
 
+### Database Migrations
+
+The database schema is managed via a single Doctrine migration that creates all tables from the entity mappings:
+
+```bash
+# Generate migration from entities (run after changing entities)
+make migrate-diff
+
+# Apply pending migrations
+make migrate
+
+# Reset database and start fresh (drops all data)
+make fresh
+```
+
 ## Available Commands
 
 | Command | Description |
@@ -70,21 +85,26 @@ Then visit http://localhost in your browser.
 | `make build` | Rebuild containers |
 | `make restart` | Restart all containers |
 | `make logs` | View all logs |
-| `make logs-frontend` | View frontend logs |
 | `make logs-backend` | View backend logs |
-| `make shell-frontend` | Access frontend container shell |
+| `make logs-frontend` | View frontend logs |
 | `make shell-backend` | Access backend container shell |
+| `make shell-frontend` | Access frontend container shell |
 | `make shell-db` | Access PostgreSQL shell |
 | `make migrate` | Run database migrations |
-| `make migrate-diff` | Generate new migration |
+| `make migrate-diff` | Generate new migration from entities |
+| `make migrate-rollback` | Rollback last migration |
 | `make fresh` | Reset everything and start fresh |
-| `make install-frontend` | Install frontend dependencies |
 | `make install-backend` | Install backend dependencies |
-| `make lint-frontend` | Run frontend linter |
+| `make install-frontend` | Install frontend dependencies |
+| `make lint` | Run linter on backend and frontend |
+| `make lint-backend` | Run PHP-CS-Fixer on backend (dry-run) |
+| `make lint-frontend` | Run ESLint on frontend |
+| `make fix-backend` | Auto-fix backend code style |
+| `make fix-frontend` | Auto-fix frontend code style |
 | `make test-backend` | Run backend tests |
-| `make test-frontend` | Run frontend tests |
-| `make test-frontend-coverage` | Run frontend tests with coverage |
 | `make clear-cache` | Clear backend cache |
+| `make cleanup-files` | Remove orphaned upload files |
+| `make cleanup-files-dry-run` | List orphaned files without deleting |
 
 ## File Cleanup
 
@@ -114,15 +134,37 @@ docker compose exec backend php bin/console app:cleanup-orphaned-files --chapter
 
 ## Testing
 
+### Linting
+
+```bash
+# Lint both backend and frontend
+make lint
+
+# Lint backend only (PHP-CS-Fixer)
+make lint-backend
+
+# Lint frontend only (ESLint)
+make lint-frontend
+
+# Auto-fix backend code style (PHP-CS-Fixer)
+make fix-backend
+
+# Auto-fix frontend code style (ESLint)
+make fix-frontend
+```
+
 ### Running Tests
 
 ```bash
-make test-coverage
-```
+# Backend tests
+make test-backend
 
-This runs both backend and frontend tests with coverage reports:
-- **Backend**: PHPUnit with PCOV coverage driver
-- **Frontend**: Jest with coverage thresholds (90%)
+# Frontend tests (from frontend directory)
+cd frontend && npm test
+
+# Frontend tests with coverage
+cd frontend && npm run test:coverage
+```
 
 ### Test Coverage
 
