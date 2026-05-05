@@ -10,10 +10,17 @@ framework:
 
     # Rate limiter configuration
     rate_limiter:
-        login:
-            policy: 'fixed_window'
-            limit: 5
-            interval: '1 minute'
+        limiters:
+            login:
+                policy: 'fixed_window'
+                limit: 5
+                interval: '1 minute'
+            registration:
+                policy: 'token_bucket'
+                limit: 3
+                rate:
+                    amount: 1
+                    interval: '3 minutes'
 
     #esi: true
     #fragments: true

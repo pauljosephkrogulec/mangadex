@@ -19,5 +19,19 @@ services:
     App\:
         resource: '../src/'
 
+    # User registration processor for password hashing
+    App\State\Processor\UserRegistrationProcessor:
+        decorates: 'api_platform.doctrine.orm.state.persist_processor'
+        arguments:
+            $decorated: '@App\State\Processor\UserRegistrationProcessor.inner'
+        autowire: true
+
+    # User update processor for password hashing
+    App\State\Processor\UserUpdateProcessor:
+        decorates: 'api_platform.doctrine.orm.state.persist_processor'
+        arguments:
+            $decorated: '@App\State\Processor\UserUpdateProcessor.inner'
+        autowire: true
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

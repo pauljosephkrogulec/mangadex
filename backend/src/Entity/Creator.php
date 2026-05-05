@@ -44,7 +44,7 @@ class Creator
     #[Groups(['creator:read', 'creator:write', 'manga:read'])]
     private string $type;
 
-    #[ORM\ManyToMany(targetEntity: Manga::class, mappedBy: 'creators', fetch: 'EAGER')]
+    #[ORM\ManyToMany(targetEntity: Manga::class, mappedBy: 'creators')]
     #[Groups(['creator:read'])]
     private Collection $manga;
 

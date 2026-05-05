@@ -5,6 +5,12 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\RangeFilter;
@@ -17,7 +23,15 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ApiResource(
     normalizationContext: ['groups' => ['chapter:read']],
     denormalizationContext: ['groups' => ['chapter:write']],
-    order: ['chapterNumber' => 'ASC']
+    order: ['chapterNumber' => 'ASC'],
+    operations: [
+        new GetCollection(),
+        new Get(),
+        new Put(security: "is_granted('ROLE_ADMIN')"),
+        new Delete(security: "is_granted('ROLE_ADMIN')"),
+        new Patch(security: "is_granted('ROLE_ADMIN')"),
+        new Post(security: "is_granted('ROLE_ADMIN')")
+    ]
 )]
 #[ApiFilter(SearchFilter::class, properties: [
     'manga' => 'exact',
@@ -34,10 +48,14 @@ class Chapter
     #[Groups(['chapter:read'])]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Manga::class, inversedBy: 'chapters', fetch: 'EAGER')]
+    #[ORM\ManyToOne(targetEntity: Manga::class, inversedBy: 'chapters')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['chapter:read', 'chapter:write'])]
     private Manga $manga;
+
+    #[ORM\ManyToOne(targetEntity: ScanlationGroup::class, inversedBy: 'chapters')]
+    #[Groups(['chapter:read', 'chapter:write'])]
+    private ?ScanlationGroup $scanlationGroup = null;
 
     #[ORM\Column(length: 50, nullable: true)]
     #[Assert\Length(max: 50)]
@@ -80,6 +98,17 @@ class Chapter
     public function setManga(Manga $manga): static
     {
         $this->manga = $manga;
+        return $this;
+    }
+
+    public function getScanlationGroup(): ?ScanlationGroup
+    {
+        return $this->scanlationGroup;
+    }
+
+    public function setScanlationGroup(?ScanlationGroup $scanlationGroup): static
+    {
+        $this->scanlationGroup = $scanlationGroup;
         return $this;
     }
 

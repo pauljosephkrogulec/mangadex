@@ -21,3 +21,7 @@ api_platform:
             enabled: true
             page_parameter_name: 'page'
             items_per_page_parameter_name: 'itemsPerPage'
+    
+    # Enable fetch join collection to prevent N+1 queries
+    eager_loading:
+        enabled: true
