@@ -88,7 +88,7 @@ class Chapter
     #[ORM\Column(type: 'json')]
     #[Assert\NotNull]
     #[Assert\Count(min: 1)]
-    #[Groups(['chapter:read', 'chapter:write'])]
+    #[Groups(['chapter:write'])]
     private array $pages = [];
 
     public function __construct()
@@ -178,6 +178,22 @@ class Chapter
     public function getPages(): array
     {
         return $this->pages;
+    }
+
+    #[Groups(['chapter:read'])]
+    public function getPageUrls(): array
+    {
+        if ($this->id === null) {
+            return [];
+        }
+
+        $urls = [];
+        $totalPages = count($this->pages);
+        for ($i = 1; $i <= $totalPages; $i++) {
+            $urls[] = sprintf('/api/chapters/%d/pages/%d', $this->id, $i);
+        }
+
+        return $urls;
     }
 
     /**
