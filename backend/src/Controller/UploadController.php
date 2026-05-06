@@ -33,20 +33,22 @@ class UploadController extends AbstractController
     {
         /** @var UploadedFile|null $file */
         $file = $request->files->get('cover');
-        $mangaId = $request->request->get('mangaId');
+        $mangaIdRaw = $request->request->get('mangaId');
+        $mangaId = is_numeric($mangaIdRaw) ? (int) $mangaIdRaw : 0;
         $volume = $request->request->get('volume');
+        $volume = $volume !== null ? (string) $volume : null;
         $isPrimary = $request->request->getBoolean('isPrimary', false);
 
-        if (!$file) {
+        if (! $file) {
             return $this->json(['error' => 'No cover file provided'], Response::HTTP_BAD_REQUEST);
         }
 
-        if (!$mangaId) {
-            return $this->json(['error' => 'mangaId is required'], Response::HTTP_BAD_REQUEST);
+        if ($mangaId <= 0) {
+            return $this->json(['error' => 'Valid mangaId is required'], Response::HTTP_BAD_REQUEST);
         }
 
         $manga = $em->getRepository(Manga::class)->find($mangaId);
-        if (!$manga) {
+        if (! $manga) {
             return $this->json(['error' => 'Manga not found'], Response::HTTP_NOT_FOUND);
         }
 
@@ -55,7 +57,12 @@ class UploadController extends AbstractController
             return $this->json(['error' => (string) $violations->get(0)->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
-        $imagePath = $this->storageService->storeCover($file, $manga->getId(), $volume);
+        $mangaId = $manga->getId();
+        if ($mangaId === null) {
+            return $this->json(['error' => 'Manga ID is null'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        $imagePath = $this->storageService->storeCover($file, $mangaId, $volume);
 
         $coverArt = new CoverArt();
         $coverArt->setManga($manga);
@@ -83,7 +90,7 @@ class UploadController extends AbstractController
     #[Route('/chapters/{id}/upload-pages', name: 'chapter_upload_pages', methods: ['POST'])]
     public function uploadChapterPages(int $id, Request $request, EntityManagerInterface $em): JsonResponse
     {
-        /** @var UploadedFile[] $files */
+        /** @var array<UploadedFile> $files */
         $files = $request->files->all('pages');
 
         if (empty($files)) {
@@ -91,16 +98,21 @@ class UploadController extends AbstractController
         }
 
         $chapter = $em->getRepository(Chapter::class)->find($id);
-        if (!$chapter) {
+        if (! $chapter) {
             return $this->json(['error' => 'Chapter not found'], Response::HTTP_NOT_FOUND);
         }
 
         $validationErrors = $this->uploadValidator->validateMultipleImages($files);
-        if (!empty($validationErrors)) {
+        if (! empty($validationErrors)) {
             return $this->json(['errors' => $validationErrors], Response::HTTP_BAD_REQUEST);
         }
 
-        $pagePaths = $this->storageService->storeChapterPages($files, $chapter->getId());
+        $chapterId = $chapter->getId();
+        if ($chapterId === null) {
+            return $this->json(['error' => 'Chapter ID is null'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        $pagePaths = $this->storageService->storeChapterPages($files, $chapterId);
 
         $chapter->setPages($pagePaths);
 

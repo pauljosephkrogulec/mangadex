@@ -6,13 +6,13 @@ namespace App\EventSubscriber;
 
 use App\Entity\Chapter;
 use App\Entity\CoverArt;
-use Doctrine\Bundle\DoctrineBundle\EventSubscriber\EventSubscriberInterface;
+use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
-class FileCleanupSubscriber implements EventSubscriberInterface
+class FileCleanupSubscriber implements EventSubscriber
 {
     public function __construct(
         private readonly Filesystem $filesystem,
@@ -26,6 +26,9 @@ class FileCleanupSubscriber implements EventSubscriberInterface
         ];
     }
 
+    /**
+     * @param LifecycleEventArgs<\Doctrine\Persistence\ObjectManager> $args
+     */
     public function postRemove(LifecycleEventArgs $args): void
     {
         $entity = $args->getObject();
@@ -97,7 +100,7 @@ class FileCleanupSubscriber implements EventSubscriberInterface
 
     private function getFullPath(string $publicPath): ?string
     {
-        if (empty($publicPath) || !str_starts_with($publicPath, '/uploads/')) {
+        if (empty($publicPath) || ! str_starts_with($publicPath, '/uploads/')) {
             return null;
         }
 

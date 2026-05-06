@@ -25,7 +25,7 @@ class UserTest extends TestCase
     {
         $user = new User();
         $user->setEmail('user@test.com');
-        
+
         $this->assertEquals('user@test.com', $user->getUserIdentifier());
     }
 
@@ -33,7 +33,7 @@ class UserTest extends TestCase
     {
         $user = new User();
         $user->setEmail('test@example.com');
-        
+
         $roles = $user->getRoles();
         $this->assertContains('ROLE_USER', $roles);
     }

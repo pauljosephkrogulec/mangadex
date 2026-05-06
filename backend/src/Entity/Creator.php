@@ -2,15 +2,16 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\ApiFilter;
-use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
-use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+
 #[ORM\Entity]
 #[ORM\Table(name: 'creator')]
 #[ORM\Index(columns: ['type'])]
@@ -21,7 +22,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 )]
 #[ApiFilter(SearchFilter::class, properties: [
     'name' => 'partial',
-    'type' => 'exact'
+    'type' => 'exact',
 ])]
 #[ApiFilter(OrderFilter::class, properties: ['name', 'type', 'createdAt'])]
 class Creator
@@ -50,6 +51,7 @@ class Creator
 
     #[ORM\ManyToMany(targetEntity: Manga::class, mappedBy: 'creators')]
     #[Groups(['creator:read'])]
+    /** @var Collection<int, Manga> */
     private Collection $manga;
 
     public function __construct()
@@ -84,6 +86,9 @@ class Creator
         return $this->type;
     }
 
+    /**
+     * @return array<string>
+     */
     public static function getTypeChoices(): array
     {
         return ['author', 'artist'];
@@ -95,6 +100,9 @@ class Creator
         return $this;
     }
 
+    /**
+     * @return Collection<int, Manga>
+     */
     public function getManga(): Collection
     {
         return $this->manga;
@@ -102,9 +110,9 @@ class Creator
 
     public function addManga(Manga $manga): static
     {
-        if (!$this->manga->contains($manga)) {
+        if (! $this->manga->contains($manga)) {
             $this->manga->add($manga);
-            if (!$manga->getCreators()->contains($this)) {
+            if (! $manga->getCreators()->contains($this)) {
                 $manga->getCreators()->add($this);
             }
         }

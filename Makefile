@@ -63,6 +63,8 @@ lint-backend:
 lint-frontend:
 	docker compose exec frontend npm run lint
 
+fix: fix-backend fix-frontend
+
 fix-frontend:
 	docker compose exec frontend npm run lint -- --fix
 

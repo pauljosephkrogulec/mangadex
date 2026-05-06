@@ -2,39 +2,40 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
-use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
-use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Metadata\Put;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+
 #[ORM\Entity]
 #[ORM\Table(name: 'cover_art')]
 #[ORM\Index(columns: ['volume'])]
 #[ApiResource(
-    normalizationContext: ['groups' => ['cover_art:read']],
-    denormalizationContext: ['groups' => ['cover_art:write']],
-    order: ['volume' => 'ASC'],
     operations: [
         new GetCollection(),
         new Get(),
         new Put(security: "is_granted('ROLE_ADMIN')"),
         new Delete(security: "is_granted('ROLE_ADMIN')"),
         new Patch(security: "is_granted('ROLE_ADMIN')"),
-        new Post(security: "is_granted('ROLE_ADMIN')")
-    ]
+        new Post(security: "is_granted('ROLE_ADMIN')"),
+    ],
+    normalizationContext: ['groups' => ['cover_art:read']],
+    denormalizationContext: ['groups' => ['cover_art:write']],
+    order: ['volume' => 'ASC']
 )]
 #[ApiFilter(SearchFilter::class, properties: [
     'manga' => 'exact',
     'volume' => 'exact',
-    'isPrimary' => 'exact'
+    'isPrimary' => 'exact',
 ])]
 #[ApiFilter(OrderFilter::class, properties: ['volume', 'isPrimary', 'createdAt'])]
 class CoverArt

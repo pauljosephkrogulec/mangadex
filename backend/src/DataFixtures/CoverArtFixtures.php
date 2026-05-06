@@ -5,8 +5,8 @@ namespace App\DataFixtures;
 use App\Entity\CoverArt;
 use App\Entity\Manga;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Persistence\ObjectManager;
 
 class CoverArtFixtures extends Fixture implements DependentFixtureInterface
 {

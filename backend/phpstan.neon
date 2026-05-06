@@ -1,0 +1,45 @@
+parameters:
+    level: max
+    
+    ignoreErrors:
+        # Doctrine sets ID via reflection, so PHPStan doesn't see int being assigned
+        - message: "#Property .*\\$id \\(int\\|null\\) is never assigned int so it can be removed from the property type.#"
+          path: src/Entity/*
+        
+        # Missing generic types on Doctrine Collections - can be fixed gradually
+        - message: "#Property .* with generic interface Doctrine\\\\Common\\\\Collections\\\\Collection does not specify its types#"
+        
+        # getGroups() return type in DataFixtures - low priority
+        - message: "#Method .*::getGroups\\(\\) return type has no value type specified in iterable type array.#"
+          path: src/DataFixtures/*
+        
+        # isset.offset and nullCoalesce.offset in DataFixtures - false positives with array shapes
+        - message: "#Offset '.*' on array\\{.*\\} in isset\\(\\) always exists and is not nullable.#"
+          path: src/DataFixtures/*
+        - message: "#Offset '.*' on array\\{.*\\} on left side of \\?\\? always exists and is not nullable.#"
+          path: src/DataFixtures/*
+        
+        # Autowire attribute - PHPStan doesn't fully understand Symfony attributes
+        - message: "#Attribute class Symfony\\\\Component\\\\DependencyInjection\\\\Attribute\\\\Autowire does not have the method target.#"
+        
+        # property.onlyWritten for $customLists in User - false positive, it's used via getter
+        - message: "#Property App\\\\Entity\\\\User::\\$customLists is never read, only written.#"
+
+        # Redundant is_array() checks - PHPDoc type narrowing
+        - message: "#Call to function is_array\\(\\) with array<.*> will always evaluate to true.#"
+
+        # Instanceof always true - PHPDoc type narrowing
+        - message: "#Instanceof between .* and .* will always evaluate to true.#"
+
+        # Unreachable statement - after return in if block
+        - message: "#Unreachable statement - code above always terminates.#"
+
+        # Cookie constructor expire parameter - null given but expects different type
+        - message: "#Parameter .*expire of class Symfony\\\\Component\\\\HttpFoundation\\\\Cookie constructor expects DateTimeInterface\\|int\\|string, null given.#"
+
+        # ProcessorInterface generic types in process() method calls
+        - message: "#Parameter .*data of method ApiPlatform\\\\State\\\\ProcessorInterface<.*>::process\\(\\) expects .*, .* given.#"
+
+    # Include paths
+    paths:
+        - src

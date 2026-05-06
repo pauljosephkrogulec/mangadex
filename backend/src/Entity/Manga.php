@@ -2,27 +2,30 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\ApiFilter;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Delete;
-use ApiPlatform\Metadata\Patch;
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\RangeFilter;
-use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use App\State\MangaFeedProvider;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+
 #[ORM\Entity]
 #[ORM\Table(name: 'manga')]
 #[ORM\Index(columns: ['status'])]
 #[ORM\Index(columns: ['year'])]
 #[ORM\Index(columns: ['content_rating'])]
+#[ORM\Index(columns: ['demographic'])]
 #[ApiResource(
     normalizationContext: ['groups' => ['manga:list']],
     denormalizationContext: ['groups' => ['manga:write']],
@@ -34,17 +37,26 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Get(
             normalizationContext: ['groups' => ['manga:read']]
         ),
+        new GetCollection(
+            uriTemplate: '/mangas/{id}/feed',
+            provider: MangaFeedProvider::class,
+            normalizationContext: ['groups' => ['chapter:read']],
+            name: 'feed'
+        ),
         new Put(security: "is_granted('ROLE_ADMIN')"),
         new Delete(security: "is_granted('ROLE_ADMIN')"),
         new Patch(security: "is_granted('ROLE_ADMIN')"),
-        new Post(security: "is_granted('ROLE_ADMIN')")
+        new Post(security: "is_granted('ROLE_ADMIN')"),
     ]
 )]
 #[ApiFilter(SearchFilter::class, properties: [
     'title' => 'partial',
     'status' => 'exact',
     'contentRating' => 'exact',
-    'year' => 'exact'
+    'demographic' => 'exact',
+    'year' => 'exact',
+    'tags.id' => 'exact',
+    'tags.name' => 'partial',
 ])]
 #[ApiFilter(OrderFilter::class, properties: ['title', 'year', 'status', 'createdAt'])]
 #[ApiFilter(RangeFilter::class, properties: ['year'])]
@@ -66,6 +78,7 @@ class Manga
     #[Groups(['manga:read', 'manga:write', 'manga:list', 'creator:read'])]
     private string $title;
 
+    /** @var array<string>|null */
     #[ORM\Column(type: 'json', nullable: true)]
     #[Groups(['manga:read', 'manga:write'])]
     private ?array $altTitles = null;
@@ -91,22 +104,31 @@ class Manga
     #[Groups(['manga:read', 'manga:write', 'manga:list'])]
     private string $contentRating;
 
+    #[ORM\Column(length: 20, options: ['default' => 'none'])]
+    #[Assert\Choice(callback: ['App\Entity\Manga', 'getDemographicChoices'])]
+    #[Groups(['manga:read', 'manga:write', 'manga:list'])]
+    private string $demographic = 'none';
+
     #[ORM\ManyToMany(targetEntity: Creator::class, inversedBy: 'manga', fetch: 'EAGER')]
     #[ORM\JoinTable(name: 'manga_creator')]
-    #[Groups(['manga:read', 'manga:write'])]
+    #[Groups(['manga:write', 'manga:include:creators'])]
+    /** @var Collection<int, Creator> */
     private Collection $creators;
 
     #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'manga', fetch: 'EAGER')]
     #[ORM\JoinTable(name: 'manga_tag')]
-    #[Groups(['manga:read', 'manga:write'])]
+    #[Groups(['manga:write', 'manga:include:tags'])]
+    /** @var Collection<int, Tag> */
     private Collection $tags;
 
     #[ORM\OneToMany(targetEntity: Chapter::class, mappedBy: 'manga', cascade: ['persist', 'remove'])]
     #[Groups(['manga:read'])]
+    /** @var Collection<int, Chapter> */
     private Collection $chapters;
 
     #[ORM\OneToMany(targetEntity: CoverArt::class, mappedBy: 'manga', cascade: ['persist', 'remove'])]
-    #[Groups(['manga:read'])]
+    #[Groups(['manga:include:coverArt'])]
+    /** @var Collection<int, CoverArt> */
     private Collection $coverArts;
 
     public function __construct()
@@ -139,11 +161,17 @@ class Manga
         return $this;
     }
 
+    /**
+     * @return array<string>|null
+     */
     public function getAltTitles(): ?array
     {
         return $this->altTitles;
     }
 
+    /**
+     * @param array<string>|null $altTitles
+     */
     public function setAltTitles(?array $altTitles): static
     {
         $this->altTitles = $altTitles;
@@ -188,14 +216,28 @@ class Manga
         return $this->contentRating;
     }
 
+    /**
+     * @return array<string>
+     */
     public static function getStatusChoices(): array
     {
         return ['ongoing', 'completed', 'hiatus', 'cancelled'];
     }
 
+    /**
+     * @return array<string>
+     */
     public static function getContentRatingChoices(): array
     {
         return ['safe', 'suggestive', 'erotica', 'pornographic'];
+    }
+
+    /**
+     * @return array<string>
+     */
+    public static function getDemographicChoices(): array
+    {
+        return ['shounen', 'shoujo', 'josei', 'seinen', 'none'];
     }
 
     public function setContentRating(string $contentRating): static
@@ -204,6 +246,20 @@ class Manga
         return $this;
     }
 
+    public function getDemographic(): string
+    {
+        return $this->demographic;
+    }
+
+    public function setDemographic(string $demographic): static
+    {
+        $this->demographic = $demographic;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Creator>
+     */
     public function getCreators(): Collection
     {
         return $this->creators;
@@ -211,7 +267,7 @@ class Manga
 
     public function addCreator(Creator $creator): static
     {
-        if (!$this->creators->contains($creator)) {
+        if (! $this->creators->contains($creator)) {
             $this->creators->add($creator);
             $creator->addManga($this);
         }
@@ -224,6 +280,9 @@ class Manga
         return $this;
     }
 
+    /**
+     * @return Collection<int, Tag>
+     */
     public function getTags(): Collection
     {
         return $this->tags;
@@ -231,7 +290,7 @@ class Manga
 
     public function addTag(Tag $tag): static
     {
-        if (!$this->tags->contains($tag)) {
+        if (! $this->tags->contains($tag)) {
             $this->tags->add($tag);
             $tag->addManga($this);
         }
@@ -244,6 +303,9 @@ class Manga
         return $this;
     }
 
+    /**
+     * @return Collection<int, Chapter>
+     */
     public function getChapters(): Collection
     {
         return $this->chapters;
@@ -251,7 +313,7 @@ class Manga
 
     public function addChapter(Chapter $chapter): static
     {
-        if (!$this->chapters->contains($chapter)) {
+        if (! $this->chapters->contains($chapter)) {
             $this->chapters->add($chapter);
             $chapter->setManga($this);
         }
@@ -267,6 +329,9 @@ class Manga
         return $this;
     }
 
+    /**
+     * @return Collection<int, CoverArt>
+     */
     public function getCoverArts(): Collection
     {
         return $this->coverArts;
@@ -274,7 +339,7 @@ class Manga
 
     public function addCoverArt(CoverArt $coverArt): static
     {
-        if (!$this->coverArts->contains($coverArt)) {
+        if (! $this->coverArts->contains($coverArt)) {
             $this->coverArts->add($coverArt);
             $coverArt->setManga($this);
         }

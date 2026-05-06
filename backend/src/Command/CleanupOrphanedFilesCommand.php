@@ -13,8 +13,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 #[AsCommand(
     name: 'app:cleanup-orphaned-files',
@@ -56,11 +56,11 @@ class CleanupOrphanedFilesCommand extends Command
 
         $deletedCount = 0;
 
-        if (!$chaptersOnly) {
+        if (! $chaptersOnly) {
             $deletedCount += $this->cleanupOrphanedCovers($io, $dryRun);
         }
 
-        if (!$coversOnly) {
+        if (! $coversOnly) {
             $deletedCount += $this->cleanupOrphanedChapters($io, $dryRun);
         }
 
@@ -81,13 +81,13 @@ class CleanupOrphanedFilesCommand extends Command
         $validPaths = [];
         foreach ($coverArts as $coverArt) {
             $path = $coverArt->getImagePath();
-            if (!empty($path)) {
+            if (! empty($path)) {
                 $validPaths[$this->getFullPath($path)] = true;
             }
         }
 
         $coversDir = $this->getUploadsDir('covers');
-        if (!is_dir($coversDir)) {
+        if (! is_dir($coversDir)) {
             $io->info('Covers directory does not exist yet.');
             return 0;
         }
@@ -104,10 +104,10 @@ class CleanupOrphanedFilesCommand extends Command
             }
 
             $fullPath = $coversDir . '/' . $file;
-            if (is_file($fullPath) && !isset($validPaths[$fullPath])) {
+            if (is_file($fullPath) && ! isset($validPaths[$fullPath])) {
                 $io->writeln(sprintf('  %s <fg=red>%s</>', $dryRun ? 'Would delete:' : 'Deleting:', $file));
 
-                if (!$dryRun) {
+                if (! $dryRun) {
                     try {
                         $this->filesystem->remove($fullPath);
                     } catch (IOExceptionInterface $e) {
@@ -130,14 +130,14 @@ class CleanupOrphanedFilesCommand extends Command
         $validPaths = [];
         foreach ($chapters as $chapter) {
             foreach ($chapter->getPages() as $pagePath) {
-                if (!empty($pagePath)) {
+                if (! empty($pagePath)) {
                     $validPaths[$this->getFullPath($pagePath)] = true;
                 }
             }
         }
 
         $chaptersDir = $this->getUploadsDir('chapters');
-        if (!is_dir($chaptersDir)) {
+        if (! is_dir($chaptersDir)) {
             $io->info('Chapters directory does not exist yet.');
             return 0;
         }
@@ -154,7 +154,7 @@ class CleanupOrphanedFilesCommand extends Command
             }
 
             $chapterPath = $chaptersDir . '/' . $dir;
-            if (!is_dir($chapterPath)) {
+            if (! is_dir($chapterPath)) {
                 continue;
             }
 
@@ -169,10 +169,10 @@ class CleanupOrphanedFilesCommand extends Command
                 }
 
                 $fullPath = $chapterPath . '/' . $file;
-                if (is_file($fullPath) && !isset($validPaths[$fullPath])) {
+                if (is_file($fullPath) && ! isset($validPaths[$fullPath])) {
                     $io->writeln(sprintf('  %s <fg=red>chapters/%s/%s</>', $dryRun ? 'Would delete:' : 'Deleting:', $dir, $file));
 
-                    if (!$dryRun) {
+                    if (! $dryRun) {
                         try {
                             $this->filesystem->remove($fullPath);
                         } catch (IOExceptionInterface $e) {
@@ -185,7 +185,7 @@ class CleanupOrphanedFilesCommand extends Command
             }
 
             // Clean up empty chapter directories
-            if (!$dryRun) {
+            if (! $dryRun) {
                 $remaining = scandir($chapterPath);
                 if ($remaining !== false && count($remaining) <= 2) {
                     try {

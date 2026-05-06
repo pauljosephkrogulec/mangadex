@@ -2,23 +2,23 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Serializer\Attribute\Groups;
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Dto\UserRegistrationDto;
 use App\Dto\UserUpdateDto;
 use App\State\Processor\UserRegistrationProcessor;
 use App\State\Processor\UserUpdateProcessor;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'app_user')]
@@ -38,7 +38,7 @@ use App\State\Processor\UserUpdateProcessor;
             security: "is_granted('IS_AUTHENTICATED_ANONYMOUSLY')",
             input: UserRegistrationDto::class,
             processor: UserRegistrationProcessor::class
-        )
+        ),
     ]
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -65,6 +65,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user:read', 'user:write'])]
     private string $username;
 
+    /** @var array<string> */
     #[ORM\Column]
     private array $roles = [];
 
@@ -73,6 +74,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(targetEntity: CustomList::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
     #[Groups(['user:read'])]
+    /** @var Collection<int, CustomList> */
     private Collection $customLists;
 
     public function __construct()
@@ -113,18 +115,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function getUserIdentifier(): string
     {
-        return $this->email;
+        /** @var non-empty-string $email */
+        $email = $this->email;
+        return $email;
     }
 
+    /**
+     * @return array<string>
+     */
     public function getRoles(): array
     {
+        /** @var array<string> $roles */
         $roles = $this->roles;
         $roles[] = 'ROLE_USER';
-        return array_unique($roles);
+        /** @var array<string> $uniqueRoles */
+        $uniqueRoles = array_unique($roles);
+        return $uniqueRoles;
     }
 
+    /**
+     * @param array<string> $roles
+     */
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;

@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --max-warnings 999",
     "test": "jest",
     "test:coverage": "jest --coverage"
   },

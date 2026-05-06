@@ -2,9 +2,9 @@
 
 namespace App\Tests;
 
-use App\Entity\Manga;
 use App\Entity\Chapter;
 use App\Entity\Creator;
+use App\Entity\Manga;
 use PHPUnit\Framework\TestCase;
 
 class MangaTest extends TestCase

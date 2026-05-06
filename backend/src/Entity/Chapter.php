@@ -2,20 +2,21 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\ApiFilter;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Delete;
-use ApiPlatform\Metadata\Patch;
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\RangeFilter;
-use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+
 #[ORM\Entity]
 #[ORM\Table(name: 'chapter')]
 #[ORM\Index(columns: ['language'])]
@@ -30,13 +31,13 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Put(security: "is_granted('ROLE_ADMIN')"),
         new Delete(security: "is_granted('ROLE_ADMIN')"),
         new Patch(security: "is_granted('ROLE_ADMIN')"),
-        new Post(security: "is_granted('ROLE_ADMIN')")
+        new Post(security: "is_granted('ROLE_ADMIN')"),
     ]
 )]
 #[ApiFilter(SearchFilter::class, properties: [
     'manga' => 'exact',
     'language' => 'exact',
-    'volume' => 'exact'
+    'volume' => 'exact',
 ])]
 #[ApiFilter(OrderFilter::class, properties: ['chapterNumber', 'volume', 'language', 'createdAt'])]
 #[ApiFilter(RangeFilter::class, properties: ['chapterNumber'])]
@@ -83,6 +84,7 @@ class Chapter
     #[Groups(['chapter:read', 'chapter:write'])]
     private string $language;
 
+    /** @var array<string> */
     #[ORM\Column(type: 'json')]
     #[Assert\NotNull]
     #[Assert\Count(min: 1)]
@@ -170,11 +172,17 @@ class Chapter
         return $this;
     }
 
+    /**
+     * @return array<string>
+     */
     public function getPages(): array
     {
         return $this->pages;
     }
 
+    /**
+     * @param array<string> $pages
+     */
     public function setPages(array $pages): static
     {
         $this->pages = $pages;

@@ -6,8 +6,8 @@ namespace App\Service;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class FileUploadValidator
 {
@@ -32,7 +32,7 @@ class FileUploadValidator
     }
 
     /**
-     * @param UploadedFile[] $files
+     * @param array<UploadedFile> $files
      * @return array<string, string> Array of filename => error message
      */
     public function validateMultipleImages(array $files): array

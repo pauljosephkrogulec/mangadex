@@ -2,38 +2,39 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
-use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
-use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Metadata\Put;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+
 #[ORM\Entity]
 #[ORM\Table(name: 'custom_list')]
 #[ApiResource(
-    normalizationContext: ['groups' => ['custom_list:read']],
-    denormalizationContext: ['groups' => ['custom_list:write']],
-    order: ['name' => 'ASC'],
     operations: [
         new GetCollection(security: "is_granted('ROLE_ADMIN')"),
         new Get(security: "object.getUser() == user or is_granted('ROLE_ADMIN')"),
         new Put(security: "object.getUser() == user or is_granted('ROLE_ADMIN')"),
         new Delete(security: "object.getUser() == user or is_granted('ROLE_ADMIN')"),
         new Patch(security: "object.getUser() == user or is_granted('ROLE_ADMIN')"),
-        new Post(security: "is_granted('IS_AUTHENTICATED_FULLY')")
-    ]
+        new Post(security: "is_granted('IS_AUTHENTICATED_FULLY')"),
+    ],
+    normalizationContext: ['groups' => ['custom_list:read']],
+    denormalizationContext: ['groups' => ['custom_list:write']],
+    order: ['name' => 'ASC']
 )]
 #[ApiFilter(SearchFilter::class, properties: [
     'name' => 'partial',
     'visibility' => 'exact',
-    'user' => 'exact'
+    'user' => 'exact',
 ])]
 #[ApiFilter(OrderFilter::class, properties: ['name', 'visibility', 'createdAt'])]
 class CustomList
@@ -96,6 +97,9 @@ class CustomList
         return $this->visibility;
     }
 
+    /**
+     * @return array<string>
+     */
     public static function getVisibilityChoices(): array
     {
         return ['public', 'private', 'hidden'];

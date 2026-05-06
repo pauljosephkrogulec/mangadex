@@ -2,12 +2,12 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Manga;
 use App\Entity\Creator;
+use App\Entity\Manga;
 use App\Entity\Tag;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Persistence\ObjectManager;
 
 class MangaFixtures extends Fixture implements DependentFixtureInterface
 {

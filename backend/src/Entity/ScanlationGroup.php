@@ -2,21 +2,22 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
-use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
-use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
-use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Metadata\Put;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+
 #[ORM\Entity]
 #[ORM\Table(name: 'scanlation_group')]
 #[ApiResource(
@@ -29,12 +30,12 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Put(security: "is_granted('ROLE_ADMIN')"),
         new Delete(security: "is_granted('ROLE_ADMIN')"),
         new Patch(security: "is_granted('ROLE_ADMIN')"),
-        new Post(security: "is_granted('ROLE_ADMIN')")
+        new Post(security: "is_granted('ROLE_ADMIN')"),
     ]
 )]
 #[ApiFilter(SearchFilter::class, properties: [
     'name' => 'partial',
-    'website' => 'partial'
+    'website' => 'partial',
 ])]
 #[ApiFilter(OrderFilter::class, properties: ['name', 'createdAt'])]
 class ScanlationGroup
@@ -63,6 +64,7 @@ class ScanlationGroup
 
     #[ORM\OneToMany(targetEntity: Chapter::class, mappedBy: 'scanlationGroup', cascade: ['persist'])]
     #[Groups(['scanlation_group:read'])]
+    /** @var Collection<int, Chapter> */
     private Collection $chapters;
 
     public function __construct()
@@ -103,6 +105,9 @@ class ScanlationGroup
         return $this;
     }
 
+    /**
+     * @return Collection<int, Chapter>
+     */
     public function getChapters(): Collection
     {
         return $this->chapters;
@@ -110,7 +115,7 @@ class ScanlationGroup
 
     public function addChapter(Chapter $chapter): static
     {
-        if (!$this->chapters->contains($chapter)) {
+        if (! $this->chapters->contains($chapter)) {
             $this->chapters->add($chapter);
             $chapter->setScanlationGroup($this);
         }

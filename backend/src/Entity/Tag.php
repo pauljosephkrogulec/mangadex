@@ -2,21 +2,22 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
-use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
-use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
-use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Metadata\Put;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+
 #[ORM\Entity]
 #[ORM\Table(name: 'tag')]
 #[ORM\Index(columns: ['group_name'])]
@@ -30,12 +31,12 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Put(security: "is_granted('ROLE_ADMIN')"),
         new Delete(security: "is_granted('ROLE_ADMIN')"),
         new Patch(security: "is_granted('ROLE_ADMIN')"),
-        new Post(security: "is_granted('ROLE_ADMIN')")
+        new Post(security: "is_granted('ROLE_ADMIN')"),
     ]
 )]
 #[ApiFilter(SearchFilter::class, properties: [
     'name' => 'partial',
-    'groupName' => 'exact'
+    'groupName' => 'exact',
 ])]
 #[ApiFilter(OrderFilter::class, properties: ['name', 'groupName', 'createdAt'])]
 class Tag
@@ -72,6 +73,7 @@ class Tag
 
     #[ORM\ManyToMany(targetEntity: Manga::class, mappedBy: 'tags')]
     #[Groups(['tag:read'])]
+    /** @var Collection<int, Manga> */
     private Collection $manga;
 
     public function __construct()
@@ -134,6 +136,9 @@ class Tag
         return $this;
     }
 
+    /**
+     * @return Collection<int, Manga>
+     */
     public function getManga(): Collection
     {
         return $this->manga;
@@ -141,7 +146,7 @@ class Tag
 
     public function addManga(Manga $manga): static
     {
-        if (!$this->manga->contains($manga)) {
+        if (! $this->manga->contains($manga)) {
             $this->manga->add($manga);
             $manga->addTag($this);
         }

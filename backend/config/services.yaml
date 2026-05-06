@@ -33,5 +33,12 @@ services:
             $decorated: '@App\State\Processor\UserUpdateProcessor.inner'
         autowire: true
 
+    # Include parameter handler for eager loading relationships
+    App\Serializer\IncludeContextBuilder:
+        decorates: 'api_platform.serializer.context_builder.filter'
+        arguments:
+            $decorated: '@api_platform.serializer.context_builder.filter.inner'
+        autowire: true
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

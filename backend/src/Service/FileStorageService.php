@@ -20,8 +20,8 @@ class FileStorageService
     }
 
     /**
-     * @param UploadedFile[] $files
-     * @return string[] Array of public file paths
+     * @param array<UploadedFile> $files
+     * @return array<string> Array of public file paths
      */
     public function storeChapterPages(array $files, int $chapterId): array
     {
@@ -49,7 +49,7 @@ class FileStorageService
     }
 
     /**
-     * @param string[] $publicPaths
+     * @param array<string> $publicPaths
      */
     public function deleteFiles(array $publicPaths): void
     {
@@ -71,7 +71,7 @@ class FileStorageService
     {
         $dir = __DIR__ . '/../../public/' . self::UPLOADS_DIR . '/' . $subdir;
 
-        if (!is_dir($dir)) {
+        if (! is_dir($dir)) {
             mkdir($dir, 0755, true);
         }
 

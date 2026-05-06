@@ -6,8 +6,8 @@ use App\Entity\Chapter;
 use App\Entity\Manga;
 use App\Entity\ScanlationGroup;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Persistence\ObjectManager;
 
 class ChapterFixtures extends Fixture implements DependentFixtureInterface
 {

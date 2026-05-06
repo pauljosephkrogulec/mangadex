@@ -5,7 +5,7 @@ const path = require('path');
 const envPath = path.resolve(__dirname, '../.env.local');
 if (fs.existsSync(envPath)) {
   const envContent = fs.readFileSync(envPath, 'utf8');
-  envContent.split('\n').forEach(line => {
+  envContent.split('\n').forEach((line: string) => {
     const match = line.match(/^([^#=]+)=(.*)$/);
     if (match) {
       process.env[match[1].trim()] = match[2].trim();
