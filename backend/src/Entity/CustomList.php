@@ -12,6 +12,10 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Controller\CustomListMangaController;
+use App\Entity\Manga;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -26,6 +30,18 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Delete(security: "object.getUser() == user or is_granted('ROLE_ADMIN')"),
         new Patch(security: "object.getUser() == user or is_granted('ROLE_ADMIN')"),
         new Post(security: "is_granted('IS_AUTHENTICATED_FULLY')"),
+        new Post(
+            uriTemplate: '/custom_lists/{id}/mangas/{mangaId}',
+            controller: CustomListMangaController::class,
+            security: "object.getUser() == user or is_granted('ROLE_ADMIN')",
+            name: 'add_manga'
+        ),
+        new Delete(
+            uriTemplate: '/custom_lists/{id}/mangas/{mangaId}',
+            controller: CustomListMangaController::class,
+            security: "object.getUser() == user or is_granted('ROLE_ADMIN')",
+            name: 'remove_manga'
+        ),
     ],
     normalizationContext: ['groups' => ['custom_list:read']],
     denormalizationContext: ['groups' => ['custom_list:write']],
@@ -66,9 +82,16 @@ class CustomList
     #[Groups(['custom_list:read', 'custom_list:write'])]
     private User $user;
 
+    #[ORM\ManyToMany(targetEntity: Manga::class, inversedBy: 'customLists')]
+    #[ORM\JoinTable(name: 'custom_list_manga')]
+    #[Groups(['custom_list:read', 'custom_list:write'])]
+    /** @var Collection<int, Manga> */
+    private Collection $mangas;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
+        $this->mangas = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -119,6 +142,28 @@ class CustomList
     public function setUser(User $user): static
     {
         $this->user = $user;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Manga>
+     */
+    public function getMangas(): Collection
+    {
+        return $this->mangas;
+    }
+
+    public function addManga(Manga $manga): static
+    {
+        if (! $this->mangas->contains($manga)) {
+            $this->mangas->add($manga);
+        }
+        return $this;
+    }
+
+    public function removeManga(Manga $manga): static
+    {
+        $this->mangas->removeElement($manga);
         return $this;
     }
 }

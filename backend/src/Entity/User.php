@@ -12,6 +12,8 @@ use App\Dto\UserRegistrationDto;
 use App\Dto\UserUpdateDto;
 use App\State\Processor\UserRegistrationProcessor;
 use App\State\Processor\UserUpdateProcessor;
+use App\State\Provider\UserFollowsProvider;
+use App\Entity\MangaFollow;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -38,6 +40,13 @@ use Symfony\Component\Validator\Constraints as Assert;
             security: "is_granted('IS_AUTHENTICATED_ANONYMOUSLY')",
             input: UserRegistrationDto::class,
             processor: UserRegistrationProcessor::class
+        ),
+        new GetCollection(
+            uriTemplate: '/users/{id}/follows',
+            provider: UserFollowsProvider::class,
+            normalizationContext: ['groups' => ['follow:read']],
+            security: "object == user or is_granted('ROLE_ADMIN')",
+            name: 'follows'
         ),
     ]
 )]
@@ -77,10 +86,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /** @var Collection<int, CustomList> */
     private Collection $customLists;
 
+    #[ORM\OneToMany(targetEntity: MangaFollow::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
+    /** @var Collection<int, MangaFollow> */
+    private Collection $followedMangas;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
         $this->customLists = new ArrayCollection();
+        $this->followedMangas = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -161,5 +175,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
+    }
+
+    /**
+     * @return Collection<int, MangaFollow>
+     */
+    public function getFollowedMangas(): Collection
+    {
+        return $this->followedMangas;
+    }
+
+    public function addFollowedManga(MangaFollow $follow): static
+    {
+        if (! $this->followedMangas->contains($follow)) {
+            $this->followedMangas->add($follow);
+            $follow->setUser($this);
+        }
+        return $this;
+    }
+
+    public function removeFollowedManga(MangaFollow $follow): static
+    {
+        if ($this->followedMangas->removeElement($follow)) {
+            // Note: MangaFollow has nullable=false on user, so we don't set to null
+        }
+        return $this;
     }
 }

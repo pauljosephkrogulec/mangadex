@@ -13,7 +13,9 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Controller\MangaFollowController;
 use App\State\MangaFeedProvider;
+use App\Entity\MangaFollow;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -43,6 +45,24 @@ use Symfony\Component\Validator\Constraints as Assert;
             normalizationContext: ['groups' => ['chapter:read']],
             name: 'feed'
         ),
+        new Post(
+            uriTemplate: '/mangas/{id}/follow',
+            controller: MangaFollowController::class,
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            name: 'follow'
+        ),
+        new Delete(
+            uriTemplate: '/mangas/{id}/follow',
+            controller: MangaFollowController::class,
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            name: 'unfollow'
+        ),
+        new Get(
+            uriTemplate: '/mangas/{id}/follow',
+            controller: MangaFollowController::class,
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            name: 'follow_status'
+        ),
         new Put(security: "is_granted('ROLE_ADMIN')"),
         new Delete(security: "is_granted('ROLE_ADMIN')"),
         new Patch(security: "is_granted('ROLE_ADMIN')"),
@@ -65,17 +85,17 @@ class Manga
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['manga:read', 'chapter:read'])]
+    #[Groups(['manga:read', 'chapter:read', 'custom_list:read'])]
     private ?int $id = null;
 
     #[ORM\Column(type: 'datetime')]
-    #[Groups(['manga:read', 'manga:list'])]
+    #[Groups(['manga:read', 'manga:list', 'custom_list:read'])]
     private \DateTime $createdAt;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
-    #[Groups(['manga:read', 'manga:write', 'manga:list', 'creator:read'])]
+    #[Groups(['manga:read', 'manga:write', 'manga:list', 'creator:read', 'custom_list:read'])]
     private string $title;
 
     /** @var array<string>|null */
@@ -90,23 +110,23 @@ class Manga
     #[ORM\Column(length: 20)]
     #[Assert\NotBlank]
     #[Assert\Choice(callback: ['App\Entity\Manga', 'getStatusChoices'])]
-    #[Groups(['manga:read', 'manga:write', 'manga:list'])]
+    #[Groups(['manga:read', 'manga:write', 'manga:list', 'custom_list:read'])]
     private string $status;
 
     #[ORM\Column(nullable: true)]
     #[Assert\Range(min: 1900, max: 2100)]
-    #[Groups(['manga:read', 'manga:write', 'manga:list'])]
+    #[Groups(['manga:read', 'manga:write', 'manga:list', 'custom_list:read'])]
     private ?int $year = null;
 
     #[ORM\Column(length: 30)]
     #[Assert\NotBlank]
     #[Assert\Choice(callback: ['App\Entity\Manga', 'getContentRatingChoices'])]
-    #[Groups(['manga:read', 'manga:write', 'manga:list'])]
+    #[Groups(['manga:read', 'manga:write', 'manga:list', 'custom_list:read'])]
     private string $contentRating;
 
     #[ORM\Column(length: 20, options: ['default' => 'none'])]
     #[Assert\Choice(callback: ['App\Entity\Manga', 'getDemographicChoices'])]
-    #[Groups(['manga:read', 'manga:write', 'manga:list'])]
+    #[Groups(['manga:read', 'manga:write', 'manga:list', 'custom_list:read'])]
     private string $demographic = 'none';
 
     #[ORM\ManyToMany(targetEntity: Creator::class, inversedBy: 'manga', fetch: 'EAGER')]
@@ -131,6 +151,14 @@ class Manga
     /** @var Collection<int, CoverArt> */
     private Collection $coverArts;
 
+    #[ORM\OneToMany(targetEntity: MangaFollow::class, mappedBy: 'manga', cascade: ['persist', 'remove'])]
+    /** @var Collection<int, MangaFollow> */
+    private Collection $followers;
+
+    #[ORM\ManyToMany(targetEntity: CustomList::class, mappedBy: 'mangas')]
+    /** @var Collection<int, CustomList> */
+    private Collection $customLists;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
@@ -138,6 +166,8 @@ class Manga
         $this->tags = new ArrayCollection();
         $this->chapters = new ArrayCollection();
         $this->coverArts = new ArrayCollection();
+        $this->followers = new ArrayCollection();
+        $this->customLists = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -350,6 +380,31 @@ class Manga
     {
         if ($this->coverArts->removeElement($coverArt)) {
             // Note: We don't set manga to null because JoinColumn(nullable: false)
+        }
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MangaFollow>
+     */
+    public function getFollowers(): Collection
+    {
+        return $this->followers;
+    }
+
+    public function addFollower(MangaFollow $follow): static
+    {
+        if (! $this->followers->contains($follow)) {
+            $this->followers->add($follow);
+            $follow->setManga($this);
+        }
+        return $this;
+    }
+
+    public function removeFollower(MangaFollow $follow): static
+    {
+        if ($this->followers->removeElement($follow)) {
+            // Note: MangaFollow has nullable=false on manga
         }
         return $this;
     }
