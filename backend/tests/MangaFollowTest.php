@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests;
 
 use App\Entity\Manga;
@@ -20,7 +22,7 @@ class MangaFollowTest extends WebTestCase
 
         // Create test user
         $user = $entityManager->getRepository(User::class)->findOneBy(['email' => 'followtest@example.com']);
-        if (!$user) {
+        if (! $user) {
             $user = new User();
             $user->setEmail('followtest@example.com');
             $user->setUsername('followtestuser');
@@ -33,7 +35,7 @@ class MangaFollowTest extends WebTestCase
 
         // Create test manga
         $manga = $entityManager->getRepository(Manga::class)->findOneBy(['title' => 'Follow Test Manga']);
-        if (!$manga) {
+        if (! $manga) {
             $manga = new Manga();
             $manga->setTitle('Follow Test Manga');
             $manga->setStatus('ongoing');
@@ -77,7 +79,7 @@ class MangaFollowTest extends WebTestCase
 
         // Create test manga
         $manga = $entityManager->getRepository(Manga::class)->findOneBy(['title' => 'Follow Test Manga']);
-        if (!$manga) {
+        if (! $manga) {
             $manga = new Manga();
             $manga->setTitle('Follow Test Manga');
             $manga->setStatus('ongoing');

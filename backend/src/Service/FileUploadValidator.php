@@ -21,12 +21,12 @@ class FileUploadValidator
 
     public function validateImage(UploadedFile $file): ConstraintViolationListInterface
     {
-        $constraints = new Assert\File([
-            'maxSize' => self::MAX_FILE_SIZE,
-            'mimeTypes' => self::ALLOWED_MIME_TYPES,
-            'mimeTypesMessage' => 'Invalid file type. Allowed types: JPEG, PNG, WebP',
-            'maxSizeMessage' => 'File size exceeds 5MB limit',
-        ]);
+        $constraints = new Assert\File(
+            maxSize: self::MAX_FILE_SIZE,
+            mimeTypes: self::ALLOWED_MIME_TYPES,
+            mimeTypesMessage: 'Invalid file type. Allowed types: JPEG, PNG, WebP',
+            maxSizeMessage: 'File size exceeds 5MB limit',
+        );
 
         return $this->validator->validate($file, $constraints);
     }

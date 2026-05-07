@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
@@ -15,7 +17,6 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Controller\MangaFollowController;
 use App\State\MangaFeedProvider;
-use App\Entity\MangaFollow;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -129,20 +130,20 @@ class Manga
     #[Groups(['manga:read', 'manga:write', 'manga:list', 'custom_list:read'])]
     private string $demographic = 'none';
 
-    #[ORM\ManyToMany(targetEntity: Creator::class, inversedBy: 'manga', fetch: 'EAGER')]
+    #[ORM\ManyToMany(targetEntity: Creator::class, inversedBy: 'manga')]
     #[ORM\JoinTable(name: 'manga_creator')]
     #[Groups(['manga:write', 'manga:include:creators'])]
     /** @var Collection<int, Creator> */
     private Collection $creators;
 
-    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'manga', fetch: 'EAGER')]
+    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'manga')]
     #[ORM\JoinTable(name: 'manga_tag')]
     #[Groups(['manga:write', 'manga:include:tags'])]
     /** @var Collection<int, Tag> */
     private Collection $tags;
 
     #[ORM\OneToMany(targetEntity: Chapter::class, mappedBy: 'manga', cascade: ['persist', 'remove'])]
-    #[Groups(['manga:read'])]
+    #[Groups(['manga:include:chapters'])]
     /** @var Collection<int, Chapter> */
     private Collection $chapters;
 

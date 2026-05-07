@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Manga;
@@ -8,7 +10,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class MangaFollowController extends AbstractController
 {
@@ -17,7 +18,7 @@ class MangaFollowController extends AbstractController
     ) {
     }
 
-    public function __invoke(Manga $manga, Request $request): JsonResponse|MangaFollow
+    public function __invoke(Manga $manga, Request $request): JsonResponse
     {
         $user = $this->getUser();
         if (! $user) {
@@ -43,7 +44,10 @@ class MangaFollowController extends AbstractController
             $this->entityManager->persist($follow);
             $this->entityManager->flush();
 
-            return $follow;
+            return new JsonResponse([
+                'following' => true,
+                'followedAt' => $follow->getFollowedAt()->format('c'),
+            ], 200);
         }
 
         if ($method === 'DELETE') {

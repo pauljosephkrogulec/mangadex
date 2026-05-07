@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\EventSubscriber;
 
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
@@ -25,7 +27,7 @@ class JwtCookieSubscriber
             $cookie = new Cookie(
                 'mangadex_jwt_token',
                 $jwt,
-                null,
+                0,
                 '/',
                 null,
                 $this->appEnv === 'prod',

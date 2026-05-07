@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests;
 
 use App\Entity\User;
@@ -18,7 +20,7 @@ class JwtHeaderDebugTest extends WebTestCase
 
         // Create test user
         $user = $entityManager->getRepository(User::class)->findOneBy(['email' => 'test@example.com']);
-        if (!$user) {
+        if (! $user) {
             $user = new User();
             $user->setEmail('test@example.com');
             $user->setUsername('testuser');
@@ -43,13 +45,13 @@ class JwtHeaderDebugTest extends WebTestCase
         $response = json_decode($client->getResponse()->getContent(), true);
         $token = $response['token'] ?? '';
         $this->assertNotEmpty($token);
-        
+
         echo "Token: " . substr($token, 0, 50) . "...\n";
-        
+
         // Check what headers are being sent
         $headers = $client->getInternalRequest()->getServer();
         echo "Has HTTP_AUTHORIZATION: " . (isset($headers['HTTP_AUTHORIZATION']) ? 'yes' : 'no') . "\n";
-        
+
         // Make authenticated request
         $client->request(
             'GET',
@@ -62,7 +64,7 @@ class JwtHeaderDebugTest extends WebTestCase
 
         echo "Response status: " . $client->getResponse()->getStatusCode() . "\n";
         echo "Response: " . substr($client->getResponse()->getContent(), 0, 200) . "\n";
-        
+
         // Check request headers for the authenticated request
         $headers2 = $client->getInternalRequest()->getServer();
         echo "Auth request has HTTP_AUTHORIZATION: " . (isset($headers2['HTTP_AUTHORIZATION']) ? 'yes - ' . substr($headers2['HTTP_AUTHORIZATION'], 0, 30) : 'no') . "\n";

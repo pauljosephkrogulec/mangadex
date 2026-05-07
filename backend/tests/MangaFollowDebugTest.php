@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests;
 
 use App\Entity\Manga;
@@ -19,7 +21,7 @@ class MangaFollowDebugTest extends WebTestCase
 
         // Create test user
         $user = $entityManager->getRepository(User::class)->findOneBy(['email' => 'followtest@example.com']);
-        if (!$user) {
+        if (! $user) {
             $user = new User();
             $user->setEmail('followtest@example.com');
             $user->setUsername('followtestuser');
@@ -32,7 +34,7 @@ class MangaFollowDebugTest extends WebTestCase
 
         // Create test manga
         $manga = $entityManager->getRepository(Manga::class)->findOneBy(['title' => 'Follow Test Manga']);
-        if (!$manga) {
+        if (! $manga) {
             $manga = new Manga();
             $manga->setTitle('Follow Test Manga');
             $manga->setStatus('ongoing');
@@ -54,7 +56,7 @@ class MangaFollowDebugTest extends WebTestCase
         $this->assertResponseStatusCodeSame(200);
         $response = json_decode($client->getResponse()->getContent(), true);
         $token = $response['token'] ?? '';
-        
+
         // Debug: print token (first 20 chars)
         echo "Token (first 20 chars): " . substr($token, 0, 20) . "...\n";
         echo "Token parts: " . count(explode('.', $token)) . "\n";
@@ -68,7 +70,7 @@ class MangaFollowDebugTest extends WebTestCase
             ['CONTENT_TYPE' => 'application/json', 'HTTP_AUTHORIZATION' => 'Bearer ' . $token],
             ''
         );
-        
+
         echo "GET user status: " . $client->getResponse()->getStatusCode() . "\n";
 
         // Now try follow request

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\CustomList;
@@ -25,7 +27,10 @@ class CustomListMangaController extends AbstractController
             throw new AccessDeniedHttpException('User not authenticated');
         }
 
-        if ($customList->getUser() !== $user && ! $this->isGranted('ROLE_ADMIN')) {
+        $listUserId = $customList->getUser()->getId();
+        $currentUserId = $user instanceof \App\Entity\User ? $user->getId() : null;
+
+        if ($listUserId !== $currentUserId && ! $this->isGranted('ROLE_ADMIN')) {
             throw new AccessDeniedHttpException('You can only modify your own lists');
         }
 

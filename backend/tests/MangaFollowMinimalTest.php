@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests;
 
 use App\Entity\User;
@@ -18,7 +20,7 @@ class MangaFollowMinimalTest extends WebTestCase
 
         // Create test user
         $user = $entityManager->getRepository(User::class)->findOneBy(['email' => 'followtest@example.com']);
-        if (!$user) {
+        if (! $user) {
             $user = new User();
             $user->setEmail('followtest@example.com');
             $user->setUsername('followtestuser');

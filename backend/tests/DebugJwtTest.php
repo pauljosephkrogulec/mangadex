@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests;
 
 use App\Entity\User;
@@ -18,7 +20,7 @@ class DebugJwtTest extends WebTestCase
 
         // Create user
         $user = $em->getRepository(User::class)->findOneBy(['email' => 'test@example.com']);
-        if (!$user) {
+        if (! $user) {
             $user = new User();
             $user->setEmail('test@example.com');
             $user->setUsername('testuser');
@@ -38,11 +40,11 @@ class DebugJwtTest extends WebTestCase
             ['CONTENT_TYPE' => 'application/json'],
             json_encode(['email' => 'test@example.com', 'password' => 'password123'])
         );
-        
+
         echo "Login status: " . $client->getResponse()->getStatusCode() . "\n";
         $token = json_decode($client->getResponse()->getContent(), true)['token'] ?? '';
         echo "Token (first 30 chars): " . substr($token, 0, 30) . "...\n";
-        
+
         // Try authenticated request
         $client2 = static::createClient();
         $client2->request(
@@ -53,7 +55,7 @@ class DebugJwtTest extends WebTestCase
             ['CONTENT_TYPE' => 'application/json', 'HTTP_AUTHORIZATION' => 'Bearer ' . $token],
             ''
         );
-        
+
         echo "Auth request status: " . $client2->getResponse()->getStatusCode() . "\n";
         echo "Auth request response: " . substr($client2->getResponse()->getContent(), 0, 200) . "\n";
     }

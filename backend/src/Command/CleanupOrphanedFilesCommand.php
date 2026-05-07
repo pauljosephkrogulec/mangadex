@@ -190,7 +190,8 @@ class CleanupOrphanedFilesCommand extends Command
                 if ($remaining !== false && count($remaining) <= 2) {
                     try {
                         $this->filesystem->remove($chapterPath);
-                        $io->writeln(sprintf('  Removed empty directory: <fg=yellow>chapters/%s/</>', $dir));
+                        $msg = sprintf('  Removed empty directory: <fg=yellow>chapters/%s/</>', $dir);
+                        $io->writeln($msg);
                     } catch (IOExceptionInterface $e) {
                         // Ignore
                     }

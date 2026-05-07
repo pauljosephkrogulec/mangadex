@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
@@ -22,9 +24,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(columns: ['language'])]
 #[ORM\Index(columns: ['chapter_number'])]
 #[ApiResource(
-    normalizationContext: ['groups' => ['chapter:read']],
-    denormalizationContext: ['groups' => ['chapter:write']],
-    order: ['chapterNumber' => 'ASC'],
     operations: [
         new GetCollection(),
         new Get(),
@@ -32,7 +31,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Delete(security: "is_granted('ROLE_ADMIN')"),
         new Patch(security: "is_granted('ROLE_ADMIN')"),
         new Post(security: "is_granted('ROLE_ADMIN')"),
-    ]
+    ],
+    normalizationContext: ['groups' => ['chapter:read']],
+    denormalizationContext: ['groups' => ['chapter:write']],
+    order: ['chapterNumber' => 'ASC']
 )]
 #[ApiFilter(SearchFilter::class, properties: [
     'manga' => 'exact',

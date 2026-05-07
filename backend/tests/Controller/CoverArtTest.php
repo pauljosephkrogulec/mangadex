@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Controller;
 
 use App\Entity\CoverArt;
@@ -23,11 +25,11 @@ class CoverArtTest extends WebTestCase
 
     private function getUploadsDir(): string
     {
-        if (!isset($this->uploadsDir)) {
+        if (! isset($this->uploadsDir)) {
             $this->uploadsDir = static::getContainer()->getParameter('kernel.project_dir') . '/public/uploads/covers';
         }
 
-        if (!is_dir($this->uploadsDir)) {
+        if (! is_dir($this->uploadsDir)) {
             mkdir($this->uploadsDir, 0755, true);
         }
 

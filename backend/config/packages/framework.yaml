@@ -21,6 +21,10 @@ framework:
                 rate:
                     amount: 1
                     interval: '3 minutes'
+            api:
+                policy: 'fixed_window'
+                limit: 60
+                interval: '1 minute'
 
     #esi: true
     #fragments: true

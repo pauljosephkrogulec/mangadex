@@ -14,11 +14,34 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/api')]
 class ChapterPageController extends AbstractController
 {
+    private const UPLOADS_BASE = '/public/uploads';
+
+    private function resolveUploadPath(string $relativePath): ?string
+    {
+        $fullPath = $this->getParameter('kernel.project_dir') . '/public' . $relativePath;
+        $realPath = realpath($fullPath);
+
+        if ($realPath === false) {
+            return null;
+        }
+
+        $uploadsDir = realpath($this->getParameter('kernel.project_dir') . self::UPLOADS_BASE);
+        if ($uploadsDir === false) {
+            return null;
+        }
+
+        if (! str_starts_with($realPath, $uploadsDir)) {
+            return null;
+        }
+
+        return $realPath;
+    }
+
     #[Route('/chapters/{id}/pages/{pageNum}', name: 'chapter_page_serve', methods: ['GET'])]
     public function servePage(int $id, int $pageNum, EntityManagerInterface $em): Response
     {
         $chapter = $em->getRepository(Chapter::class)->find($id);
-        if (!$chapter) {
+        if (! $chapter) {
             throw $this->createNotFoundException('Chapter not found');
         }
 
@@ -30,9 +53,9 @@ class ChapterPageController extends AbstractController
         }
 
         $relativePath = $pages[$pageNum - 1];
-        $fullPath = $this->getParameter('kernel.project_dir') . '/public' . $relativePath;
+        $fullPath = $this->resolveUploadPath($relativePath);
 
-        if (!file_exists($fullPath)) {
+        if ($fullPath === null) {
             throw $this->createNotFoundException('Page file not found');
         }
 
