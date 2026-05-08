@@ -1,4 +1,4 @@
-.PHONY: up down build restart logs logs-backend logs-frontend shell-backend shell-frontend shell-db lint lint-backend lint-frontend fix-backend fix-frontend migrate migrate-diff migrate-rollback install-backend install-frontend test-backend clear-cache cleanup-files cleanup-files-dry-run fresh setup
+.PHONY: up down build restart logs logs-backend logs-frontend shell-backend shell-frontend shell-db lint lint-backend lint-frontend fix-backend fix-frontend migrate migrate-diff migrate-rollback install-backend install-frontend test-backend test-frontend test-frontend-coverage clear-cache cleanup-files cleanup-files-dry-run fresh setup
 
 up:
 	docker compose up -d
