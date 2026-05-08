@@ -1,8 +1,16 @@
 services:
+  frontend:
+    build: ./frontend
+    environment:
+      NEXT_PUBLIC_API_URL: "/api"
+      NODE_ENV: "production"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
   backend:
     build: ./backend
-    volumes:
-      - ./backend:/app
     environment:
       DATABASE_URL: "${DATABASE_URL}"
       APP_SECRET: "${APP_SECRET}"
@@ -21,6 +29,7 @@ services:
       - "80:80"
       - "443:443"
     depends_on:
+      - frontend
       - backend
     networks:
       - app-network
@@ -31,8 +40,6 @@ services:
       POSTGRES_DB: "${POSTGRES_DB:-manga_reader}"
       POSTGRES_USER: "${POSTGRES_USER:-app}"
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-    ports:
-      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:

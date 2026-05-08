@@ -1,5 +1,35 @@
+@import "tailwindcss";
+
+:root {
+  --md-background: 15 17 20;
+  --md-surface: 24 26 30;
+  --md-surface-hover: 32 35 40;
+  --md-border: 38 41 46;
+  --md-text-primary: 236 236 236;
+  --md-text-secondary: 148 155 164;
+  --md-accent: 255 103 64;
+  --md-accent-dim: 255 103 64 / 0.15;
+}
+
+@theme inline {
+  --color-md-background: rgb(var(--md-background));
+  --color-md-surface: rgb(var(--md-surface));
+  --color-md-surface-hover: rgb(var(--md-surface-hover));
+  --color-md-border: rgb(var(--md-border));
+  --color-md-text-primary: rgb(var(--md-text-primary));
+  --color-md-text-secondary: rgb(var(--md-text-secondary));
+  --color-md-accent: rgb(var(--md-accent));
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--md-border)) transparent;
+}
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  margin: 0;
-  padding: 0;
+  background: rgb(var(--md-background));
+  color: rgb(var(--md-text-primary));
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }

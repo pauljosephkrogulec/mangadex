@@ -1,19 +1,29 @@
 import type { Metadata } from "next";
+import { Geist } from "next/font/google";
 import "./globals.css";
+import LayoutClient from "./LayoutClient";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
-  title: "Mangadex",
-  description: "A manga reader built with Next.js and Tailwind CSS.",
+  title: "MangaDex",
+  description: "Read manga online for free",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className={`${geistSans.variable} min-h-screen bg-md-background text-md-text-primary antialiased`}>
+        <LayoutClient>{children}</LayoutClient>
+      </body>
     </html>
   );
 }

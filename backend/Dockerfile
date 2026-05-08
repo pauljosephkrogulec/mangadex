@@ -25,7 +25,8 @@ WORKDIR /app
 COPY . .
 
 # Install PHP dependencies (including dev for now, can use --no-dev in prod)
-RUN composer install --no-interaction --optimize-autoloader
+# --no-scripts: .env is excluded by .dockerignore, so post-install scripts (cache:clear) would fail
+RUN composer install --no-interaction --optimize-autoloader --no-scripts
 
 # Production stage
 FROM php:8.4-fpm

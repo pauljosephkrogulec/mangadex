@@ -1,0 +1,22 @@
+services:
+  frontend:
+    command: sh -c "npm install && npm run dev"
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=/api
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+    user: "0:0"  # Run as root to avoid permission issues during npm install
+
+  backend:
+    volumes:
+      - ./backend:/app
+    command: php -S 0.0.0.0:9000 -t public public/index.php
+    ports:
+      - "9000:9000"
+
+  nginx:
+    ports:
+      - "8080:80"
