@@ -14,6 +14,11 @@ use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 #[AllowMockObjectsWithoutExpectations]
 class CustomListMangaControllerTest extends TestCase
@@ -74,7 +79,6 @@ class CustomListMangaControllerTest extends TestCase
 
         $reflection = new \ReflectionClass($this->controller);
         $property = $reflection->getProperty('container');
-        $property->setAccessible(true);
         $property->setValue($this->controller, $container);
     }
 

@@ -1,0 +1,688 @@
+[
+  {
+    "ref": "ch-1",
+    "manga": "na-honjaman-level-up",
+    "volume": "1",
+    "chapterNumber": "0",
+    "title": "Only I Level Up",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "mangaplus"
+  },
+  {
+    "ref": "ch-2",
+    "manga": "na-honjaman-level-up",
+    "volume": "1",
+    "chapterNumber": "0",
+    "title": null,
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "viz-media"
+  },
+  {
+    "ref": "ch-3",
+    "manga": "na-honjaman-level-up",
+    "volume": "1",
+    "chapterNumber": "0",
+    "title": null,
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "crunchyroll"
+  },
+  {
+    "ref": "ch-4",
+    "manga": "na-honjaman-level-up",
+    "volume": "1",
+    "chapterNumber": "1",
+    "title": "The Weakest Hunter",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "mangadex"
+  },
+  {
+    "ref": "ch-5",
+    "manga": "na-honjaman-level-up",
+    "volume": "1",
+    "chapterNumber": "1",
+    "title": null,
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "fan-scanlation-group-a"
+  },
+  {
+    "ref": "ch-6",
+    "manga": "kage-no-jitsuryokusha-ni-naritakute",
+    "volume": "1",
+    "chapterNumber": "1",
+    "title": null,
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "fan-scanlation-group-b"
+  },
+  {
+    "ref": "ch-7",
+    "manga": "kage-no-jitsuryokusha-ni-naritakute",
+    "volume": "1",
+    "chapterNumber": "2",
+    "title": null,
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "fan-scanlation-group-c"
+  },
+  {
+    "ref": "ch-8",
+    "manga": "kage-no-jitsuryokusha-ni-naritakute",
+    "volume": "1",
+    "chapterNumber": "3",
+    "title": null,
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "mangaplus"
+  },
+  {
+    "ref": "ch-9",
+    "manga": "kage-no-jitsuryokusha-ni-naritakute",
+    "volume": "1",
+    "chapterNumber": "4",
+    "title": null,
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "viz-media"
+  },
+  {
+    "ref": "ch-10",
+    "manga": "kage-no-jitsuryokusha-ni-naritakute",
+    "volume": "2",
+    "chapterNumber": "5",
+    "title": null,
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "crunchyroll"
+  },
+  {
+    "ref": "ch-11",
+    "manga": "mato-seihei-no-slave",
+    "volume": "18",
+    "chapterNumber": "151.5",
+    "title": "Commander Election - Night Memories",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "mangadex"
+  },
+  {
+    "ref": "ch-12",
+    "manga": "mato-seihei-no-slave",
+    "volume": null,
+    "chapterNumber": "153",
+    "title": "Comfort",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "fan-scanlation-group-a"
+  },
+  {
+    "ref": "ch-13",
+    "manga": "mato-seihei-no-slave",
+    "volume": null,
+    "chapterNumber": "154",
+    "title": "Into the Fray",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "fan-scanlation-group-b"
+  },
+  {
+    "ref": "ch-14",
+    "manga": "mato-seihei-no-slave",
+    "volume": null,
+    "chapterNumber": "155",
+    "title": "Taikyoku",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "fan-scanlation-group-c"
+  },
+  {
+    "ref": "ch-15",
+    "manga": "berserk",
+    "volume": "1",
+    "chapterNumber": "0.01",
+    "title": "The Black Swordsman",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "mangaplus"
+  },
+  {
+    "ref": "ch-16",
+    "manga": "berserk",
+    "volume": "1",
+    "chapterNumber": "0.02",
+    "title": "The Brand",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "viz-media"
+  },
+  {
+    "ref": "ch-17",
+    "manga": "berserk",
+    "volume": "1",
+    "chapterNumber": "0.03",
+    "title": "The Guardians of Desire (1)",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "crunchyroll"
+  },
+  {
+    "ref": "ch-18",
+    "manga": "berserk",
+    "volume": "2",
+    "chapterNumber": "0.04",
+    "title": "The Guardians of Desire (2) (LQ)",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "mangadex"
+  },
+  {
+    "ref": "ch-19",
+    "manga": "berserk",
+    "volume": "2",
+    "chapterNumber": "0.05",
+    "title": "The Guardians of Desire (3) (LQ)",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "fan-scanlation-group-a"
+  },
+  {
+    "ref": "ch-20",
+    "manga": "chainsaw-man",
+    "volume": "1",
+    "chapterNumber": "1",
+    "title": null,
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "fan-scanlation-group-b"
+  },
+  {
+    "ref": "ch-21",
+    "manga": "chainsaw-man",
+    "volume": "1",
+    "chapterNumber": "1",
+    "title": "Dog & Chainsaw",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "fan-scanlation-group-c"
+  },
+  {
+    "ref": "ch-22",
+    "manga": "chainsaw-man",
+    "volume": "1",
+    "chapterNumber": "1",
+    "title": "A Dog and a Chainsaw",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "mangaplus"
+  },
+  {
+    "ref": "ch-23",
+    "manga": "chainsaw-man",
+    "volume": "1",
+    "chapterNumber": "2",
+    "title": null,
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "viz-media"
+  },
+  {
+    "ref": "ch-24",
+    "manga": "chainsaw-man",
+    "volume": "1",
+    "chapterNumber": "2",
+    "title": "The Place Where Pochita Is",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "crunchyroll"
+  },
+  {
+    "ref": "ch-25",
+    "manga": "isekai-meikyuu-de-harem-o",
+    "volume": "0",
+    "chapterNumber": "0",
+    "title": null,
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "mangadex"
+  },
+  {
+    "ref": "ch-26",
+    "manga": "isekai-meikyuu-de-harem-o",
+    "volume": "1",
+    "chapterNumber": "1",
+    "title": "Starting Village",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "fan-scanlation-group-a"
+  },
+  {
+    "ref": "ch-27",
+    "manga": "isekai-meikyuu-de-harem-o",
+    "volume": "1",
+    "chapterNumber": "2",
+    "title": "Vale",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "fan-scanlation-group-b"
+  },
+  {
+    "ref": "ch-28",
+    "manga": "isekai-meikyuu-de-harem-o",
+    "volume": "1",
+    "chapterNumber": "3",
+    "title": "Roxanne",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "fan-scanlation-group-c"
+  },
+  {
+    "ref": "ch-29",
+    "manga": "isekai-meikyuu-de-harem-o",
+    "volume": "1",
+    "chapterNumber": "4",
+    "title": "Roxanne 2",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "mangaplus"
+  },
+  {
+    "ref": "ch-30",
+    "manga": "otome-game-sekai-wa-mob-ni-kibishii-sekai-desu",
+    "volume": "1",
+    "chapterNumber": "1",
+    "title": "Reincarnated into Darkness",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "viz-media"
+  },
+  {
+    "ref": "ch-31",
+    "manga": "otome-game-sekai-wa-mob-ni-kibishii-sekai-desu",
+    "volume": "1",
+    "chapterNumber": "2",
+    "title": "Towards Determination",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "crunchyroll"
+  },
+  {
+    "ref": "ch-32",
+    "manga": "otome-game-sekai-wa-mob-ni-kibishii-sekai-desu",
+    "volume": "1",
+    "chapterNumber": "3",
+    "title": "The Thing That Rests Underground",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "mangadex"
+  },
+  {
+    "ref": "ch-33",
+    "manga": "otome-game-sekai-wa-mob-ni-kibishii-sekai-desu",
+    "volume": "1",
+    "chapterNumber": "4",
+    "title": "Enrollment",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "fan-scanlation-group-a"
+  },
+  {
+    "ref": "ch-34",
+    "manga": "otome-game-sekai-wa-mob-ni-kibishii-sekai-desu",
+    "volume": "1",
+    "chapterNumber": "5",
+    "title": "The Normal. Then The Abnormal.",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "fan-scanlation-group-b"
+  },
+  {
+    "ref": "ch-35",
+    "manga": "mushoku-tensei-isekai-ittara-honki-dasu",
+    "volume": null,
+    "chapterNumber": "109",
+    "title": "Mortal Combat",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "fan-scanlation-group-c"
+  },
+  {
+    "ref": "ch-36",
+    "manga": "mushoku-tensei-isekai-ittara-honki-dasu",
+    "volume": null,
+    "chapterNumber": "109",
+    "title": "Mortal Combat",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "mangaplus"
+  },
+  {
+    "ref": "ch-37",
+    "manga": "mushoku-tensei-isekai-ittara-honki-dasu",
+    "volume": null,
+    "chapterNumber": "110",
+    "title": "Loss",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "viz-media"
+  },
+  {
+    "ref": "ch-38",
+    "manga": "mushoku-tensei-isekai-ittara-honki-dasu",
+    "volume": null,
+    "chapterNumber": "110",
+    "title": "Loss",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "crunchyroll"
+  },
+  {
+    "ref": "ch-39",
+    "manga": "mushoku-tensei-isekai-ittara-honki-dasu",
+    "volume": null,
+    "chapterNumber": "111",
+    "title": "Parents",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "mangadex"
+  },
+  {
+    "ref": "ch-40",
+    "manga": "komi-san-wa-komyushou-desu",
+    "volume": "22",
+    "chapterNumber": "288",
+    "title": "Rumiko-chan and Kometani-kun",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "fan-scanlation-group-a"
+  },
+  {
+    "ref": "ch-41",
+    "manga": "komi-san-wa-komyushou-desu",
+    "volume": "37",
+    "chapterNumber": "500",
+    "title": "We're in University.",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "fan-scanlation-group-b"
+  },
+  {
+    "ref": "ch-42",
+    "manga": "komi-san-wa-komyushou-desu",
+    "volume": "37",
+    "chapterNumber": "500.5",
+    "title": "Omake",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "fan-scanlation-group-c"
+  },
+  {
+    "ref": "ch-43",
+    "manga": "lv2-kara-cheat-datta-moto-yuusha-kouho-no-mattari-",
+    "volume": "1",
+    "chapterNumber": "1",
+    "title": null,
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "mangaplus"
+  },
+  {
+    "ref": "ch-44",
+    "manga": "lv2-kara-cheat-datta-moto-yuusha-kouho-no-mattari-",
+    "volume": "1",
+    "chapterNumber": "1",
+    "title": "Hero Candidate",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "viz-media"
+  },
+  {
+    "ref": "ch-45",
+    "manga": "lv2-kara-cheat-datta-moto-yuusha-kouho-no-mattari-",
+    "volume": "1",
+    "chapterNumber": "2",
+    "title": null,
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "crunchyroll"
+  },
+  {
+    "ref": "ch-46",
+    "manga": "lv2-kara-cheat-datta-moto-yuusha-kouho-no-mattari-",
+    "volume": "1",
+    "chapterNumber": "3",
+    "title": null,
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "mangadex"
+  },
+  {
+    "ref": "ch-47",
+    "manga": "lv2-kara-cheat-datta-moto-yuusha-kouho-no-mattari-",
+    "volume": "1",
+    "chapterNumber": "3.5",
+    "title": null,
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "fan-scanlation-group-a"
+  },
+  {
+    "ref": "ch-48",
+    "manga": "ijiranaide-nagatoro-san",
+    "volume": "1",
+    "chapterNumber": "1",
+    "title": "Senpai, you're kinda...",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "fan-scanlation-group-b"
+  },
+  {
+    "ref": "ch-49",
+    "manga": "ijiranaide-nagatoro-san",
+    "volume": "1",
+    "chapterNumber": "2",
+    "title": "Observing Senpai is fun...",
+    "language": "en",
+    "pages": [
+      "001.jpg",
+      "002.jpg",
+      "003.jpg"
+    ],
+    "scanlationGroup": "fan-scanlation-group-c"
+  }
+]

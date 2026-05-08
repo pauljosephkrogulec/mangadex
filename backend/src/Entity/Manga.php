@@ -21,6 +21,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
@@ -84,10 +85,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Manga
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    #[Groups(['manga:read', 'chapter:read', 'custom_list:read'])]
-    private ?int $id = null;
+    #[ORM\Column(type: 'string', length: 36)]
+    #[Groups(['manga:read', 'manga:list', 'chapter:read', 'custom_list:read'])]
+    private ?string $id = null;
 
     #[ORM\Column(type: 'datetime')]
     #[Groups(['manga:read', 'manga:list', 'custom_list:read'])]
@@ -162,6 +162,7 @@ class Manga
 
     public function __construct()
     {
+        $this->id = Uuid::v4()->toRfc4122();
         $this->createdAt = new \DateTime();
         $this->creators = new ArrayCollection();
         $this->tags = new ArrayCollection();
@@ -171,7 +172,7 @@ class Manga
         $this->customLists = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }

@@ -1,0 +1,287 @@
+[
+  {
+    "ref": "774-nanashi-artist",
+    "name": "774 (Nanashi)",
+    "type": "artist"
+  },
+  {
+    "ref": "774-nanashi-author",
+    "name": "774 (Nanashi)",
+    "type": "author"
+  },
+  {
+    "ref": "abe-tsukasa-artist",
+    "name": "Abe Tsukasa",
+    "type": "artist"
+  },
+  {
+    "ref": "aizawa-daisuke-author",
+    "name": "Aizawa Daisuke",
+    "type": "author"
+  },
+  {
+    "ref": "akutami-gege-artist",
+    "name": "Akutami Gege",
+    "type": "artist"
+  },
+  {
+    "ref": "akutami-gege-author",
+    "name": "Akutami Gege",
+    "type": "author"
+  },
+  {
+    "ref": "azumi-kei-author",
+    "name": "Azumi Kei",
+    "type": "author"
+  },
+  {
+    "ref": "baba-okina-author",
+    "name": "Baba Okina",
+    "type": "author"
+  },
+  {
+    "ref": "chugong-author",
+    "name": "Chugong (추공)",
+    "type": "author"
+  },
+  {
+    "ref": "fujikawa-yuka-artist",
+    "name": "Fujikawa Yuka",
+    "type": "artist"
+  },
+  {
+    "ref": "fujimoto-tatsuki-artist",
+    "name": "Fujimoto Tatsuki",
+    "type": "artist"
+  },
+  {
+    "ref": "fujimoto-tatsuki-author",
+    "name": "Fujimoto Tatsuki",
+    "type": "author"
+  },
+  {
+    "ref": "fukuda-shinichi-artist",
+    "name": "Fukuda Shinichi",
+    "type": "artist"
+  },
+  {
+    "ref": "fukuda-shinichi-author",
+    "name": "Fukuda Shinichi",
+    "type": "author"
+  },
+  {
+    "ref": "fuse-author",
+    "name": "Fuse",
+    "type": "author"
+  },
+  {
+    "ref": "gi-so-ryeong-author",
+    "name": "Gi So-Ryeong (기소령)",
+    "type": "author"
+  },
+  {
+    "ref": "harawata-saizou-author",
+    "name": "Harawata Saizou",
+    "type": "author"
+  },
+  {
+    "ref": "hyouju-issei-artist",
+    "name": "Hyouju Issei",
+    "type": "artist"
+  },
+  {
+    "ref": "hyuuga-natsu-author",
+    "name": "Hyuuga Natsu",
+    "type": "author"
+  },
+  {
+    "ref": "itomachi-akine-artist",
+    "name": "Itomachi Akine",
+    "type": "artist"
+  },
+  {
+    "ref": "izumi-tomoki-artist",
+    "name": "Izumi Tomoki",
+    "type": "artist"
+  },
+  {
+    "ref": "izumi-tomoki-author",
+    "name": "Izumi Tomoki",
+    "type": "author"
+  },
+  {
+    "ref": "jang-sung-rak-artist",
+    "name": "Jang Sung-Rak (장성락)",
+    "type": "artist"
+  },
+  {
+    "ref": "kakashi-asahiro-artist",
+    "name": "Kakashi Asahiro",
+    "type": "artist"
+  },
+  {
+    "ref": "kawakami-taiki-artist",
+    "name": "Kawakami Taiki",
+    "type": "artist"
+  },
+  {
+    "ref": "kino-kotora-artist",
+    "name": "Kino Kotora",
+    "type": "artist"
+  },
+  {
+    "ref": "kinojo-miya-author",
+    "name": "Kinojo Miya",
+    "type": "author"
+  },
+  {
+    "ref": "mikami-saka-artist",
+    "name": "Mikami Saka",
+    "type": "artist"
+  },
+  {
+    "ref": "mikami-saka-author",
+    "name": "Mikami Saka",
+    "type": "author"
+  },
+  {
+    "ref": "mishima-yomu-author",
+    "name": "Mishima Yomu",
+    "type": "author"
+  },
+  {
+    "ref": "miura-kentarou-artist",
+    "name": "Miura Kentarou",
+    "type": "artist"
+  },
+  {
+    "ref": "miura-kentarou-author",
+    "name": "Miura Kentarou",
+    "type": "author"
+  },
+  {
+    "ref": "mori-kouji-author",
+    "name": "Mori Kouji",
+    "type": "author"
+  },
+  {
+    "ref": "murata-yuusuke-artist",
+    "name": "Murata Yuusuke",
+    "type": "artist"
+  },
+  {
+    "ref": "nanao-itsuki-author",
+    "name": "Nanao Itsuki",
+    "type": "author"
+  },
+  {
+    "ref": "nekokurage-artist",
+    "name": "Nekokurage",
+    "type": "artist"
+  },
+  {
+    "ref": "nishi-osamu-artist",
+    "name": "Nishi Osamu ",
+    "type": "artist"
+  },
+  {
+    "ref": "nishi-osamu-author",
+    "name": "Nishi Osamu ",
+    "type": "author"
+  },
+  {
+    "ref": "nokomi-artist",
+    "name": "Nokomi (のこみ)",
+    "type": "artist"
+  },
+  {
+    "ref": "one-author",
+    "name": "ONE",
+    "type": "author"
+  },
+  {
+    "ref": "oda-tomohito-artist",
+    "name": "Oda Tomohito",
+    "type": "artist"
+  },
+  {
+    "ref": "oda-tomohito-author",
+    "name": "Oda Tomohito",
+    "type": "author"
+  },
+  {
+    "ref": "ononata-manimani-author",
+    "name": "Ononata Manimani",
+    "type": "author"
+  },
+  {
+    "ref": "redice-studio-artist",
+    "name": "REDICE Studio (레드아이스 스튜디오)",
+    "type": "artist"
+  },
+  {
+    "ref": "rifujin-na-magonote-author",
+    "name": "Rifujin na Magonote",
+    "type": "author"
+  },
+  {
+    "ref": "sakamoto-akira-artist",
+    "name": "Sakamoto Akira",
+    "type": "artist"
+  },
+  {
+    "ref": "sakano-anri-artist",
+    "name": "Sakano Anri",
+    "type": "artist"
+  },
+  {
+    "ref": "sakano-anri-author",
+    "name": "Sakano Anri",
+    "type": "author"
+  },
+  {
+    "ref": "shiosato-jun-artist",
+    "name": "Shiosato Jun",
+    "type": "artist"
+  },
+  {
+    "ref": "sogano-shachi-author",
+    "name": "Sogano Shachi",
+    "type": "author"
+  },
+  {
+    "ref": "studio-gaga-artist",
+    "name": "Studio Gaga",
+    "type": "artist"
+  },
+  {
+    "ref": "takahiro-author",
+    "name": "Takahiro",
+    "type": "author"
+  },
+  {
+    "ref": "takemura-youhei-artist",
+    "name": "Takemura Youhei",
+    "type": "artist"
+  },
+  {
+    "ref": "tanabata-satori-author",
+    "name": "Tanabata Satori",
+    "type": "author"
+  },
+  {
+    "ref": "yamada-kanehito-author",
+    "name": "Yamada Kanehito",
+    "type": "author"
+  },
+  {
+    "ref": "h-goon-author",
+    "name": "h-goon (현군)",
+    "type": "author"
+  },
+  {
+    "ref": "zunta-artist",
+    "name": "zunta",
+    "type": "artist"
+  }
+]

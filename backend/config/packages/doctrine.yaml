@@ -18,8 +18,8 @@ doctrine:
 when@test:
     doctrine:
         dbal:
-            driver: 'pdo_pgsql'
-            server_version: 'postgresql-15'
+            driver: 'pdo_sqlite'
+            server_version: null
 
 when@prod:
     doctrine:

@@ -166,7 +166,7 @@ class CoverArtTest extends WebTestCase
         $coverArt = new CoverArt();
         $coverArt->setManga($this->testManga);
         // Use a relative path that the controller can resolve
-        $coverArt->setImagePath('/uploads/covers/test_cover.jpg');
+        $coverArt->setImagePath('/covers/test_cover.jpg');
         $coverArt->setIsPrimary(false);
 
         $entityManager->persist($coverArt);
@@ -193,7 +193,7 @@ class CoverArtTest extends WebTestCase
 
         $coverArt = new CoverArt();
         $coverArt->setManga($this->testManga);
-        $coverArt->setImagePath('/uploads/covers/test_primary_cover.jpg');
+        $coverArt->setImagePath('/covers/test_primary_cover.jpg');
         $coverArt->setIsPrimary(true);
 
         $entityManager->persist($coverArt);

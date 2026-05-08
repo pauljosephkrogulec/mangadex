@@ -13,7 +13,6 @@ services:
   backend:
     volumes:
       - ./backend:/app
-    command: php -S 0.0.0.0:9000 -t public public/index.php
     ports:
       - "9000:9000"
 

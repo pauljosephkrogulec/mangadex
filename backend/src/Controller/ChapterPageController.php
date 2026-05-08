@@ -18,7 +18,7 @@ class ChapterPageController extends AbstractController
 
     private function resolveUploadPath(string $relativePath): ?string
     {
-        $fullPath = $this->getParameter('kernel.project_dir') . '/public' . $relativePath;
+        $fullPath = $this->getParameter('kernel.project_dir') . '/public/uploads' . $relativePath;
         $realPath = realpath($fullPath);
 
         if ($realPath === false) {
@@ -38,7 +38,7 @@ class ChapterPageController extends AbstractController
     }
 
     #[Route('/chapters/{id}/pages/{pageNum}', name: 'chapter_page_serve', methods: ['GET'])]
-    public function servePage(int $id, int $pageNum, EntityManagerInterface $em): Response
+    public function servePage(string $id, int $pageNum, EntityManagerInterface $em): Response
     {
         $chapter = $em->getRepository(Chapter::class)->find($id);
         if (! $chapter) {

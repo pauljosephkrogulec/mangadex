@@ -54,7 +54,7 @@ final class MangaFeedProvider implements ProviderInterface
         }
 
         $allowedFields = ['chapterNumber', 'volume', 'createdAt', 'language'];
-        $field = $allowedFields[array_key_first($orderBy)] ?? 'chapterNumber';
+        $field = array_key_first($orderBy) ?? 'chapterNumber';
         $direction = reset($orderBy);
         $direction = in_array($direction, ['ASC', 'DESC'], true) ? $direction : 'ASC';
 

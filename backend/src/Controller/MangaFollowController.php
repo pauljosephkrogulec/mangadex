@@ -21,7 +21,7 @@ class MangaFollowController extends AbstractController
     public function __invoke(Manga $manga, Request $request): JsonResponse
     {
         $user = $this->getUser();
-        if (! $user) {
+        if (! $user instanceof \App\Entity\User) {
             throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException('User not authenticated');
         }
 

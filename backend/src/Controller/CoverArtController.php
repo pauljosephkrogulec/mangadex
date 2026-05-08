@@ -19,7 +19,7 @@ class CoverArtController extends AbstractController
 
     private function resolveUploadPath(string $relativePath): ?string
     {
-        $fullPath = $this->getParameter('kernel.project_dir') . '/public' . $relativePath;
+        $fullPath = $this->getParameter('kernel.project_dir') . '/public/uploads' . $relativePath;
         $realPath = realpath($fullPath);
 
         if ($realPath === false) {
@@ -39,7 +39,7 @@ class CoverArtController extends AbstractController
     }
 
     #[Route('/covers/{id}', methods: ['GET'])]
-    public function serveCover(int $id, EntityManagerInterface $em): Response
+    public function serveCover(string $id, EntityManagerInterface $em): Response
     {
         $coverArt = $em->getRepository(CoverArt::class)->find($id);
 
@@ -57,7 +57,7 @@ class CoverArtController extends AbstractController
     }
 
     #[Route('/mangas/{id}/primary-cover', methods: ['GET'])]
-    public function servePrimaryCover(int $id, EntityManagerInterface $em): Response
+    public function servePrimaryCover(string $id, EntityManagerInterface $em): Response
     {
         $manga = $em->getRepository(Manga::class)->find($id);
 

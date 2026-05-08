@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'manga_follow')]
@@ -13,10 +14,9 @@ use Symfony\Component\Serializer\Attribute\Groups;
 class MangaFollow
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'string', length: 36)]
     #[Groups(['follow:read'])]
-    private ?int $id = null;
+    private ?string $id = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'followedMangas')]
     #[ORM\JoinColumn(nullable: false)]
@@ -33,10 +33,11 @@ class MangaFollow
 
     public function __construct()
     {
+        $this->id = Uuid::v4()->toRfc4122();
         $this->followedAt = new \DateTime();
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }

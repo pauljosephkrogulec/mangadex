@@ -42,6 +42,7 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     && docker-php-ext-install zip intl pcntl mbstring gd pdo pdo_pgsql pgsql \
     && pecl install apcu && docker-php-ext-enable apcu \
+    && pecl install pcov && docker-php-ext-enable pcov \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /app /app

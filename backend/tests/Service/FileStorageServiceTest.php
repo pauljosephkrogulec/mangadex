@@ -26,9 +26,9 @@ class FileStorageServiceTest extends TestCase
 
         $file = new UploadedFile($tmpFile, 'cover.jpg', 'image/jpeg', null, true);
 
-        $result = $this->service->storeCover($file, 123, '1');
+        $result = $this->service->storeCover($file, '123', '1');
 
-        $this->assertStringStartsWith('/uploads/covers/', $result);
+        $this->assertStringStartsWith('/covers/', $result);
         $this->assertStringContainsString('manga_123', $result);
 
         // Cleanup
@@ -45,9 +45,9 @@ class FileStorageServiceTest extends TestCase
 
         $file = new UploadedFile($tmpFile, 'cover.jpg', 'image/jpeg', null, true);
 
-        $result = $this->service->storeCover($file, 456, null);
+        $result = $this->service->storeCover($file, '456', null);
 
-        $this->assertStringStartsWith('/uploads/covers/', $result);
+        $this->assertStringStartsWith('/covers/', $result);
         $this->assertStringContainsString('manga_456', $result);
         $this->assertStringContainsString('vol_default', $result);
 
@@ -67,10 +67,10 @@ class FileStorageServiceTest extends TestCase
             $files[] = new UploadedFile($tmpFile, "page{$i}.jpg", 'image/jpeg', null, true);
         }
 
-        $result = $this->service->storeChapterPages($files, 789);
+        $result = $this->service->storeChapterPages($files, '789');
 
         $this->assertCount(3, $result);
-        $this->assertStringStartsWith('/uploads/chapters/789/', $result[0]);
+        $this->assertStringStartsWith('/chapters/789/', $result[0]);
         $this->assertStringContainsString('page_001', $result[0]);
 
         // Cleanup
@@ -96,7 +96,7 @@ class FileStorageServiceTest extends TestCase
         file_put_contents($testFile, 'test content');
 
         $this->assertFileExists($testFile);
-        $this->service->deleteFile('/uploads/test_file.txt');
+        $this->service->deleteFile('/test_file.txt');
         $this->assertFileDoesNotExist($testFile);
     }
 
@@ -114,10 +114,10 @@ class FileStorageServiceTest extends TestCase
         }
 
         $files = [];
-        for ($i = 0; $i < 3; $i++) {
+        for ($i =0; $i < 3; $i++) {
             $testFile = $uploadsDir . "/test_{$i}.txt";
             file_put_contents($testFile, 'test');
-            $files[] = '/uploads/test_' . $i . '.txt';
+            $files[] = "/test_{$i}.txt";
         }
 
         $this->service->deleteFiles($files);
@@ -138,7 +138,7 @@ class FileStorageServiceTest extends TestCase
 
         $file = new UploadedFile($tmpFile, 'test.jpg', 'image/jpeg', null, true);
 
-        $result = $method->invoke($this->service, $file, 999, '5');
+        $result = $method->invoke($this->service, $file, '999', '5');
 
         $this->assertStringContainsString('manga_999', $result);
         $this->assertStringContainsString('vol_5', $result);
@@ -155,7 +155,7 @@ class FileStorageServiceTest extends TestCase
 
         $file = new UploadedFile($tmpFile, 'test.jpg', 'image/jpeg', null, true);
 
-        $result = $method->invoke($this->service, $file, 111, null);
+        $result = $method->invoke($this->service, $file, '111', null);
 
         $this->assertStringContainsString('manga_111', $result);
         $this->assertStringContainsString('vol_default', $result);

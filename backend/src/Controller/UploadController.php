@@ -33,8 +33,7 @@ class UploadController extends AbstractController
     {
         /** @var UploadedFile|null $file */
         $file = $request->files->get('cover');
-        $mangaIdRaw = $request->request->get('mangaId');
-        $mangaId = is_numeric($mangaIdRaw) ? (int) $mangaIdRaw : 0;
+        $mangaId = $request->request->get('mangaId');
         $volume = $request->request->get('volume');
         $volume = $volume !== null ? (string) $volume : null;
         $isPrimary = $request->request->getBoolean('isPrimary', false);
@@ -43,7 +42,7 @@ class UploadController extends AbstractController
             return $this->json(['error' => 'No cover file provided'], Response::HTTP_BAD_REQUEST);
         }
 
-        if ($mangaId <= 0) {
+        if (! is_string($mangaId) || $mangaId === '') {
             return $this->json(['error' => 'Valid mangaId is required'], Response::HTTP_BAD_REQUEST);
         }
 
@@ -88,7 +87,7 @@ class UploadController extends AbstractController
     }
 
     #[Route('/chapters/{id}/upload-pages', name: 'chapter_upload_pages', methods: ['POST'])]
-    public function uploadChapterPages(int $id, Request $request, EntityManagerInterface $em): JsonResponse
+    public function uploadChapterPages(string $id, Request $request, EntityManagerInterface $em): JsonResponse
     {
         /** @var array<UploadedFile> $files */
         $files = $request->files->all('pages');

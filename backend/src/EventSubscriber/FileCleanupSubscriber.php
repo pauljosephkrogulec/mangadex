@@ -100,11 +100,11 @@ class FileCleanupSubscriber implements EventSubscriber
 
     private function getFullPath(string $publicPath): ?string
     {
-        if (empty($publicPath) || ! str_starts_with($publicPath, '/uploads/')) {
+        if (empty($publicPath)) {
             return null;
         }
 
-        $fullPath = __DIR__ . '/../../public' . $publicPath;
+        $fullPath = __DIR__ . '/../../public/uploads' . $publicPath;
         return $fullPath;
     }
 }

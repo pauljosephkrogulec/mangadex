@@ -1,0 +1,527 @@
+[
+  {
+    "ref": "4-koma",
+    "name": "4-Koma",
+    "groupName": "format",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "action",
+    "name": "Action",
+    "groupName": "genre",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "adaptation",
+    "name": "Adaptation",
+    "groupName": "format",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "adventure",
+    "name": "Adventure",
+    "groupName": "genre",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "aliens",
+    "name": "Aliens",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "animals",
+    "name": "Animals",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "anthology",
+    "name": "Anthology",
+    "groupName": "format",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "award-winning",
+    "name": "Award Winning",
+    "groupName": "format",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "boys-love",
+    "name": "Boys' Love",
+    "groupName": "genre",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "comedy",
+    "name": "Comedy",
+    "groupName": "genre",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "cooking",
+    "name": "Cooking",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "crime",
+    "name": "Crime",
+    "groupName": "genre",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "crossdressing",
+    "name": "Crossdressing",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "delinquents",
+    "name": "Delinquents",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "demons",
+    "name": "Demons",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "doujinshi",
+    "name": "Doujinshi",
+    "groupName": "format",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "drama",
+    "name": "Drama",
+    "groupName": "genre",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "fan-colored",
+    "name": "Fan Colored",
+    "groupName": "format",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "fantasy",
+    "name": "Fantasy",
+    "groupName": "genre",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "full-color",
+    "name": "Full Color",
+    "groupName": "format",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "genderswap",
+    "name": "Genderswap",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "ghosts",
+    "name": "Ghosts",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "girls-love",
+    "name": "Girls' Love",
+    "groupName": "genre",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "gyaru",
+    "name": "Gyaru",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "harem",
+    "name": "Harem",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "historical",
+    "name": "Historical",
+    "groupName": "genre",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "horror",
+    "name": "Horror",
+    "groupName": "genre",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "incest",
+    "name": "Incest",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "isekai",
+    "name": "Isekai",
+    "groupName": "genre",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "loli",
+    "name": "Loli",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "long-strip",
+    "name": "Long Strip",
+    "groupName": "format",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "mafia",
+    "name": "Mafia",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "magic",
+    "name": "Magic",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "magical-girls",
+    "name": "Magical Girls",
+    "groupName": "genre",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "mahjong",
+    "name": "Mahjong",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "martial-arts",
+    "name": "Martial Arts",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "mecha",
+    "name": "Mecha",
+    "groupName": "genre",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "medical",
+    "name": "Medical",
+    "groupName": "genre",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "military",
+    "name": "Military",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "monster-girls",
+    "name": "Monster Girls",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "monsters",
+    "name": "Monsters",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "music",
+    "name": "Music",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "mystery",
+    "name": "Mystery",
+    "groupName": "genre",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "ninja",
+    "name": "Ninja",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "office-workers",
+    "name": "Office Workers",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "official-colored",
+    "name": "Official Colored",
+    "groupName": "format",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "oneshot",
+    "name": "Oneshot",
+    "groupName": "format",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "philosophical",
+    "name": "Philosophical",
+    "groupName": "genre",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "police",
+    "name": "Police",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "post-apocalyptic",
+    "name": "Post-Apocalyptic",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "psychological",
+    "name": "Psychological",
+    "groupName": "genre",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "reincarnation",
+    "name": "Reincarnation",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "reverse-harem",
+    "name": "Reverse Harem",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "romance",
+    "name": "Romance",
+    "groupName": "genre",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "samurai",
+    "name": "Samurai",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "school-life",
+    "name": "School Life",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "sci-fi",
+    "name": "Sci-Fi",
+    "groupName": "genre",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "self-published",
+    "name": "Self-Published",
+    "groupName": "format",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "shota",
+    "name": "Shota",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "slice-of-life",
+    "name": "Slice of Life",
+    "groupName": "genre",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "sports",
+    "name": "Sports",
+    "groupName": "genre",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "superhero",
+    "name": "Superhero",
+    "groupName": "genre",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "supernatural",
+    "name": "Supernatural",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "survival",
+    "name": "Survival",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "thriller",
+    "name": "Thriller",
+    "groupName": "genre",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "time-travel",
+    "name": "Time Travel",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "traditional-games",
+    "name": "Traditional Games",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "tragedy",
+    "name": "Tragedy",
+    "groupName": "genre",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "vampires",
+    "name": "Vampires",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "video-games",
+    "name": "Video Games",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "villainess",
+    "name": "Villainess",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "virtual-reality",
+    "name": "Virtual Reality",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  },
+  {
+    "ref": "web-comic",
+    "name": "Web Comic",
+    "groupName": "format",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "wuxia",
+    "name": "Wuxia",
+    "groupName": "genre",
+    "description": null,
+    "isPrimary": true
+  },
+  {
+    "ref": "zombies",
+    "name": "Zombies",
+    "groupName": "theme",
+    "description": null,
+    "isPrimary": false
+  }
+]

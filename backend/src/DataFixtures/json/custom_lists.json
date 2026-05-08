@@ -1,0 +1,51 @@
+[
+  {
+    "ref": "favorites-1",
+    "name": "My Favorite Manga",
+    "visibility": "public",
+    "user": "mangareader1",
+    "mangas": ["chainsaw-man", "jujutsu-kaisen", "berserk"]
+  },
+  {
+    "ref": "action-1",
+    "name": "Action Packed",
+    "visibility": "public",
+    "user": "mangareader1",
+    "mangas": ["one-punch-man", "kage-no-jitsuryokusha-ni-naritakute", "mato-seihei-no-slave"]
+  },
+  {
+    "ref": "read-later-1",
+    "name": "Read Later",
+    "visibility": "private",
+    "user": "mangareader1",
+    "mangas": ["sousou-no-frieren", "mushoku-tensei-isekai-ittara-honki-dasu"]
+  },
+  {
+    "ref": "top-picks-2",
+    "name": "Top Picks",
+    "visibility": "public",
+    "user": "mangareader2",
+    "mangas": ["na-honjaman-level-up", "tensei-shitara-slime-datta-ken"]
+  },
+  {
+    "ref": "romance-2",
+    "name": "Romance Reads",
+    "visibility": "public",
+    "user": "mangareader2",
+    "mangas": ["sono-bisque-doll-wa-koi-o-suru", "komi-san-wa-komyushou-desu", "kaoru-hana-wa-rin-to-saku"]
+  },
+  {
+    "ref": "hidden-2",
+    "name": "Hidden Gems",
+    "visibility": "hidden",
+    "user": "mangareader2",
+    "mangas": ["mieruko-chan", "lv2-kara-cheat-datta-moto-yuusha-kouho-no-mattari-"]
+  },
+  {
+    "ref": "admin-picks",
+    "name": "Admin Picks",
+    "visibility": "public",
+    "user": "admin",
+    "mangas": ["berserk", "chainsaw-man", "jujutsu-kaisen", "one-punch-man"]
+  }
+]

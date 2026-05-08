@@ -1,0 +1,17 @@
+[
+  { "ref": "follow-1", "user": "mangareader1", "manga": "chainsaw-man" },
+  { "ref": "follow-2", "user": "mangareader1", "manga": "berserk" },
+  { "ref": "follow-3", "user": "mangareader1", "manga": "jujutsu-kaisen" },
+  { "ref": "follow-4", "user": "mangareader1", "manga": "one-punch-man" },
+  { "ref": "follow-5", "user": "mangareader1", "manga": "na-honjaman-level-up" },
+  { "ref": "follow-6", "user": "mangareader2", "manga": "sousou-no-frieren" },
+  { "ref": "follow-7", "user": "mangareader2", "manga": "tensei-shitara-slime-datta-ken" },
+  { "ref": "follow-8", "user": "mangareader2", "manga": "mushoku-tensei-isekai-ittara-honki-dasu" },
+  { "ref": "follow-9", "user": "admin", "manga": "berserk" },
+  { "ref": "follow-10", "user": "admin", "manga": "jujutsu-kaisen" },
+  { "ref": "follow-11", "user": "admin", "manga": "chainsaw-man" },
+  { "ref": "follow-12", "user": "admin", "manga": "na-honjaman-level-up" },
+  { "ref": "follow-13", "user": "animefan", "manga": "sono-bisque-doll-wa-koi-o-suru" },
+  { "ref": "follow-14", "user": "animefan", "manga": "komi-san-wa-komyushou-desu" },
+  { "ref": "follow-15", "user": "animefan", "manga": "kaoru-hana-wa-rin-to-saku" }
+]

@@ -14,6 +14,10 @@ use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 #[AllowMockObjectsWithoutExpectations]
 class MangaFollowControllerTest extends TestCase
@@ -55,7 +59,6 @@ class MangaFollowControllerTest extends TestCase
 
         $reflection = new \ReflectionClass($this->controller);
         $property = $reflection->getProperty('container');
-        $property->setAccessible(true);
         $property->setValue($this->controller, $container);
     }
 
@@ -188,7 +191,6 @@ class MangaFollowControllerTest extends TestCase
 
         $reflection = new \ReflectionClass($controller);
         $property = $reflection->getProperty('container');
-        $property->setAccessible(true);
         $property->setValue($controller, $container);
 
         $request = $this->createRequest('POST');

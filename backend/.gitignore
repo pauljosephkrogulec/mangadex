@@ -3,6 +3,7 @@
 .env
 .env.local
 .php-cs-fixer.cache
+/coverage/
 
 ###> lexik/jwt-authentication-bundle ###
 /config/jwt/*.pem

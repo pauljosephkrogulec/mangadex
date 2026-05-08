@@ -1,0 +1,37 @@
+[
+  {
+    "ref": "mangaplus",
+    "name": "MangaPlus",
+    "website": "https://mangaplus.shueisha.co.jp"
+  },
+  {
+    "ref": "viz-media",
+    "name": "VIZ Media",
+    "website": "https://www.viz.com"
+  },
+  {
+    "ref": "crunchyroll",
+    "name": "Crunchyroll",
+    "website": "https://www.crunchyroll.com"
+  },
+  {
+    "ref": "mangadex",
+    "name": "MangaDex",
+    "website": "https://mangadex.org"
+  },
+  {
+    "ref": "fan-scanlation-group-a",
+    "name": "Scanlation Group A",
+    "website": null
+  },
+  {
+    "ref": "fan-scanlation-group-b",
+    "name": "Scanlation Group B",
+    "website": null
+  },
+  {
+    "ref": "fan-scanlation-group-c",
+    "name": "Scanlation Group C",
+    "website": null
+  }
+]

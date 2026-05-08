@@ -16,6 +16,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
@@ -43,10 +44,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CoverArt
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    #[Groups(['cover_art:read', 'manga:read'])]
-    private ?int $id = null;
+    #[ORM\Column(type: 'string', length: 36)]
+    #[Groups(['cover_art:read', 'manga:read', 'manga:include:coverArt'])]
+    private ?string $id = null;
 
     #[ORM\Column(type: 'datetime')]
     #[Groups(['cover_art:read'])]
@@ -60,24 +60,25 @@ class CoverArt
     #[ORM\Column(length: 500)]
     #[Assert\NotBlank]
     #[Assert\Length(max: 500)]
-    #[Groups(['cover_art:read', 'cover_art:write', 'manga:read'])]
+    #[Groups(['cover_art:read', 'cover_art:write', 'manga:read', 'manga:include:coverArt'])]
     private string $imagePath;
 
     #[ORM\Column(length: 50, nullable: true)]
     #[Assert\Length(max: 50)]
-    #[Groups(['cover_art:read', 'cover_art:write', 'manga:read'])]
+    #[Groups(['cover_art:read', 'cover_art:write', 'manga:read', 'manga:include:coverArt'])]
     private ?string $volume = null;
 
     #[ORM\Column(name: 'is_primary', type: 'boolean', options: ['default' => false])]
-    #[Groups(['cover_art:read', 'cover_art:write', 'manga:read'])]
+    #[Groups(['cover_art:read', 'cover_art:write', 'manga:read', 'manga:include:coverArt'])]
     private bool $isPrimary = false;
 
     public function __construct()
     {
+        $this->id = Uuid::v4()->toRfc4122();
         $this->createdAt = new \DateTime();
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
@@ -121,6 +122,11 @@ class CoverArt
     }
 
     public function isPrimary(): bool
+    {
+        return $this->isPrimary;
+    }
+
+    public function getIsPrimary(): bool
     {
         return $this->isPrimary;
     }

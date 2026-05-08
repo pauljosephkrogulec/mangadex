@@ -204,7 +204,7 @@ class CleanupOrphanedFilesCommand extends Command
 
     private function getFullPath(string $publicPath): string
     {
-        return __DIR__ . '/../../public' . $publicPath;
+        return __DIR__ . '/../../public/uploads' . $publicPath;
     }
 
     private function getUploadsDir(string $subdir): string

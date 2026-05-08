@@ -27,7 +27,7 @@ class MangaTest extends TestCase
         $this->assertEquals('ongoing', $manga->getStatus());
         $this->assertEquals(2024, $manga->getYear());
         $this->assertEquals('suggestive', $manga->getContentRating());
-        $this->assertNull($manga->getId());
+        $this->assertIsString($manga->getId());
     }
 
     public function testStatusChoices(): void

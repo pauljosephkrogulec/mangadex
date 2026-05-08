@@ -34,14 +34,14 @@ describe("api instance", () => {
     expect(api.defaults.timeout).toBe(15_000);
   });
 
-  it("sends Content-Type and Accept JSON headers on every request", async () => {
+  it("sends Content-Type and Accept JSON-LD headers on every request", async () => {
     // Read the actual headers the client sends through MockAdapter rather than
     // inspecting defaults (Axios internally enriches them at send time).
     mock.onGet("/check-headers").reply((config) => {
       expect(config.headers).toHaveProperty("Content-Type", "application/json");
       // Axios adds extra Accept values at the adapter level, so we check
-      // that at least application/json is present.
-      expect(config.headers?.Accept).toMatch(/application\/json/);
+      // that at least application/ld+json is present.
+      expect(config.headers?.Accept).toMatch(/application\/ld\+json/);
       return [200, {}];
     });
 

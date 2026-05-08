@@ -18,6 +18,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Validator\ConstraintViolationInterface;
+use Symfony\Component\Validator\ConstraintViolationList;
 
 #[AllowMockObjectsWithoutExpectations]
 class UploadControllerTest extends TestCase
@@ -61,11 +65,11 @@ class UploadControllerTest extends TestCase
         $this->adminUser->setRoles(['ROLE_ADMIN']);
 
         $this->manga = $this->createMock(Manga::class);
-        $this->manga->method('getId')->willReturn(1);
+        $this->manga->method('getId')->willReturn('1');
         $this->manga->method('getTitle')->willReturn('Test Manga');
 
         $this->chapter = $this->createMock(Chapter::class);
-        $this->chapter->method('getId')->willReturn(1);
+        $this->chapter->method('getId')->willReturn('1');
 
         $this->mockSecurityContext($this->adminUser);
     }
@@ -78,10 +82,10 @@ class UploadControllerTest extends TestCase
         $tokenStorage = $this->createMock(TokenStorageInterface::class);
         $tokenStorage->method('getToken')->willReturn($token);
 
-        $serializer = $this->createMock(\Symfony\Component\Serializer\SerializerInterface::class);
+        $serializer = $this->createMock(SerializerInterface::class);
         $serializer->method('serialize')->willReturn('{}');
 
-        $container = $this->createMock(\Symfony\Component\DependencyInjection\ContainerInterface::class);
+        $container = $this->createMock(ContainerInterface::class);
         $container->method('has')->willReturnCallback(function ($id) {
             return in_array($id, ['security.token_storage', 'serializer']);
         });
@@ -95,7 +99,6 @@ class UploadControllerTest extends TestCase
 
         $reflection = new \ReflectionClass($this->controller);
         $property = $reflection->getProperty('container');
-        $property->setAccessible(true);
         $property->setValue($this->controller, $container);
     }
 
@@ -103,12 +106,12 @@ class UploadControllerTest extends TestCase
     {
         $this->mangaRepository
             ->method('find')
-            ->with(1)
+            ->with('1')
             ->willReturn($this->manga);
 
         $this->uploadValidator
             ->method('validateImage')
-            ->willReturn(new \Symfony\Component\Validator\ConstraintViolationList());
+            ->willReturn(new ConstraintViolationList());
 
         $this->storageService
             ->method('storeCover')
@@ -162,7 +165,7 @@ class UploadControllerTest extends TestCase
     {
         $this->mangaRepository
             ->method('find')
-            ->with(999)
+            ->with('999')
             ->willReturn(null);
 
         $file = $this->createMock(UploadedFile::class);
@@ -180,7 +183,7 @@ class UploadControllerTest extends TestCase
     {
         $this->chapterRepository
             ->method('find')
-            ->with(1)
+            ->with('1')
             ->willReturn($this->chapter);
 
         $this->uploadValidator
@@ -201,9 +204,9 @@ class UploadControllerTest extends TestCase
         $request = new Request();
         $request->setMethod('POST');
         $request->files->set('pages', [$file1, $file2]);
-        $request->attributes->set('id', 1);
+        $request->attributes->set('id', '1');
 
-        $response = $this->controller->uploadChapterPages(1, $request, $this->entityManager);
+        $response = $this->controller->uploadChapterPages('1', $request, $this->entityManager);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
         $this->assertEquals(200, $response->getStatusCode());
@@ -213,9 +216,9 @@ class UploadControllerTest extends TestCase
     {
         $request = new Request();
         $request->setMethod('POST');
-        $request->attributes->set('id', 1);
+        $request->attributes->set('id', '1');
 
-        $response = $this->controller->uploadChapterPages(1, $request, $this->entityManager);
+        $response = $this->controller->uploadChapterPages('1', $request, $this->entityManager);
 
         $this->assertEquals(400, $response->getStatusCode());
     }
@@ -224,16 +227,16 @@ class UploadControllerTest extends TestCase
     {
         $this->chapterRepository
             ->method('find')
-            ->with(999)
+            ->with('999')
             ->willReturn(null);
 
         $file = $this->createMock(UploadedFile::class);
         $request = new Request();
         $request->setMethod('POST');
-        $request->attributes->set('id', 999);
+        $request->attributes->set('id', '999');
         $request->files->set('pages', [$file]);
 
-        $response = $this->controller->uploadChapterPages(999, $request, $this->entityManager);
+        $response = $this->controller->uploadChapterPages('999', $request, $this->entityManager);
 
         $this->assertEquals(404, $response->getStatusCode());
     }
@@ -247,22 +250,22 @@ class UploadControllerTest extends TestCase
 
         $response = $this->controller->uploadCover($request, $this->entityManager);
 
-        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertEquals(404, $response->getStatusCode());
     }
 
     public function testUploadCoverValidationViolation(): void
     {
         $this->mangaRepository
             ->method('find')
-            ->with(1)
+            ->with('1')
             ->willReturn($this->manga);
 
-        $violation = $this->createMock(\Symfony\Component\Validator\ConstraintViolationInterface::class);
+        $violation = $this->createMock(ConstraintViolationInterface::class);
         $violation->method('getMessage')->willReturn('File too large');
 
         $this->uploadValidator
             ->method('validateImage')
-            ->willReturn(new \Symfony\Component\Validator\ConstraintViolationList([$violation]));
+            ->willReturn(new ConstraintViolationList([$violation]));
 
         $file = $this->createMock(UploadedFile::class);
         $request = new Request();
@@ -282,12 +285,12 @@ class UploadControllerTest extends TestCase
 
         $this->mangaRepository
             ->method('find')
-            ->with(1)
+            ->with('1')
             ->willReturn($mangaWithNullId);
 
         $this->uploadValidator
             ->method('validateImage')
-            ->willReturn(new \Symfony\Component\Validator\ConstraintViolationList());
+            ->willReturn(new ConstraintViolationList());
 
         $this->storageService
             ->method('storeCover')
@@ -308,12 +311,12 @@ class UploadControllerTest extends TestCase
     {
         $this->mangaRepository
             ->method('find')
-            ->with(1)
+            ->with('1')
             ->willReturn($this->manga);
 
         $this->uploadValidator
             ->method('validateImage')
-            ->willReturn(new \Symfony\Component\Validator\ConstraintViolationList());
+            ->willReturn(new ConstraintViolationList());
 
         $this->storageService
             ->method('storeCover')
@@ -351,7 +354,7 @@ class UploadControllerTest extends TestCase
     {
         $this->chapterRepository
             ->method('find')
-            ->with(1)
+            ->with('1')
             ->willReturn($this->chapter);
 
         $this->uploadValidator
@@ -362,9 +365,9 @@ class UploadControllerTest extends TestCase
         $request = new Request();
         $request->setMethod('POST');
         $request->files->set('pages', [$file]);
-        $request->attributes->set('id', 1);
+        $request->attributes->set('id', '1');
 
-        $response = $this->controller->uploadChapterPages(1, $request, $this->entityManager);
+        $response = $this->controller->uploadChapterPages('1', $request, $this->entityManager);
 
         $this->assertEquals(400, $response->getStatusCode());
     }
@@ -376,7 +379,7 @@ class UploadControllerTest extends TestCase
 
         $this->chapterRepository
             ->method('find')
-            ->with(1)
+            ->with('1')
             ->willReturn($chapterWithNullId);
 
         $this->uploadValidator
@@ -391,9 +394,9 @@ class UploadControllerTest extends TestCase
         $request = new Request();
         $request->setMethod('POST');
         $request->files->set('pages', [$file]);
-        $request->attributes->set('id', 1);
+        $request->attributes->set('id', '1');
 
-        $response = $this->controller->uploadChapterPages(1, $request, $this->entityManager);
+        $response = $this->controller->uploadChapterPages('1', $request, $this->entityManager);
 
         $this->assertEquals(500, $response->getStatusCode());
     }
@@ -402,7 +405,7 @@ class UploadControllerTest extends TestCase
     {
         $this->chapterRepository
             ->method('find')
-            ->with(1)
+            ->with('1')
             ->willReturn($this->chapter);
 
         $this->uploadValidator
@@ -426,11 +429,11 @@ class UploadControllerTest extends TestCase
         $request = new Request();
         $request->setMethod('POST');
         $request->files->set('pages', [$file]);
-        $request->attributes->set('id', 1);
+        $request->attributes->set('id', '1');
 
         // Use try/catch so PCOV records the catch block execution
         try {
-            $this->controller->uploadChapterPages(1, $request, $this->entityManager);
+            $this->controller->uploadChapterPages('1', $request, $this->entityManager);
             $this->fail('Expected exception was not thrown');
         } catch (\Exception $e) {
             $this->assertEquals('Database error', $e->getMessage());

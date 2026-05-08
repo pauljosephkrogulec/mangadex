@@ -17,6 +17,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
@@ -46,10 +47,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Chapter
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'string', length: 36)]
     #[Groups(['chapter:read'])]
-    private ?int $id = null;
+    private ?string $id = null;
 
     #[ORM\Column(type: 'datetime')]
     #[Groups(['chapter:read'])]
@@ -95,10 +95,11 @@ class Chapter
 
     public function __construct()
     {
+        $this->id = Uuid::v4()->toRfc4122();
         $this->createdAt = new \DateTime();
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
@@ -181,7 +182,10 @@ class Chapter
     {
         return $this->pages;
     }
-
+    
+    /**
+     * @return list<string>
+     */
     #[Groups(['chapter:read'])]
     public function getPageUrls(): array
     {
@@ -191,8 +195,10 @@ class Chapter
 
         $urls = [];
         $totalPages = count($this->pages);
-        for ($i = 1; $i <= $totalPages; $i++) {
-            $urls[] = sprintf('/api/chapters/%d/pages/%d', $this->id, $i);
+        $baseUrl = '/api/chapters/' . $this->id . '/pages';
+
+        for ($i = 0; $i < $totalPages; $i++) {
+            $urls[] = $baseUrl . '/' . ($i + 1);
         }
 
         return $urls;

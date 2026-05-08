@@ -20,7 +20,7 @@ class UserTest extends TestCase
         $this->assertEquals('hashed_password_here', $user->getPassword());
         $this->assertContains('ROLE_ADMIN', $user->getRoles());
         $this->assertContains('ROLE_USER', $user->getRoles()); // Default role
-        $this->assertNull($user->getId()); // New entity has no ID
+        $this->assertIsString($user->getId());
     }
 
     public function testUserIdentifier(): void
@@ -48,9 +48,9 @@ class UserTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function testGetIdReturnsNullForNewEntity(): void
+    public function testGetIdReturnsStringForNewEntity(): void
     {
         $user = new User();
-        $this->assertNull($user->getId());
+        $this->assertIsString($user->getId());
     }
 }
