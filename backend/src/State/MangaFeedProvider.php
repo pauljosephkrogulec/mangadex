@@ -75,6 +75,6 @@ final class MangaFeedProvider implements ProviderInterface
         /** @var array<Chapter> $result */
         $result = $qb->getQuery()->getResult();
 
-        return $result;
+        return $result ?? [];
     }
 }

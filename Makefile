@@ -95,8 +95,7 @@ generate-covers:
 
 test-backend:
 	-docker compose exec backend rm -f var/test.db
-	docker compose exec backend php bin/console doctrine:database:create --env=test --no-interaction
-	docker compose exec backend php bin/console doctrine:schema:create --env=test --no-interaction
+	docker compose exec backend bash -c 'DATABASE_URL="sqlite:///$$(pwd)/var/test.db" php bin/console doctrine:schema:create --env=test --no-interaction'
 	docker compose exec backend php bin/phpunit
 	-docker compose exec backend rm -f var/test.db
 
