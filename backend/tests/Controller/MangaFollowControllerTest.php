@@ -14,10 +14,8 @@ use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 #[AllowMockObjectsWithoutExpectations]
 class MangaFollowControllerTest extends TestCase
@@ -37,8 +35,12 @@ class MangaFollowControllerTest extends TestCase
 
         $this->entityManager
             ->method('getRepository')
-            ->with(MangaFollow::class)
-            ->willReturn($this->repository);
+            ->willReturnCallback(function ($className) {
+                return match($className) {
+                    MangaFollow::class => $this->repository,
+                    default => throw new \RuntimeException("Unexpected repository: $className"),
+                };
+            });
 
         $this->controller = new MangaFollowController($this->entityManager);
 
@@ -54,8 +56,8 @@ class MangaFollowControllerTest extends TestCase
         $tokenStorage->method('getToken')->willReturn($token);
 
         $container = $this->createMock(\Symfony\Component\DependencyInjection\ContainerInterface::class);
-        $container->method('has')->with('security.token_storage')->willReturn(true);
-        $container->method('get')->with('security.token_storage')->willReturn($tokenStorage);
+        $container->method('has')->willReturn(true);
+        $container->method('get')->willReturn($tokenStorage);
 
         $reflection = new \ReflectionClass($this->controller);
         $property = $reflection->getProperty('container');
@@ -84,7 +86,7 @@ class MangaFollowControllerTest extends TestCase
         $response = $this->controller->__invoke($this->manga, $request);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(201, $response->getStatusCode());
 
         $data = json_decode($response->getContent(), true);
         $this->assertTrue($data['following']);
@@ -186,8 +188,8 @@ class MangaFollowControllerTest extends TestCase
         $tokenStorage->method('getToken')->willReturn($token);
 
         $container = $this->createMock(\Symfony\Component\DependencyInjection\ContainerInterface::class);
-        $container->method('has')->with('security.token_storage')->willReturn(true);
-        $container->method('get')->with('security.token_storage')->willReturn($tokenStorage);
+        $container->method('has')->willReturn(true);
+        $container->method('get')->willReturn($tokenStorage);
 
         $reflection = new \ReflectionClass($controller);
         $property = $reflection->getProperty('container');

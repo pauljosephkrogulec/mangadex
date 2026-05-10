@@ -14,7 +14,7 @@ class DebugJwtTest extends WebTestCase
     public function testJwtAuth(): void
     {
         $client = static::createClient();
-        $container = static::getContainer();
+        $container = $client->getContainer();
         $em = $container->get(EntityManagerInterface::class);
         $hasher = $container->get(UserPasswordHasherInterface::class);
 
@@ -41,13 +41,12 @@ class DebugJwtTest extends WebTestCase
             json_encode(['email' => 'test@example.com', 'password' => 'password123'])
         );
 
-        echo "Login status: " . $client->getResponse()->getStatusCode() . "\n";
         $token = json_decode($client->getResponse()->getContent(), true)['token'] ?? '';
-        echo "Token (first 30 chars): " . substr($token, 0, 30) . "...\n";
 
-        // Try authenticated request
-        $client2 = static::createClient();
-        $client2->request(
+        $this->assertNotEmpty($token, 'JWT token should not be empty');
+
+        // Try authenticated request with the same client
+        $client->request(
             'GET',
             '/api/users/' . $user->getId(),
             [],
@@ -56,7 +55,6 @@ class DebugJwtTest extends WebTestCase
             ''
         );
 
-        echo "Auth request status: " . $client2->getResponse()->getStatusCode() . "\n";
-        echo "Auth request response: " . substr($client2->getResponse()->getContent(), 0, 200) . "\n";
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
 }

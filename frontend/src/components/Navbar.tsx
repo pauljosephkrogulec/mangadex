@@ -56,14 +56,14 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar: () => voi
             </span>
           </div>
 
-          <button className="p-2 text-md-text-secondary hover:text-md-text-primary transition-colors">
+          <button aria-label="Notifications" className="p-2 text-md-text-secondary hover:text-md-text-primary transition-colors">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
               <path d="M9 1.5a5.5 5.5 0 00-5.5 5.5v2.5l-1.5 3h14l-1.5-3V7A5.5 5.5 0 009 1.5z" stroke="currentColor" strokeWidth="1.5"/>
               <path d="M6.5 13a2.5 2.5 0 005 0" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
             </svg>
           </button>
 
-          <button className="w-8 h-8 rounded-full bg-md-surface border border-md-border flex items-center justify-center text-sm text-md-text-secondary hover:text-md-text-primary transition-colors">
+          <button aria-label="User profile" className="w-8 h-8 rounded-full bg-md-surface border border-md-border flex items-center justify-center text-sm text-md-text-secondary hover:text-md-text-primary transition-colors">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <circle cx="8" cy="5" r="3" stroke="currentColor" strokeWidth="1.5"/>
               <path d="M2 14c0-3.5 3-5 6-5s6 1.5 6 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>

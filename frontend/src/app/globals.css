@@ -33,3 +33,11 @@ body {
   color: rgb(var(--md-text-primary));
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
+
+@utility scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

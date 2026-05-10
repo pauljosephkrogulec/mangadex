@@ -47,7 +47,7 @@ class MangaFollowController extends AbstractController
             return new JsonResponse([
                 'following' => true,
                 'followedAt' => $follow->getFollowedAt()->format('c'),
-            ], 200);
+            ], 201);
         }
 
         if ($method === 'DELETE') {

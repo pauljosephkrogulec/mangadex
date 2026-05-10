@@ -77,14 +77,17 @@ class CleanupOrphanedFilesCommand extends Command
     {
         $io->section('Checking cover art files...');
 
-        $coverArts = $this->em->getRepository(CoverArt::class)->findAll();
+        // Use streaming query to avoid loading all entities into memory
+        $qb = $this->em->getRepository(CoverArt::class)->createQueryBuilder('c')
+            ->select('c.imagePath');
         $validPaths = [];
-        foreach ($coverArts as $coverArt) {
-            $path = $coverArt->getImagePath();
+        foreach ($qb->getQuery()->toIterable() as $row) {
+            $path = $row['imagePath'];
             if (! empty($path)) {
                 $validPaths[$this->getFullPath($path)] = true;
             }
         }
+        $this->em->clear();
 
         $coversDir = $this->getUploadsDir('covers');
         if (! is_dir($coversDir)) {
@@ -93,19 +96,52 @@ class CleanupOrphanedFilesCommand extends Command
         }
 
         $deleted = 0;
-        $files = scandir($coversDir);
-        if ($files === false) {
-            return 0;
-        }
+        $entries = scandir($coversDir);
 
-        foreach ($files as $file) {
-            if ($file === '.' || $file === '..') {
+        foreach ($entries ?: [] as $entry) {
+            if ($entry === '.' || $entry === '..') {
                 continue;
             }
 
-            $fullPath = $coversDir . '/' . $file;
-            if (is_file($fullPath) && ! isset($validPaths[$fullPath])) {
-                $io->writeln(sprintf('  %s <fg=red>%s</>', $dryRun ? 'Would delete:' : 'Deleting:', $file));
+            $fullPath = $coversDir . '/' . $entry;
+
+            // Covers are stored in UUID subdirectories: covers/{uuid}/{filename}
+            if (is_dir($fullPath)) {
+                $files = scandir($fullPath);
+                foreach ($files ?: [] as $file) {
+                    if ($file === '.' || $file === '..') {
+                        continue;
+                    }
+                    $filePath = $fullPath . '/' . $file;
+                    if (is_file($filePath) && ! isset($validPaths[$filePath])) {
+                        $io->writeln(sprintf('  %s <fg=red>%s/%s</>', $dryRun ? 'Would delete:' : 'Deleting:', $entry, $file));
+
+                        if (! $dryRun) {
+                            try {
+                                $this->filesystem->remove($filePath);
+                            } catch (IOExceptionInterface $e) {
+                                $io->error('Failed to delete: ' . $e->getMessage());
+                                continue;
+                            }
+                        }
+                        $deleted++;
+                    }
+                }
+
+                // Remove empty UUID directories
+                if (! $dryRun) {
+                    $remaining = scandir($fullPath);
+                    if ($remaining !== false && count($remaining) <= 2) {
+                        try {
+                            $this->filesystem->remove($fullPath);
+                            $io->writeln(sprintf('  Removed empty directory: <fg=yellow>covers/%s/</>', $entry));
+                        } catch (IOExceptionInterface) {
+                            // Ignore
+                        }
+                    }
+                }
+            } elseif (is_file($fullPath) && ! isset($validPaths[$fullPath])) {
+                $io->writeln(sprintf('  %s <fg=red>%s</>', $dryRun ? 'Would delete:' : 'Deleting:', $entry));
 
                 if (! $dryRun) {
                     try {
@@ -126,15 +162,21 @@ class CleanupOrphanedFilesCommand extends Command
     {
         $io->section('Checking chapter page files...');
 
-        $chapters = $this->em->getRepository(Chapter::class)->findAll();
+        // Use streaming query to avoid loading all entities into memory
+        $qb = $this->em->getRepository(Chapter::class)->createQueryBuilder('ch')
+            ->select('ch.pages');
         $validPaths = [];
-        foreach ($chapters as $chapter) {
-            foreach ($chapter->getPages() as $pagePath) {
-                if (! empty($pagePath)) {
-                    $validPaths[$this->getFullPath($pagePath)] = true;
+        foreach ($qb->getQuery()->toIterable() as $row) {
+            $pages = $row['pages'];
+            if (is_array($pages)) {
+                foreach ($pages as $pagePath) {
+                    if (! empty($pagePath)) {
+                        $validPaths[$this->getFullPath($pagePath)] = true;
+                    }
                 }
             }
         }
+        $this->em->clear();
 
         $chaptersDir = $this->getUploadsDir('chapters');
         if (! is_dir($chaptersDir)) {
@@ -144,11 +186,8 @@ class CleanupOrphanedFilesCommand extends Command
 
         $deleted = 0;
         $chapterDirs = scandir($chaptersDir);
-        if ($chapterDirs === false) {
-            return 0;
-        }
 
-        foreach ($chapterDirs as $dir) {
+        foreach ($chapterDirs ?: [] as $dir) {
             if ($dir === '.' || $dir === '..') {
                 continue;
             }
@@ -159,11 +198,8 @@ class CleanupOrphanedFilesCommand extends Command
             }
 
             $files = scandir($chapterPath);
-            if ($files === false) {
-                continue;
-            }
 
-            foreach ($files as $file) {
+            foreach ($files ?: [] as $file) {
                 if ($file === '.' || $file === '..') {
                     continue;
                 }
@@ -204,11 +240,18 @@ class CleanupOrphanedFilesCommand extends Command
 
     private function getFullPath(string $publicPath): string
     {
-        return __DIR__ . '/../../public/uploads' . $publicPath;
+        // $publicPath is like '/covers/1/cover.jpg' (without /uploads prefix)
+        // Uploads directory is at 'public/uploads/'
+        $baseDir = dirname(__DIR__, 2) . '/public/uploads';
+        $fullPath = $baseDir . $publicPath;
+
+        return $fullPath;
     }
 
     private function getUploadsDir(string $subdir): string
     {
-        return __DIR__ . '/../../public/' . self::UPLOADS_DIR . '/' . $subdir;
+        // $subdir is 'covers' or 'chapters'
+        $baseDir = dirname(__DIR__, 2) . '/public/uploads';
+        return $baseDir . '/' . $subdir;
     }
 }

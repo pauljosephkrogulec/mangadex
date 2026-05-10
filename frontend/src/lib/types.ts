@@ -27,7 +27,7 @@ export interface Tag extends ApiResource {
 
 export interface CoverArt extends ApiResource {
   id: string;
-  createdAt: string;
+  createdAt?: string;
   imagePath: string;
   volume: string | null;
   isPrimary: boolean;
@@ -48,8 +48,8 @@ export interface Manga extends ApiResource {
   id: string;
   createdAt: string;
   title: string;
-  altTitles: string[] | null;
-  description: string | null;
+  altTitles?: string[] | null;
+  description?: string | null;
   status: MangaStatus;
   year: number | null;
   contentRating: ContentRating;
@@ -63,8 +63,18 @@ export interface Manga extends ApiResource {
 export interface Chapter extends ApiResource {
   id: string;
   createdAt: string;
-  manga: string;
-  scanlationGroup: string | null;
+  manga: {
+    "@id": string;
+    "@type": string;
+    id: string;
+  };
+  scanlationGroup: {
+    "@id": string;
+    "@type": string;
+    id: string;
+    name: string;
+    website: string | null;
+  } | null;
   volume: string | null;
   chapterNumber: string;
   title: string | null;

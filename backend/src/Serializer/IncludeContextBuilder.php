@@ -38,7 +38,11 @@ final class IncludeContextBuilder implements SerializerContextBuilderInterface
             $groups = [];
         }
 
+        $allowedIncludes = ['creators', 'tags', 'chapters', 'coverArt'];
         foreach ($includes as $include) {
+            if (! in_array($include, $allowedIncludes, true)) {
+                continue;
+            }
             $group = 'manga:include:' . $include;
             if (! in_array($group, $groups, true)) {
                 $groups[] = $group;

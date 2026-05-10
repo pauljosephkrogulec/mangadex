@@ -17,13 +17,13 @@ class FileUploadValidatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->mockValidator = $this->createMock(ValidatorInterface::class);
+        $this->mockValidator = $this->createStub(ValidatorInterface::class);
         $this->validator = new FileUploadValidator($this->mockValidator);
     }
 
     public function testValidateImageReturnsViolations(): void
     {
-        $file = $this->createMock(UploadedFile::class);
+        $file = $this->createStub(UploadedFile::class);
         $violations = new ConstraintViolationList();
         $this->mockValidator->method('validate')->willReturn($violations);
 
@@ -33,8 +33,8 @@ class FileUploadValidatorTest extends TestCase
 
     public function testValidateMultipleImagesWithNoErrors(): void
     {
-        $file1 = $this->createMock(UploadedFile::class);
-        $file2 = $this->createMock(UploadedFile::class);
+        $file1 = $this->createStub(UploadedFile::class);
+        $file2 = $this->createStub(UploadedFile::class);
         $files = [$file1, $file2];
 
         $violations = new ConstraintViolationList();
@@ -46,11 +46,11 @@ class FileUploadValidatorTest extends TestCase
 
     public function testValidateMultipleImagesWithErrors(): void
     {
-        $file1 = $this->createMock(UploadedFile::class);
-        $file2 = $this->createMock(UploadedFile::class);
+        $file1 = $this->createStub(UploadedFile::class);
+        $file2 = $this->createStub(UploadedFile::class);
         $files = [$file1, $file2];
 
-        $violation1 = $this->createMock(\Symfony\Component\Validator\ConstraintViolationInterface::class);
+        $violation1 = $this->createStub(\Symfony\Component\Validator\ConstraintViolationInterface::class);
         $violation1->method('getMessage')->willReturn('Invalid file type');
 
         $violations1 = new ConstraintViolationList([$violation1]);

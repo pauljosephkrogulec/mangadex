@@ -4,48 +4,74 @@
     "name": "My Favorite Manga",
     "visibility": "public",
     "user": "mangareader1",
-    "mangas": ["chainsaw-man", "jujutsu-kaisen", "berserk"]
+    "mangas": [
+      "jeonjijeok-dokja-sijeom",
+      "sss-geup-jugeoya-saneun-hunter",
+      "latna-saga-survival-of-a-sword-king"
+    ]
   },
   {
     "ref": "action-1",
     "name": "Action Packed",
     "visibility": "public",
     "user": "mangareader1",
-    "mangas": ["one-punch-man", "kage-no-jitsuryokusha-ni-naritakute", "mato-seihei-no-slave"]
+    "mangas": [
+      "the-archmage-returns-after-4000-years",
+      "the-skeleton-soldier-failed-to-defend-the-dungeon",
+      "the-monstrous-dukes-adopted-daughter"
+    ]
   },
   {
     "ref": "read-later-1",
     "name": "Read Later",
     "visibility": "private",
     "user": "mangareader1",
-    "mangas": ["sousou-no-frieren", "mushoku-tensei-isekai-ittara-honki-dasu"]
+    "mangas": [
+      "the-max-level-hero-strikes-back",
+      "a-returners-magic-should-be-special"
+    ]
   },
   {
     "ref": "top-picks-2",
     "name": "Top Picks",
     "visibility": "public",
     "user": "mangareader2",
-    "mangas": ["na-honjaman-level-up", "tensei-shitara-slime-datta-ken"]
+    "mangas": [
+      "na-honjaman-level-up",
+      "second-life-ranker"
+    ]
   },
   {
     "ref": "romance-2",
     "name": "Romance Reads",
     "visibility": "public",
     "user": "mangareader2",
-    "mangas": ["sono-bisque-doll-wa-koi-o-suru", "komi-san-wa-komyushou-desu", "kaoru-hana-wa-rin-to-saku"]
+    "mangas": [
+      "who-made-me-a-princess",
+      "the-villainess-turns-the-hourglass",
+      "doctor-elise"
+    ]
   },
   {
     "ref": "hidden-2",
     "name": "Hidden Gems",
     "visibility": "hidden",
     "user": "mangareader2",
-    "mangas": ["mieruko-chan", "lv2-kara-cheat-datta-moto-yuusha-kouho-no-mattari-"]
+    "mangas": [
+      "roxana",
+      "agyeogui-ending-jugeumppun"
+    ]
   },
   {
     "ref": "admin-picks",
     "name": "Admin Picks",
     "visibility": "public",
     "user": "admin",
-    "mangas": ["berserk", "chainsaw-man", "jujutsu-kaisen", "one-punch-man"]
+    "mangas": [
+      "latna-saga-survival-of-a-sword-king",
+      "jeonjijeok-dokja-sijeom",
+      "sss-geup-jugeoya-saneun-hunter",
+      "the-archmage-returns-after-4000-years"
+    ]
   }
 ]

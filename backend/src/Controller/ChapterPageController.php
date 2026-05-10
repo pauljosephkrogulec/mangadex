@@ -26,9 +26,6 @@ class ChapterPageController extends AbstractController
         }
 
         $uploadsDir = realpath($this->getParameter('kernel.project_dir') . self::UPLOADS_BASE);
-        if ($uploadsDir === false) {
-            return null;
-        }
 
         if (! str_starts_with($realPath, $uploadsDir)) {
             return null;

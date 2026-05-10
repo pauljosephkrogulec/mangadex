@@ -13,6 +13,8 @@ class AuthTest extends WebTestCase
     public function testLoginWithValidCredentialsReturnsJwtToken(): void
     {
         $client = static::createClient();
+        $this->ensureTestUserExists();
+
         $client->request(
             'POST',
             '/api/login_check',
@@ -31,6 +33,8 @@ class AuthTest extends WebTestCase
     public function testLoginWithInvalidCredentialsReturnsUnauthorized(): void
     {
         $client = static::createClient();
+        $this->ensureTestUserExists();
+
         $client->request(
             'POST',
             '/api/login_check',
@@ -46,6 +50,8 @@ class AuthTest extends WebTestCase
     public function testLoginWithEmptyPasswordReturnsBadRequest(): void
     {
         $client = static::createClient();
+        $this->ensureTestUserExists();
+
         $client->request(
             'POST',
             '/api/login_check',
@@ -61,6 +67,8 @@ class AuthTest extends WebTestCase
     public function testLoginWithMissingPasswordKeyReturnsBadRequest(): void
     {
         $client = static::createClient();
+        $this->ensureTestUserExists();
+
         $client->request(
             'POST',
             '/api/login_check',
@@ -73,10 +81,8 @@ class AuthTest extends WebTestCase
         $this->assertResponseStatusCodeSame(400);
     }
 
-    protected function setUp(): void
+    private function ensureTestUserExists(): void
     {
-        // Ensure test user exists before each test
-        static::bootKernel();
         $container = static::getContainer();
         $entityManager = $container->get(EntityManagerInterface::class);
         $passwordHasher = $container->get(UserPasswordHasherInterface::class);
@@ -94,7 +100,5 @@ class AuthTest extends WebTestCase
             $entityManager->persist($user);
             $entityManager->flush();
         }
-
-        static::ensureKernelShutdown();
     }
 }

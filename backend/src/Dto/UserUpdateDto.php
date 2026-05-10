@@ -9,7 +9,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class UserUpdateDto
 {
-    #[Assert\NotBlank]
     #[Assert\Length(min: 3, max: 255)]
     #[Groups(['user:write'])]
     private ?string $username = null;

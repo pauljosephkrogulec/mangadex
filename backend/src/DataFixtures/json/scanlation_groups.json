@@ -33,5 +33,60 @@
     "ref": "fan-scanlation-group-c",
     "name": "Scanlation Group C",
     "website": null
+  },
+  {
+    "ref": "bucci-gang",
+    "name": "BUCCI GANG",
+    "website": null
+  },
+  {
+    "ref": "drakon",
+    "name": "DRAKON",
+    "website": null
+  },
+  {
+    "ref": "flame-comics",
+    "name": "Flame Comics",
+    "website": "https://flamecomics.com/"
+  },
+  {
+    "ref": "kraken-manga",
+    "name": "Kraken Manga",
+    "website": "https://falconscans.com/"
+  },
+  {
+    "ref": "lunalotusscans",
+    "name": "LunaLotusScans",
+    "website": null
+  },
+  {
+    "ref": "manga-weebs",
+    "name": "Manga Weebs",
+    "website": null
+  },
+  {
+    "ref": "pocket-comics",
+    "name": "Pocket Comics",
+    "website": "https://www.pocketcomics.com"
+  },
+  {
+    "ref": "rizz-fables",
+    "name": "Rizz Fables",
+    "website": "https://rizzfables.com/"
+  },
+  {
+    "ref": "tappytoon",
+    "name": "TappyToon",
+    "website": "https://www.tappytoon.com"
+  },
+  {
+    "ref": "trashscanlations",
+    "name": "trashscanlations",
+    "website": null
+  },
+  {
+    "ref": "webnovel",
+    "name": "Webnovel",
+    "website": "https://www.webnovel.com/"
   }
 ]

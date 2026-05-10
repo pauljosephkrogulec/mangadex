@@ -33,6 +33,13 @@ services:
             $decorated: '@App\State\Processor\UserUpdateProcessor.inner'
         autowire: true
 
+    # CustomList processor to set owner from security context
+    App\State\Processor\CustomListProcessor:
+        decorates: 'api_platform.doctrine.orm.state.persist_processor'
+        arguments:
+            $decorated: '@App\State\Processor\CustomListProcessor.inner'
+        autowire: true
+
     # Include parameter handler for eager loading relationships
     App\Serializer\IncludeContextBuilder:
         decorates: 'api_platform.serializer.context_builder.filter'

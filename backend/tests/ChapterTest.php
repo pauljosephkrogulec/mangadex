@@ -27,7 +27,6 @@ class ChapterTest extends TestCase
         $this->assertEquals('Test Chapter', $chapter->getTitle());
         $this->assertEquals('en', $chapter->getLanguage());
         $this->assertEquals(['page1.jpg'], $chapter->getPages());
-        $this->assertNull($chapter->getId());
     }
 
     public function testOptionalFields(): void

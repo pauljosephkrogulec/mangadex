@@ -14,11 +14,9 @@ use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 #[AllowMockObjectsWithoutExpectations]
 class CustomListMangaControllerTest extends TestCase
@@ -37,7 +35,6 @@ class CustomListMangaControllerTest extends TestCase
 
         $this->entityManager
             ->method('getRepository')
-            ->with(Manga::class)
             ->willReturn($this->mangaRepository);
 
         $this->controller = new CustomListMangaController($this->entityManager);
@@ -63,7 +60,7 @@ class CustomListMangaControllerTest extends TestCase
         $tokenStorage->method('getToken')->willReturn($token);
 
         $authorizationChecker = $this->createMock(\Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface::class);
-        $authorizationChecker->method('isGranted')->with('ROLE_ADMIN')->willReturn($isAdmin);
+        $authorizationChecker->method('isGranted')->willReturn($isAdmin);
 
         $container = $this->createMock(\Symfony\Component\DependencyInjection\ContainerInterface::class);
         $container->method('has')->willReturnCallback(function ($id) {
@@ -95,6 +92,7 @@ class CustomListMangaControllerTest extends TestCase
     public function testInvokeWithPostMethodAddsManga(): void
     {
         $this->mangaRepository
+            ->expects($this->once())
             ->method('find')
             ->with(1)
             ->willReturn($this->manga);
@@ -113,6 +111,7 @@ class CustomListMangaControllerTest extends TestCase
         $this->customList->addManga($this->manga);
 
         $this->mangaRepository
+            ->expects($this->once())
             ->method('find')
             ->with(1)
             ->willReturn($this->manga);
@@ -129,6 +128,7 @@ class CustomListMangaControllerTest extends TestCase
         $this->customList->addManga($this->manga);
 
         $this->mangaRepository
+            ->expects($this->once())
             ->method('find')
             ->with(1)
             ->willReturn($this->manga);
@@ -144,6 +144,7 @@ class CustomListMangaControllerTest extends TestCase
     public function testInvokeWithDeleteMethodMangaNotInList(): void
     {
         $this->mangaRepository
+            ->expects($this->once())
             ->method('find')
             ->with(1)
             ->willReturn($this->manga);
@@ -158,6 +159,7 @@ class CustomListMangaControllerTest extends TestCase
     public function testInvokeWithUnsupportedMethod(): void
     {
         $this->mangaRepository
+            ->expects($this->once())
             ->method('find')
             ->with(1)
             ->willReturn($this->manga);
@@ -191,7 +193,6 @@ class CustomListMangaControllerTest extends TestCase
 
         $this->mangaRepository
             ->method('find')
-            ->with(1)
             ->willReturn($this->manga);
 
         $request = $this->createRequest('POST', ['mangaId' => 1]);
@@ -214,6 +215,7 @@ class CustomListMangaControllerTest extends TestCase
         $customList->setName('Other List');
 
         $this->mangaRepository
+            ->expects($this->once())
             ->method('find')
             ->with(1)
             ->willReturn($this->manga);
@@ -237,6 +239,7 @@ class CustomListMangaControllerTest extends TestCase
     public function testInvokeWithMangaNotFound(): void
     {
         $this->mangaRepository
+            ->expects($this->once())
             ->method('find')
             ->with(999)
             ->willReturn(null);

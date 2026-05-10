@@ -10,67 +10,108 @@ use App\Entity\User;
 use App\State\Provider\UserFollowsProvider;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
+#[AllowMockObjectsWithoutExpectations]
 class UserFollowsProviderTest extends TestCase
 {
     private UserFollowsProvider $provider;
     private EntityManagerInterface $emMock;
-    private EntityRepository $userRepoMock;
+    private Security $securityMock;
     private EntityRepository $followRepoMock;
+    private QueryBuilder $qbMock;
+    private Query $queryMock;
 
     protected function setUp(): void
     {
         $this->emMock = $this->createMock(EntityManagerInterface::class);
-        $this->userRepoMock = $this->createMock(EntityRepository::class);
+        $this->securityMock = $this->createMock(Security::class);
         $this->followRepoMock = $this->createMock(EntityRepository::class);
+        $this->qbMock = $this->createStub(QueryBuilder::class);
+        $this->queryMock = $this->createStub(Query::class);
 
         $this->emMock->method('getRepository')
-            ->willReturnMap([
-                [User::class, $this->userRepoMock],
-                [MangaFollow::class, $this->followRepoMock],
-            ]);
+            ->with(MangaFollow::class)
+            ->willReturn($this->followRepoMock);
 
-        $this->provider = new UserFollowsProvider($this->emMock);
+        $this->followRepoMock->method('createQueryBuilder')
+            ->with('mf')
+            ->willReturn($this->qbMock);
+
+        $this->qbMock->method('leftJoin')->willReturnSelf();
+        $this->qbMock->method('addSelect')->willReturnSelf();
+        $this->qbMock->method('where')->willReturnSelf();
+        $this->qbMock->method('setParameter')->willReturnSelf();
+        $this->qbMock->method('orderBy')->willReturnSelf();
+        $this->qbMock->method('setFirstResult')->willReturnSelf();
+        $this->qbMock->method('setMaxResults')->willReturnSelf();
+        $this->qbMock->method('getQuery')->willReturn($this->queryMock);
+
+        $this->provider = new UserFollowsProvider($this->emMock, $this->securityMock);
     }
 
     public function testProvideReturnsFollowsForValidUser(): void
     {
         $user = new User();
+        $user->setEmail('test@example.com');
         $follow1 = new MangaFollow();
         $follow2 = new MangaFollow();
 
-        $this->userRepoMock->method('find')->with(1)->willReturn($user);
-        $this->followRepoMock->method('findBy')
-            ->with(['user' => $user], ['followedAt' => 'DESC'])
+        $this->securityMock->method('getUser')
+            ->willReturn($user);
+        $this->securityMock->method('isGranted')
+            ->with('ROLE_ADMIN')
+            ->willReturn(false);
+
+        $this->queryMock->method('getResult')
             ->willReturn([$follow1, $follow2]);
 
-        $operation = $this->createMock(Operation::class);
-        $result = $this->provider->provide($operation, ['id' => 1]);
+        $operation = $this->createStub(Operation::class);
+        $result = $this->provider->provide($operation, ['id' => $user->getId()]);
 
         $this->assertCount(2, iterator_to_array($result));
     }
 
-    public function testProvideThrowsNotFoundForInvalidUser(): void
+    public function testProvideThrowsAccessDeniedForDifferentUser(): void
     {
-        $this->userRepoMock->method('find')->with(999)->willReturn(null);
+        $currentUser = new User();
+        $currentUser->setEmail('current@example.com');
 
-        $operation = $this->createMock(Operation::class);
+        $this->securityMock->method('getUser')
+            ->willReturn($currentUser);
+        $this->securityMock->method('isGranted')
+            ->with('ROLE_ADMIN')
+            ->willReturn(false);
 
-        $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
-        $this->expectExceptionMessage('User not found');
+        $operation = $this->createStub(Operation::class);
 
-        $this->provider->provide($operation, ['id' => 999]);
+        $this->expectException(AccessDeniedHttpException::class);
+        $this->expectExceptionMessage('You can only view your own follows');
+
+        $this->provider->provide($operation, ['id' => 'some-other-uuid']);
     }
 
     public function testProvideWithEmptyFollows(): void
     {
         $user = new User();
-        $this->userRepoMock->method('find')->with(1)->willReturn($user);
-        $this->followRepoMock->method('findBy')->willReturn([]);
+        $user->setEmail('test@example.com');
 
-        $operation = $this->createMock(Operation::class);
-        $result = $this->provider->provide($operation, ['id' => 1]);
+        $this->securityMock->method('getUser')
+            ->willReturn($user);
+        $this->securityMock->method('isGranted')
+            ->with('ROLE_ADMIN')
+            ->willReturn(false);
+
+        $this->queryMock->method('getResult')
+            ->willReturn([]);
+
+        $operation = $this->createStub(Operation::class);
+        $result = $this->provider->provide($operation, ['id' => $user->getId()]);
 
         $this->assertCount(0, iterator_to_array($result));
     }

@@ -48,9 +48,6 @@ class FileCleanupSubscriber implements EventSubscriber
         }
 
         $fullPath = $this->getFullPath($imagePath);
-        if ($fullPath === null) {
-            return;
-        }
 
         try {
             if (file_exists($fullPath)) {
@@ -104,7 +101,11 @@ class FileCleanupSubscriber implements EventSubscriber
             return null;
         }
 
-        $fullPath = __DIR__ . '/../../public/uploads' . $publicPath;
+        // $publicPath is like '/covers/1/cover.jpg' or '/chapters/1/1.jpg'
+        // Uploads directory is at 'public/uploads/'
+        $baseDir = dirname(__DIR__, 2) . '/public';
+        $fullPath = $baseDir . $publicPath;
+
         return $fullPath;
     }
 }

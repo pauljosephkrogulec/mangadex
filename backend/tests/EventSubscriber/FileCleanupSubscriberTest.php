@@ -413,6 +413,21 @@ class FileCleanupSubscriberTest extends TestCase
         $this->assertTrue(true);
     }
 
+    public function testGetFullPathWithEmptyPagePath(): void
+    {
+        $chapter = new Chapter();
+        $chapter->setPages(['']);
+
+        $args = $this->createMock(LifecycleEventArgs::class);
+        $args->method('getObject')->willReturn($chapter);
+
+        $this->filesystem
+            ->expects($this->never())
+            ->method('remove');
+
+        $this->subscriber->postRemove($args);
+    }
+
     public function testDeleteChapterFilesWithEmptyDirectory(): void
     {
         // Create temp files and then delete them to test directory cleanup

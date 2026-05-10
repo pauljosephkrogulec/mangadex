@@ -32,36 +32,33 @@ class IncludeParameterSubscriberTest extends TestCase
     {
         $request = new Request(['include' => 'chapters,coverArt']);
 
-        $kernel = $this->createMock(HttpKernelInterface::class);
+        $kernel = $this->createStub(HttpKernelInterface::class);
         $event = new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         $this->subscriber->onKernelRequest($event);
 
-        $context = $request->attributes->get('_api_normalization_context');
-        $this->assertIsArray($context);
-        $this->assertContains('manga:include:chapters', $context);
-        $this->assertContains('manga:include:coverArt', $context);
+        // Subscriber is intentionally a no-op; IncludeContextBuilder handles includes
+        $this->assertNull($request->attributes->get('_api_normalization_context'));
     }
 
     public function testOnKernelRequestWithSingleInclude(): void
     {
         $request = new Request(['include' => 'chapters']);
 
-        $kernel = $this->createMock(HttpKernelInterface::class);
+        $kernel = $this->createStub(HttpKernelInterface::class);
         $event = new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         $this->subscriber->onKernelRequest($event);
 
-        $context = $request->attributes->get('_api_normalization_context');
-        $this->assertIsArray($context);
-        $this->assertContains('manga:include:chapters', $context);
+        // Subscriber is intentionally a no-op
+        $this->assertNull($request->attributes->get('_api_normalization_context'));
     }
 
     public function testOnKernelRequestWithoutIncludeParameter(): void
     {
         $request = new Request();
 
-        $kernel = $this->createMock(HttpKernelInterface::class);
+        $kernel = $this->createStub(HttpKernelInterface::class);
         $event = new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         $this->subscriber->onKernelRequest($event);
@@ -73,30 +70,26 @@ class IncludeParameterSubscriberTest extends TestCase
     {
         $request = new Request(['include' => '']);
 
-        $kernel = $this->createMock(HttpKernelInterface::class);
+        $kernel = $this->createStub(HttpKernelInterface::class);
         $event = new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         $this->subscriber->onKernelRequest($event);
 
-        // Empty string will result in array with one empty string after explode
-        // The code doesn't handle this edge case properly
-        $context = $request->attributes->get('_api_normalization_context');
-        $this->assertIsArray($context);
+        // Subscriber is intentionally a no-op
+        $this->assertNull($request->attributes->get('_api_normalization_context'));
     }
 
     public function testOnKernelRequestWithWhitespaceInInclude(): void
     {
         $request = new Request(['include' => ' chapters , coverArt ']);
 
-        $kernel = $this->createMock(HttpKernelInterface::class);
+        $kernel = $this->createStub(HttpKernelInterface::class);
         $event = new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         $this->subscriber->onKernelRequest($event);
 
-        $context = $request->attributes->get('_api_normalization_context');
-        $this->assertIsArray($context);
-        $this->assertContains('manga:include:chapters', $context);
-        $this->assertContains('manga:include:coverArt', $context);
+        // Subscriber is intentionally a no-op
+        $this->assertNull($request->attributes->get('_api_normalization_context'));
     }
 
     public function testOnKernelRequestPreservesExistingContext(): void
@@ -104,15 +97,14 @@ class IncludeParameterSubscriberTest extends TestCase
         $request = new Request(['include' => 'chapters']);
         $request->attributes->set('_api_normalization_context', ['existing_group']);
 
-        $kernel = $this->createMock(HttpKernelInterface::class);
+        $kernel = $this->createStub(HttpKernelInterface::class);
         $event = new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         $this->subscriber->onKernelRequest($event);
 
+        // Subscriber is intentionally a no-op; existing context should be preserved as-is
         $context = $request->attributes->get('_api_normalization_context');
-        $this->assertIsArray($context);
-        $this->assertContains('existing_group', $context);
-        $this->assertContains('manga:include:chapters', $context);
+        $this->assertSame(['existing_group'], $context);
     }
 
     public function testOnKernelRequestDoesNotDuplicateIncludes(): void
@@ -120,78 +112,67 @@ class IncludeParameterSubscriberTest extends TestCase
         $request = new Request(['include' => 'chapters']);
         $request->attributes->set('_api_normalization_context', ['manga:include:chapters']);
 
-        $kernel = $this->createMock(HttpKernelInterface::class);
+        $kernel = $this->createStub(HttpKernelInterface::class);
         $event = new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         $this->subscriber->onKernelRequest($event);
 
+        // Subscriber is intentionally a no-op; context should remain unchanged
         $context = $request->attributes->get('_api_normalization_context');
-        $this->assertIsArray($context);
-        $this->assertEquals(1, count(array_keys($context, 'manga:include:chapters', true)));
+        $this->assertSame(['manga:include:chapters'], $context);
     }
 
     public function testOnKernelRequestWithSubRequest(): void
     {
         $request = new Request(['include' => 'chapters']);
 
-        $kernel = $this->createMock(HttpKernelInterface::class);
+        $kernel = $this->createStub(HttpKernelInterface::class);
         $event = new RequestEvent($kernel, $request, HttpKernelInterface::SUB_REQUEST);
 
         $this->subscriber->onKernelRequest($event);
 
-        // Should still process sub-requests
-        $context = $request->attributes->get('_api_normalization_context');
-        $this->assertIsArray($context);
-        $this->assertContains('manga:include:chapters', $context);
+        // Subscriber is intentionally a no-op
+        $this->assertNull($request->attributes->get('_api_normalization_context'));
     }
 
     public function testOnKernelRequestWithNonArrayContext(): void
     {
         $request = new Request(['include' => 'chapters']);
-        // Set a non-array context to trigger the is_array check
         $request->attributes->set('_api_normalization_context', 'invalid_context');
 
-        $kernel = $this->createMock(HttpKernelInterface::class);
+        $kernel = $this->createStub(HttpKernelInterface::class);
         $event = new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         $this->subscriber->onKernelRequest($event);
 
-        // Should reset to empty array and then add the include
-        $context = $request->attributes->get('_api_normalization_context');
-        $this->assertIsArray($context);
-        $this->assertContains('manga:include:chapters', $context);
+        // Subscriber is intentionally a no-op; context should remain unchanged
+        $this->assertSame('invalid_context', $request->attributes->get('_api_normalization_context'));
     }
 
     public function testOnKernelRequestWithIntegerContext(): void
     {
         $request = new Request(['include' => 'chapters']);
-        // Set an integer context to trigger the is_array check
         $request->attributes->set('_api_normalization_context', 123);
 
-        $kernel = $this->createMock(HttpKernelInterface::class);
+        $kernel = $this->createStub(HttpKernelInterface::class);
         $event = new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         $this->subscriber->onKernelRequest($event);
 
-        // Should reset to empty array and then add the include
-        $context = $request->attributes->get('_api_normalization_context');
-        $this->assertIsArray($context);
-        $this->assertContains('manga:include:chapters', $context);
+        // Subscriber is intentionally a no-op; context should remain unchanged
+        $this->assertSame(123, $request->attributes->get('_api_normalization_context'));
     }
 
     public function testOnKernelRequestWithNonStringIncludeParameter(): void
     {
-        // Use an integer as the include value — it passes InputBag validation (scalar)
-        // but is_string() returns false, so the method returns early
         $request = new Request(['include' => 123]);
 
-        $kernel = $this->createMock(HttpKernelInterface::class);
+        $kernel = $this->createStub(HttpKernelInterface::class);
         $event = new RequestEvent($kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         $this->subscriber->onKernelRequest($event);
 
-        // is_string($includeParam) is false, so the method returns early
-        // _api_normalization_context should not be set
+        // Subscriber is intentionally a no-op
         $this->assertNull($request->attributes->get('_api_normalization_context'));
     }
 }

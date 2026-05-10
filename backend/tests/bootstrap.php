@@ -37,7 +37,7 @@ if (($_SERVER['APP_ENV'] ?? '') === 'test') {
     }
 
     // Delete database AFTER tests using shutdown function
-    register_shutdown_function(function() use ($testDbPath) {
+    register_shutdown_function(function () use ($testDbPath) {
         if (file_exists($testDbPath)) {
             unlink($testDbPath);
         }

@@ -49,9 +49,9 @@ describe("api instance", () => {
   });
 });
 
-// ── Request interceptor (auth token) ────────────────────────────────────────
+// ── Request: no auth interceptor ────────────────────────────────────────────
 
-describe("request interceptor — auth token", () => {
+describe("request — no auth interceptor", () => {
   let mock: MockAdapter;
 
   beforeEach(() => {
@@ -63,18 +63,7 @@ describe("request interceptor — auth token", () => {
     mock.restore();
   });
 
-  it("attaches a Bearer token when auth_token exists in localStorage", async () => {
-    localStorage.setItem("auth_token", "test-jwt");
-
-    mock.onGet("/me").reply((config) => {
-      expect(config.headers?.Authorization).toBe("Bearer test-jwt");
-      return [200, { id: 1 }];
-    });
-
-    await api.get("/me");
-  });
-
-  it("does NOT attach an Authorization header when no token is stored", async () => {
+  it("does NOT attach an Authorization header (JWT is sent via httpOnly cookie)", async () => {
     mock.onGet("/public").reply((config) => {
       expect(config.headers?.Authorization).toBeUndefined();
       return [200, { ok: true }];
@@ -83,67 +72,16 @@ describe("request interceptor — auth token", () => {
     await api.get("/public");
   });
 
-  it("works after the token is removed from localStorage", async () => {
-    localStorage.setItem("auth_token", "temp-token");
-    localStorage.removeItem("auth_token");
+  it("never reads localStorage (JWT is managed server-side via cookie)", async () => {
+    // Write something to localStorage to prove the interceptor ignores it
+    localStorage.setItem("auth_token", "should-not-be-used");
 
-    mock.onGet("/public").reply((config) => {
-      expect(config.headers?.Authorization).toBeUndefined();
-      return [200, { ok: true }];
-    });
-
-    await api.get("/public");
-  });
-
-  it("uses the latest token value on each request", async () => {
-    localStorage.setItem("auth_token", "token-a");
-
-    mock.onGet("/first").reply((config) => {
-      expect(config.headers?.Authorization).toBe("Bearer token-a");
-      return [200, {}];
-    });
-
-    await api.get("/first");
-
-    localStorage.setItem("auth_token", "token-b");
-
-    mock.onGet("/second").reply((config) => {
-      expect(config.headers?.Authorization).toBe("Bearer token-b");
-      return [200, {}];
-    });
-
-    await api.get("/second");
-  });
-
-  it("handles errors thrown by preceding request interceptors (line 45)", async () => {
-    // Add a request interceptor before the auth one that throws.
-    // When its error propagates, the auth interceptor's error handler
-    // (line 45) catches and re-throws it.
-    const ejectId = api.interceptors.request.use(
-      () => { throw new Error("Preceding interceptor failure"); },
-      undefined,
-    );
-
-    await expect(api.get("/test")).rejects.toThrow(
-      "Preceding interceptor failure",
-    );
-
-    api.interceptors.request.eject(ejectId);
-  });
-
-  it("skips localStorage access on the server (typeof window === undefined, line 37)", async () => {
-    // Simulate a server-side rendering environment where `window` is
-    // unavailable, so the auth interceptor skips the localStorage read.
-    vi.stubGlobal("window", undefined);
-
-    mock.onGet("/ssr").reply((config) => {
+    mock.onGet("/secure").reply((config) => {
       expect(config.headers?.Authorization).toBeUndefined();
       return [200, {}];
     });
 
-    await api.get("/ssr");
-
-    vi.unstubAllGlobals();
+    await api.get("/secure");
   });
 });
 

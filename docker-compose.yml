@@ -16,7 +16,8 @@ services:
       APP_SECRET: "${APP_SECRET}"
       JWT_PASSPHRASE: "${JWT_PASSPHRASE}"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - app-network
 
@@ -44,6 +45,12 @@ services:
       - pgdata:/var/lib/postgresql/data
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-app} -d ${POSTGRES_DB:-manga_reader}"]
+      interval: 1s
+      retries: 15
+      timeout: 3s
+      start_period: 5s
 
 networks:
   app-network:

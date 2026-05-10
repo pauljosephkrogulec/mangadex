@@ -8,9 +8,11 @@ use ApiPlatform\Metadata\Operation;
 use App\Dto\UserRegistrationDto;
 use App\Entity\User;
 use App\State\Processor\UserRegistrationProcessor;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+#[AllowMockObjectsWithoutExpectations]
 class UserRegistrationProcessorTest extends TestCase
 {
     private UserRegistrationProcessor $processor;
@@ -32,17 +34,16 @@ class UserRegistrationProcessorTest extends TestCase
         $dto->setUsername('testuser');
         $dto->setPassword('password123');
 
-        $this->passwordHasherMock->method('hashPassword')
+        $this->passwordHasherMock->expects($this->once())->method('hashPassword')
             ->willReturn('hashed_password');
 
-        $createdUser = new User();
         $this->decoratedMock->method('process')
             ->willReturnCallback(function ($user) use (&$createdUser) {
                 $createdUser = $user;
                 return $user;
             });
 
-        $operation = $this->createMock(Operation::class);
+        $operation = $this->createStub(Operation::class);
         $result = $this->processor->process($dto, $operation);
 
         $this->assertInstanceOf(User::class, $result);
@@ -55,11 +56,11 @@ class UserRegistrationProcessorTest extends TestCase
     {
         $data = new \stdClass();
 
-        $this->decoratedMock->method('process')
+        $this->decoratedMock->expects($this->once())->method('process')
             ->with($data, $this->anything(), [], [])
             ->willReturn(new User());
 
-        $operation = $this->createMock(Operation::class);
+        $operation = $this->createStub(Operation::class);
         $result = $this->processor->process($data, $operation);
 
         $this->assertInstanceOf(User::class, $result);
@@ -84,7 +85,7 @@ class UserRegistrationProcessorTest extends TestCase
             }))
             ->willReturn(new User());
 
-        $operation = $this->createMock(Operation::class);
+        $operation = $this->createStub(Operation::class);
         $this->processor->process($dto, $operation);
     }
 
@@ -95,7 +96,7 @@ class UserRegistrationProcessorTest extends TestCase
         $dto->setUsername('testuser');
         $dto->setPassword('password123');
 
-        $this->passwordHasherMock->method('hashPassword')
+        $this->passwordHasherMock->expects($this->once())->method('hashPassword')
             ->willReturn('my_hashed_password');
 
         $returnedUser = new User();
@@ -105,7 +106,7 @@ class UserRegistrationProcessorTest extends TestCase
                 return $user;
             });
 
-        $operation = $this->createMock(Operation::class);
+        $operation = $this->createStub(Operation::class);
         $result = $this->processor->process($dto, $operation);
 
         $this->assertSame('my_hashed_password', $result->getPassword());

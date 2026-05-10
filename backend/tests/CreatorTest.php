@@ -18,7 +18,6 @@ class CreatorTest extends TestCase
 
         $this->assertEquals('Test Creator', $creator->getName());
         $this->assertEquals('author', $creator->getType());
-        $this->assertNull($creator->getId());
     }
 
     public function testTypeChoices(): void

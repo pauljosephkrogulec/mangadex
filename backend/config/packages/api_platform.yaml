@@ -8,6 +8,8 @@ api_platform:
     # Default settings for all resources
     defaults:
         pagination_items_per_page: 20
+        pagination_client_items_per_page: true
+        pagination_maximum_items_per_page: 100
 
     # Enable OpenAPI and documentation
     enable_swagger: true

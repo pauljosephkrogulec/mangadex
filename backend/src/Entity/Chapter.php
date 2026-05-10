@@ -182,7 +182,7 @@ class Chapter
     {
         return $this->pages;
     }
-    
+
     /**
      * @return list<string>
      */

@@ -80,12 +80,12 @@ class CustomList
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'customLists')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['custom_list:read', 'custom_list:write'])]
-    private User $user;
+    #[Groups(['custom_list:read'])]
+    private ?User $user = null;
 
     #[ORM\ManyToMany(targetEntity: Manga::class, inversedBy: 'customLists')]
     #[ORM\JoinTable(name: 'custom_list_manga')]
-    #[Groups(['custom_list:read', 'custom_list:write'])]
+    #[Groups(['custom_list:read'])]
     /** @var Collection<int, Manga> */
     private Collection $mangas;
 
@@ -136,7 +136,7 @@ class CustomList
         return $this;
     }
 
-    public function getUser(): User
+    public function getUser(): ?User
     {
         return $this->user;
     }

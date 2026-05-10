@@ -1,3 +1,5 @@
+"use client";
+
 export default function MangaCardSkeleton() {
   return (
     <div className="rounded-lg bg-md-surface border border-md-border overflow-hidden animate-pulse">

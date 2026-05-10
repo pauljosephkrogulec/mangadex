@@ -61,7 +61,10 @@ class FileStorageService
     private function generateCoverFilename(UploadedFile $file, string $mangaId, ?string $volume): string
     {
         $ext = $file->guessExtension() ?? 'jpg';
-        $volumePart = $volume ?? 'default';
+        $volumePart = $volume !== null ? preg_replace('/[^a-zA-Z0-9_-]/', '', $volume) : 'default';
+        if ($volumePart === '') {
+            $volumePart = 'default';
+        }
         $timestamp = time();
 
         return sprintf('manga_%s_vol_%s_%d.%s', $mangaId, $volumePart, $timestamp, $ext);

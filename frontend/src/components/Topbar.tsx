@@ -1,5 +1,3 @@
-"use client";
-
 export default function Topbar() {
   return (
     <div className="max-w-content mx-auto px-4 py-6">

@@ -7,9 +7,7 @@ namespace App\State;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Entity\Chapter;
-use App\Entity\Manga;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @implements ProviderInterface<Chapter>
@@ -30,33 +28,23 @@ final class MangaFeedProvider implements ProviderInterface
     {
         $mangaId = $uriVariables['id'] ?? null;
 
-        $manga = $this->entityManager->getRepository(Manga::class)->find($mangaId);
-        if (! $manga) {
-            throw new NotFoundHttpException('Manga not found');
-        }
-
         /** @var array<string, mixed> $filters */
         $filters = $context['filters'] ?? [];
-        $orderBy = [];
+
+        // Map allowed sort fields to DQL-safe field paths
+        $allowedFields = ['chapterNumber' => 'c.chapterNumber', 'volume' => 'c.volume', 'createdAt' => 'c.createdAt', 'language' => 'c.language'];
+        $field = 'c.chapterNumber';
+        $direction = 'ASC';
 
         if (isset($filters['order']) && is_array($filters['order'])) {
-            foreach ($filters['order'] as $field => $direction) {
-                if (is_string($field) && is_string($direction)) {
-                    if (in_array($field, ['chapterNumber', 'volume', 'createdAt', 'language'], true)) {
-                        $orderBy[$field] = strtoupper($direction) === 'DESC' ? 'DESC' : 'ASC';
-                    }
+            foreach ($filters['order'] as $f => $d) {
+                if (is_string($f) && is_string($d) && isset($allowedFields[$f])) {
+                    $field = $allowedFields[$f];
+                    $direction = strtoupper($d) === 'DESC' ? 'DESC' : 'ASC';
+                    break;
                 }
             }
         }
-
-        if (empty($orderBy)) {
-            $orderBy = ['chapterNumber' => 'ASC'];
-        }
-
-        $allowedFields = ['chapterNumber', 'volume', 'createdAt', 'language'];
-        $field = array_key_first($orderBy) ?? 'chapterNumber';
-        $direction = reset($orderBy);
-        $direction = in_array($direction, ['ASC', 'DESC'], true) ? $direction : 'ASC';
 
         $qb = $this->entityManager->getRepository(Chapter::class)->createQueryBuilder('c')
             ->leftJoin('c.scanlationGroup', 'sg')
@@ -64,13 +52,19 @@ final class MangaFeedProvider implements ProviderInterface
             ->leftJoin('c.manga', 'm')
             ->addSelect('m')
             ->where('c.manga = :manga')
-            ->setParameter('manga', $manga)
-            ->orderBy('c.' . $field, $direction);
+            ->setParameter('manga', $mangaId)
+            ->orderBy($field, $direction);
 
         if (isset($filters['language']) && is_string($filters['language'])) {
             $qb->andWhere('c.language = :language')
                ->setParameter('language', $filters['language']);
         }
+
+        // Apply pagination from context
+        $page = max(1, (int) ($filters['page'] ?? 1));
+        $itemsPerPage = min(100, max(1, (int) ($filters['itemsPerPage'] ?? 20)));
+        $qb->setFirstResult(($page - 1) * $itemsPerPage)
+           ->setMaxResults($itemsPerPage);
 
         /** @var array<Chapter> $result */
         $result = $qb->getQuery()->getResult();

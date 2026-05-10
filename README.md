@@ -53,11 +53,11 @@ mangadex/
 │   │   ├── Controller/           # Custom controllers (5)
 │   │   ├── EventSubscriber/      # Event subscribers (4)
 │   │   ├── Service/              # Business logic services (2)
-│   │   ├── State/                # API Platform providers/processors (4)
+│   │   ├── State/                # API Platform providers/processors (5)
 │   │   ├── Dto/                  # Data transfer objects (2)
 │   │   ├── Serializer/           # Serialization context builder
 │   │   ├── Command/              # CLI commands (1)
-│   │   └── DataFixtures/         # Doctrine fixtures (8)
+│   │   └── DataFixtures/         # Doctrine fixtures (9 + JSON data)
 │   └── tests/                    # PHPUnit test suite
 │
 ├── frontend/                     # Next.js application
@@ -74,6 +74,8 @@ mangadex/
 │       │   ├── layout.tsx        # Root layout (Geist font, metadata)
 │       │   ├── LayoutClient.tsx  # Client layout (navbar, sidebar)
 │       │   ├── page.tsx          # Home page
+│       │   ├── error.tsx         # Global error boundary
+│       │   ├── loading.tsx       # Root loading spinner
 │       │   └── globals.css       # Tailwind + custom CSS vars
 │       ├── components/           # UI components (8)
 │       │   └── __tests__/        # Component tests (2 files)
@@ -216,12 +218,13 @@ Many endpoints support `?include=coverArt,creators,tags,chapters` to sideload re
 |-------|------|---------|
 | `MangaFeedProvider` | Provider | Custom chapter feed for manga |
 | `UserFollowsProvider` | Provider | User's followed mangas |
+| `CustomListProcessor` | Processor | Auto-assigns current user on custom list creation |
 | `UserRegistrationProcessor` | Processor | Hashes password on user creation |
 | `UserUpdateProcessor` | Processor | Hashes password on user update |
 
 ### DataFixtures
 
-Eight fixture files seeding development data: `UserFixtures`, `MangaFixtures`, `ChapterFixtures`, `CoverArtFixtures`, `CreatorFixtures`, `TagFixtures`, `ScanlationGroupFixtures`, `CustomListFixtures`. Manga fixtures include titles like "Berserk", "One Piece", "Attack on Titan", etc.
+Nine JSON-driven fixture files read from `json/*.json` data files: `JsonUserFixtures`, `JsonMangaFixtures`, `JsonChapterFixtures`, `JsonCoverArtFixtures`, `JsonCreatorFixtures`, `JsonTagFixtures`, `JsonScanlationGroupFixtures`, `JsonCustomListFixtures`, `JsonMangaFollowFixtures`. Manga data includes titles like "Berserk", "One Piece", "Attack on Titan", etc.
 
 ## Frontend Architecture
 
@@ -230,6 +233,8 @@ Eight fixture files seeding development data: `UserFixtures`, `MangaFixtures`, `
 | Route | File | Description |
 |-------|------|-------------|
 | `/` | `app/page.tsx` | Home page: Topbar + MangaGrid + Footer |
+| (error) | `app/error.tsx` | Global error boundary with retry button |
+| (loading) | `app/loading.tsx` | Root loading spinner |
 
 The app uses Next.js App Router. The root layout (`app/layout.tsx`) is a server component setting up Geist font, dark theme CSS variables, and metadata. It wraps content in `LayoutClient` which manages the sidebar state and renders `Navbar` + `Sidebar` with a main content area.
 
@@ -349,6 +354,7 @@ Visit `http://localhost:8080` in your browser.
 | `make migrate` | Run pending migrations |
 | `make migrate-diff` | Generate migration from entity changes |
 | `make migrate-rollback` | Rollback last migration |
+| `make fixtures` | Load development fixtures |
 | `make fresh` | Reset DB, rebuild, migrate, fixtures |
 | `make setup` | Fresh + success message |
 
@@ -366,6 +372,7 @@ Visit `http://localhost:8080` in your browser.
 | Command | Description |
 |---------|-------------|
 | `make test-backend` | Run PHPUnit tests |
+| `make test-backend-coverage` | Run PHPUnit with coverage text |
 | `make test-frontend` | Run Vitest tests |
 | `make test-frontend-coverage` | Run Vitest with coverage |
 
@@ -424,7 +431,7 @@ curl -X POST http://localhost:8080/api/login_check \
 
 Response: `{"token":"eyJ0eXAiOiJKV1QiLCJhbGc..."}`
 
-The token is also set as an HTTP-only cookie (`BEARER`).
+The token is also set as an HTTP-only cookie (`mangadex_jwt_token`).
 
 ### Using the Token
 ```bash

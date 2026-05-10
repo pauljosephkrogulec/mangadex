@@ -82,6 +82,7 @@ class FileStorageServiceTest extends TestCase
         }
         $chapterDir = $this->publicDir . '/uploads/chapters/789';
         if (is_dir($chapterDir)) {
+            array_map('unlink', glob($chapterDir . '/*'));
             rmdir($chapterDir);
         }
     }
@@ -114,7 +115,7 @@ class FileStorageServiceTest extends TestCase
         }
 
         $files = [];
-        for ($i =0; $i < 3; $i++) {
+        for ($i = 0; $i < 3; $i++) {
             $testFile = $uploadsDir . "/test_{$i}.txt";
             file_put_contents($testFile, 'test');
             $files[] = "/test_{$i}.txt";
@@ -158,6 +159,24 @@ class FileStorageServiceTest extends TestCase
         $result = $method->invoke($this->service, $file, '111', null);
 
         $this->assertStringContainsString('manga_111', $result);
+        $this->assertStringContainsString('vol_default', $result);
+    }
+
+    public function testGenerateCoverFilenameWithEmptyVolumeAfterSanitization(): void
+    {
+        $reflection = new \ReflectionClass(FileStorageService::class);
+        $method = $reflection->getMethod('generateCoverFilename');
+
+        $tmpFile = tempnam(sys_get_temp_dir(), 'test_');
+        file_put_contents($tmpFile, 'fake image');
+
+        $file = new UploadedFile($tmpFile, 'test.jpg', 'image/jpeg', null, true);
+
+        // Volume consisting only of characters that get removed by preg_replace
+        // should fall back to 'default' when the result is an empty string
+        $result = $method->invoke($this->service, $file, '222', '!!!');
+
+        $this->assertStringContainsString('manga_222', $result);
         $this->assertStringContainsString('vol_default', $result);
     }
 }

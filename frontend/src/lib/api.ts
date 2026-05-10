@@ -36,19 +36,6 @@ const config: CreateAxiosDefaults = {
 
 const api: AxiosInstance = axios.create(config);
 
-api.interceptors.request.use(
-  (config) => {
-    if (typeof window !== "undefined") {
-      const token = localStorage.getItem("auth_token");
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-    }
-    return config;
-  },
-  (error) => Promise.reject(error),
-);
-
 api.interceptors.response.use(
   (response) => response,
   (error: AxiosError<{ detail?: string; message?: string }>) => {
@@ -150,7 +137,6 @@ export const chapterApi = {
     return api.post<{ chapterId: string; pages: string[]; pageCount: number }>(
       `/chapters/${id}/upload-pages`,
       formData,
-      { headers: { "Content-Type": "multipart/form-data" } },
     );
   },
 };
@@ -183,9 +169,8 @@ export const coverArtApi = {
       volume: string | null;
       isPrimary: boolean;
       manga: { id: string; title: string };
-    }>("/covers/upload", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+      // Omit Content-Type — axios auto-sets it with boundary for FormData
+    }>("/covers/upload", formData);
   },
 };
 
