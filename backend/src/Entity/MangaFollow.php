@@ -50,6 +50,7 @@ class MangaFollow
     public function setUser(User $user): static
     {
         $this->user = $user;
+
         return $this;
     }
 
@@ -61,6 +62,7 @@ class MangaFollow
     public function setManga(Manga $manga): static
     {
         $this->manga = $manga;
+
         return $this;
     }
 

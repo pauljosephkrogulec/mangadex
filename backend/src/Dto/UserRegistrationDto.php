@@ -33,6 +33,7 @@ class UserRegistrationDto
     public function setEmail(string $email): static
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -44,6 +45,7 @@ class UserRegistrationDto
     public function setUsername(string $username): static
     {
         $this->username = $username;
+
         return $this;
     }
 
@@ -55,6 +57,7 @@ class UserRegistrationDto
     public function setPassword(string $password): static
     {
         $this->password = $password;
+
         return $this;
     }
 }

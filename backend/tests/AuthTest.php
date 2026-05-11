@@ -89,7 +89,7 @@ class AuthTest extends WebTestCase
 
         $existingUser = $entityManager->getRepository(\App\Entity\User::class)->findOneBy(['email' => 'test@example.com']);
 
-        if (! $existingUser) {
+        if (!$existingUser) {
             $user = new \App\Entity\User();
             $user->setEmail('test@example.com');
             $user->setUsername('testuser');

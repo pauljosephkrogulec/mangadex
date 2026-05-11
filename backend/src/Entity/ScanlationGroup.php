@@ -94,6 +94,7 @@ class ScanlationGroup
     public function setName(string $name): static
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -105,6 +106,7 @@ class ScanlationGroup
     public function setWebsite(?string $website): static
     {
         $this->website = $website;
+
         return $this;
     }
 
@@ -118,10 +120,11 @@ class ScanlationGroup
 
     public function addChapter(Chapter $chapter): static
     {
-        if (! $this->chapters->contains($chapter)) {
+        if (!$this->chapters->contains($chapter)) {
             $this->chapters->add($chapter);
             $chapter->setScanlationGroup($this);
         }
+
         return $this;
     }
 
@@ -132,6 +135,7 @@ class ScanlationGroup
                 $chapter->setScanlationGroup(null);
             }
         }
+
         return $this;
     }
 }

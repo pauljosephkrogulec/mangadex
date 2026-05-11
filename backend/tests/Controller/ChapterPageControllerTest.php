@@ -40,7 +40,7 @@ class ChapterPageControllerTest extends TestCase
         $container = $this->createMock(ContainerInterface::class);
         $container
             ->method('has')
-            ->willReturnCallback(fn ($id) => $id === 'parameter_bag');
+            ->willReturnCallback(fn ($id) => 'parameter_bag' === $id);
         $container
             ->method('get')
             ->with('parameter_bag')
@@ -53,12 +53,12 @@ class ChapterPageControllerTest extends TestCase
     public function testServePageReturnsImage(): void
     {
         $projectDir = dirname(__DIR__, 2);
-        $uploadsDir = $projectDir . '/public/uploads';
-        $chapterDir = $uploadsDir . '/chapters/test_serve';
-        if (! is_dir($chapterDir)) {
-            mkdir($chapterDir, 0777, true);
+        $uploadsDir = $projectDir.'/public/uploads';
+        $chapterDir = $uploadsDir.'/chapters/test_serve';
+        if (!is_dir($chapterDir)) {
+            mkdir($chapterDir, 0o777, true);
         }
-        $testFile = $chapterDir . '/1.jpg';
+        $testFile = $chapterDir.'/1.jpg';
         file_put_contents($testFile, 'test image content');
 
         $chapter = $this->createMock(Chapter::class);
@@ -158,12 +158,12 @@ class ChapterPageControllerTest extends TestCase
     public function testServePageSetsCacheHeaders(): void
     {
         $projectDir = dirname(__DIR__, 2);
-        $uploadsDir = $projectDir . '/public/uploads';
-        $chapterDir = $uploadsDir . '/chapters/cache_test';
-        if (! is_dir($chapterDir)) {
-            mkdir($chapterDir, 0777, true);
+        $uploadsDir = $projectDir.'/public/uploads';
+        $chapterDir = $uploadsDir.'/chapters/cache_test';
+        if (!is_dir($chapterDir)) {
+            mkdir($chapterDir, 0o777, true);
         }
-        $testFile = $chapterDir . '/1.jpg';
+        $testFile = $chapterDir.'/1.jpg';
         file_put_contents($testFile, 'cache test content');
 
         $chapter = $this->createMock(Chapter::class);
@@ -196,13 +196,13 @@ class ChapterPageControllerTest extends TestCase
     public function testServePageWithMultiplePages(): void
     {
         $projectDir = dirname(__DIR__, 2);
-        $chapterDir = $projectDir . '/public/uploads/chapters/multi_test';
-        if (! is_dir($chapterDir)) {
-            mkdir($chapterDir, 0777, true);
+        $chapterDir = $projectDir.'/public/uploads/chapters/multi_test';
+        if (!is_dir($chapterDir)) {
+            mkdir($chapterDir, 0o777, true);
         }
-        $testFile1 = $chapterDir . '/1.jpg';
-        $testFile2 = $chapterDir . '/2.jpg';
-        $testFile3 = $chapterDir . '/3.jpg';
+        $testFile1 = $chapterDir.'/1.jpg';
+        $testFile2 = $chapterDir.'/2.jpg';
+        $testFile3 = $chapterDir.'/3.jpg';
         file_put_contents($testFile1, 'page 1');
         file_put_contents($testFile2, 'page 2');
         file_put_contents($testFile3, 'page 3');
@@ -239,7 +239,7 @@ class ChapterPageControllerTest extends TestCase
     public function testResolveUploadPathBlocksDirectoryTraversal(): void
     {
         $projectDir = dirname(__DIR__, 2);
-        $traversalFile = $projectDir . '/test_traversal.txt';
+        $traversalFile = $projectDir.'/test_traversal.txt';
         file_put_contents($traversalFile, 'test');
 
         $chapter = $this->createMock(Chapter::class);

@@ -117,6 +117,7 @@ class Chapter
     public function setManga(Manga $manga): static
     {
         $this->manga = $manga;
+
         return $this;
     }
 
@@ -128,6 +129,7 @@ class Chapter
     public function setScanlationGroup(?ScanlationGroup $scanlationGroup): static
     {
         $this->scanlationGroup = $scanlationGroup;
+
         return $this;
     }
 
@@ -139,6 +141,7 @@ class Chapter
     public function setVolume(?string $volume): static
     {
         $this->volume = $volume;
+
         return $this;
     }
 
@@ -150,6 +153,7 @@ class Chapter
     public function setChapterNumber(string $chapterNumber): static
     {
         $this->chapterNumber = $chapterNumber;
+
         return $this;
     }
 
@@ -161,6 +165,7 @@ class Chapter
     public function setTitle(?string $title): static
     {
         $this->title = $title;
+
         return $this;
     }
 
@@ -172,6 +177,7 @@ class Chapter
     public function setLanguage(string $language): static
     {
         $this->language = $language;
+
         return $this;
     }
 
@@ -189,16 +195,16 @@ class Chapter
     #[Groups(['chapter:read'])]
     public function getPageUrls(): array
     {
-        if ($this->id === null) {
+        if (null === $this->id) {
             return [];
         }
 
         $urls = [];
         $totalPages = count($this->pages);
-        $baseUrl = '/api/chapters/' . $this->id . '/pages';
+        $baseUrl = '/api/chapters/'.$this->id.'/pages';
 
-        for ($i = 0; $i < $totalPages; $i++) {
-            $urls[] = $baseUrl . '/' . ($i + 1);
+        for ($i = 0; $i < $totalPages; ++$i) {
+            $urls[] = $baseUrl.'/'.($i + 1);
         }
 
         return $urls;
@@ -210,6 +216,7 @@ class Chapter
     public function setPages(array $pages): static
     {
         $this->pages = $pages;
+
         return $this;
     }
 }

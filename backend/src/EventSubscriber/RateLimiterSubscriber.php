@@ -29,40 +29,42 @@ final class RateLimiterSubscriber
     public function onKernelRequest(RequestEvent $event): void
     {
         // Disable rate limiting in test environment
-        if ($this->kernel->getEnvironment() === 'test') {
+        if ('test' === $this->kernel->getEnvironment()) {
             return;
         }
 
         $request = $event->getRequest();
 
-        if (! str_starts_with($request->getPathInfo(), '/api')) {
+        if (!str_starts_with($request->getPathInfo(), '/api')) {
             return;
         }
 
         // Rate limit login endpoint: 5 attempts/minute per IP
-        if ($request->getMethod() === 'POST' && $request->getPathInfo() === '/api/login_check') {
+        if ('POST' === $request->getMethod() && '/api/login_check' === $request->getPathInfo()) {
             $limiter = $this->login->create($request->getClientIp());
             $consume = $limiter->consume();
-            if (! $consume->isAccepted()) {
+            if (!$consume->isAccepted()) {
                 throw new TooManyRequestsHttpException(60);
             }
+
             return;
         }
 
         // Rate limit registration: token bucket 3 burst, 1 per 3 min
-        if ($request->getMethod() === 'POST' && $request->getPathInfo() === '/api/users') {
+        if ('POST' === $request->getMethod() && '/api/users' === $request->getPathInfo()) {
             $limiter = $this->registration->create($request->getClientIp());
             $consume = $limiter->consume();
-            if (! $consume->isAccepted()) {
+            if (!$consume->isAccepted()) {
                 throw new TooManyRequestsHttpException(60);
             }
+
             return;
         }
 
         // General API rate limit: 60 requests/minute per IP
         $limiter = $this->api->create($request->getClientIp());
         $consume = $limiter->consume();
-        if (! $consume->isAccepted()) {
+        if (!$consume->isAccepted()) {
             throw new TooManyRequestsHttpException(60);
         }
     }

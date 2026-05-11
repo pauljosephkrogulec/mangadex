@@ -67,7 +67,7 @@ class CustomListMangaControllerTest extends TestCase
             return in_array($id, ['security.token_storage', 'security.authorization_checker']);
         });
         $container->method('get')->willReturnCallback(function ($id) use ($tokenStorage, $authorizationChecker) {
-            return match($id) {
+            return match ($id) {
                 'security.token_storage' => $tokenStorage,
                 'security.authorization_checker' => $authorizationChecker,
                 default => null,
@@ -86,6 +86,7 @@ class CustomListMangaControllerTest extends TestCase
         foreach ($attributes as $key => $value) {
             $request->attributes->set($key, $value);
         }
+
         return $request;
     }
 

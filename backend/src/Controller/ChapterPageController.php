@@ -18,16 +18,16 @@ class ChapterPageController extends AbstractController
 
     private function resolveUploadPath(string $relativePath): ?string
     {
-        $fullPath = $this->getParameter('kernel.project_dir') . '/public/uploads' . $relativePath;
+        $fullPath = $this->getParameter('kernel.project_dir').'/public/uploads'.$relativePath;
         $realPath = realpath($fullPath);
 
-        if ($realPath === false) {
+        if (false === $realPath) {
             return null;
         }
 
-        $uploadsDir = realpath($this->getParameter('kernel.project_dir') . self::UPLOADS_BASE);
+        $uploadsDir = realpath($this->getParameter('kernel.project_dir').self::UPLOADS_BASE);
 
-        if (! str_starts_with($realPath, $uploadsDir)) {
+        if (!str_starts_with($realPath, $uploadsDir)) {
             return null;
         }
 
@@ -38,7 +38,7 @@ class ChapterPageController extends AbstractController
     public function servePage(string $id, int $pageNum, EntityManagerInterface $em): Response
     {
         $chapter = $em->getRepository(Chapter::class)->find($id);
-        if (! $chapter) {
+        if (!$chapter) {
             throw $this->createNotFoundException('Chapter not found');
         }
 
@@ -52,7 +52,7 @@ class ChapterPageController extends AbstractController
         $relativePath = $pages[$pageNum - 1];
         $fullPath = $this->resolveUploadPath($relativePath);
 
-        if ($fullPath === null) {
+        if (null === $fullPath) {
             throw $this->createNotFoundException('Page file not found');
         }
 

@@ -114,6 +114,7 @@ class CustomList
     public function setName(string $name): static
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -133,6 +134,7 @@ class CustomList
     public function setVisibility(string $visibility): static
     {
         $this->visibility = $visibility;
+
         return $this;
     }
 
@@ -144,6 +146,7 @@ class CustomList
     public function setUser(User $user): static
     {
         $this->user = $user;
+
         return $this;
     }
 
@@ -157,15 +160,17 @@ class CustomList
 
     public function addManga(Manga $manga): static
     {
-        if (! $this->mangas->contains($manga)) {
+        if (!$this->mangas->contains($manga)) {
             $this->mangas->add($manga);
         }
+
         return $this;
     }
 
     public function removeManga(Manga $manga): static
     {
         $this->mangas->removeElement($manga);
+
         return $this;
     }
 }

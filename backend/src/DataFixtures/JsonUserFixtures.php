@@ -22,26 +22,26 @@ class JsonUserFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        $filePath = __DIR__ . '/json/users.json';
+        $filePath = __DIR__.'/json/users.json';
 
-        if (! file_exists($filePath)) {
+        if (!file_exists($filePath)) {
             return;
         }
 
         $content = file_get_contents($filePath);
 
-        if ($content === false) {
+        if (false === $content) {
             return;
         }
 
         $data = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
 
-        if (! is_array($data)) {
+        if (!is_array($data)) {
             return;
         }
 
         foreach ($data as $item) {
-            if (! is_array($item)) {
+            if (!is_array($item)) {
                 continue;
             }
             $user = new User();
@@ -53,7 +53,7 @@ class JsonUserFixtures extends Fixture
             $user->setPassword($hashedPassword);
 
             $manager->persist($user);
-            $this->addReference('user_' . $item['ref'], $user);
+            $this->addReference('user_'.$item['ref'], $user);
         }
 
         $manager->flush();

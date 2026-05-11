@@ -15,26 +15,26 @@ class JsonMangaFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
-        $filePath = __DIR__ . '/json/mangas.json';
+        $filePath = __DIR__.'/json/mangas.json';
 
-        if (! file_exists($filePath)) {
+        if (!file_exists($filePath)) {
             return;
         }
 
         $content = file_get_contents($filePath);
 
-        if ($content === false) {
+        if (false === $content) {
             return;
         }
 
         $data = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
 
-        if (! is_array($data)) {
+        if (!is_array($data)) {
             return;
         }
 
         foreach ($data as $item) {
-            if (! is_array($item)) {
+            if (!is_array($item)) {
                 continue;
             }
             $manga = new Manga();
@@ -47,17 +47,17 @@ class JsonMangaFixtures extends Fixture implements DependentFixtureInterface
             $manga->setDemographic($item['demographic'] ?? 'none');
 
             foreach ($item['creators'] as $creatorRef) {
-                $creator = $this->getReference('creator_' . $creatorRef, Creator::class);
+                $creator = $this->getReference('creator_'.$creatorRef, Creator::class);
                 $manga->addCreator($creator);
             }
 
             foreach ($item['tags'] as $tagRef) {
-                $tag = $this->getReference('tag_' . $tagRef, Tag::class);
+                $tag = $this->getReference('tag_'.$tagRef, Tag::class);
                 $manga->addTag($tag);
             }
 
             $manager->persist($manga);
-            $this->addReference('manga_' . $item['ref'], $manga);
+            $this->addReference('manga_'.$item['ref'], $manga);
         }
 
         $manager->flush();

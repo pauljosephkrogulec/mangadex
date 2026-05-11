@@ -8,6 +8,14 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'localhost' },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "http://nginx:80/api/:path*",
+      },
+    ];
+  },
 };
 
 export default nextConfig;

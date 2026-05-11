@@ -15,42 +15,42 @@ class JsonCustomListFixtures extends Fixture implements DependentFixtureInterfac
 {
     public function load(ObjectManager $manager): void
     {
-        $filePath = __DIR__ . '/json/custom_lists.json';
+        $filePath = __DIR__.'/json/custom_lists.json';
 
-        if (! file_exists($filePath)) {
+        if (!file_exists($filePath)) {
             return;
         }
 
         $content = file_get_contents($filePath);
 
-        if ($content === false) {
+        if (false === $content) {
             return;
         }
 
         $data = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
 
-        if (! is_array($data)) {
+        if (!is_array($data)) {
             return;
         }
 
         foreach ($data as $item) {
-            if (! is_array($item)) {
+            if (!is_array($item)) {
                 continue;
             }
             $list = new CustomList();
             $list->setName($item['name']);
             $list->setVisibility($item['visibility']);
 
-            $user = $this->getReference('user_' . $item['user'], User::class);
+            $user = $this->getReference('user_'.$item['user'], User::class);
             $list->setUser($user);
 
             foreach ($item['mangas'] as $mangaRef) {
-                $manga = $this->getReference('manga_' . $mangaRef, Manga::class);
+                $manga = $this->getReference('manga_'.$mangaRef, Manga::class);
                 $list->addManga($manga);
             }
 
             $manager->persist($list);
-            $this->addReference('custom_list_' . $item['ref'], $list);
+            $this->addReference('custom_list_'.$item['ref'], $list);
         }
 
         $manager->flush();

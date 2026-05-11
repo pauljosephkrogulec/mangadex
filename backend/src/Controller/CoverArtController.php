@@ -19,16 +19,16 @@ class CoverArtController extends AbstractController
 
     private function resolveUploadPath(string $relativePath): ?string
     {
-        $fullPath = $this->getParameter('kernel.project_dir') . '/public/uploads' . $relativePath;
+        $fullPath = $this->getParameter('kernel.project_dir').'/public/uploads'.$relativePath;
         $realPath = realpath($fullPath);
 
-        if ($realPath === false) {
+        if (false === $realPath) {
             return null;
         }
 
-        $uploadsDir = realpath($this->getParameter('kernel.project_dir') . self::UPLOADS_BASE);
+        $uploadsDir = realpath($this->getParameter('kernel.project_dir').self::UPLOADS_BASE);
 
-        if (! str_starts_with($realPath, $uploadsDir)) {
+        if (!str_starts_with($realPath, $uploadsDir)) {
             return null;
         }
 
@@ -40,13 +40,13 @@ class CoverArtController extends AbstractController
     {
         $coverArt = $em->getRepository(CoverArt::class)->find($id);
 
-        if (! $coverArt) {
+        if (!$coverArt) {
             throw $this->createNotFoundException('Cover art not found');
         }
 
         $fullPath = $this->resolveUploadPath($coverArt->getImagePath());
 
-        if ($fullPath === null) {
+        if (null === $fullPath) {
             throw $this->createNotFoundException('Cover art file not found');
         }
 
@@ -58,7 +58,7 @@ class CoverArtController extends AbstractController
     {
         $manga = $em->getRepository(Manga::class)->find($id);
 
-        if (! $manga) {
+        if (!$manga) {
             throw $this->createNotFoundException('Manga not found');
         }
 
@@ -67,13 +67,13 @@ class CoverArtController extends AbstractController
             'isPrimary' => true,
         ]);
 
-        if (! $coverArt) {
+        if (!$coverArt) {
             throw $this->createNotFoundException('Primary cover not found for this manga');
         }
 
         $fullPath = $this->resolveUploadPath($coverArt->getImagePath());
 
-        if ($fullPath === null) {
+        if (null === $fullPath) {
             throw $this->createNotFoundException('Cover art file not found');
         }
 
@@ -90,7 +90,7 @@ class CoverArtController extends AbstractController
 
         // Set content type based on file extension to avoid requiring symfony/mime
         $mimeType = $this->getMimeType($fullPath);
-        if ($mimeType !== null) {
+        if (null !== $mimeType) {
             $response->headers->set('Content-Type', $mimeType);
         }
 

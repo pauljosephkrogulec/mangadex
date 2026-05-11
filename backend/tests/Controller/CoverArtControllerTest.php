@@ -32,7 +32,7 @@ class CoverArtControllerTest extends TestCase
         $this->entityManager = $this->createMock(EntityManagerInterface::class);
         $this->entityManager
             ->method('getRepository')
-            ->willReturnCallback(fn ($class) => match($class) {
+            ->willReturnCallback(fn ($class) => match ($class) {
                 CoverArt::class => $this->coverArtRepository,
                 Manga::class => $this->mangaRepository,
                 default => null,
@@ -46,7 +46,7 @@ class CoverArtControllerTest extends TestCase
         $container = $this->createMock(ContainerInterface::class);
         $container
             ->method('has')
-            ->willReturnCallback(fn ($id) => $id === 'parameter_bag');
+            ->willReturnCallback(fn ($id) => 'parameter_bag' === $id);
         $container
             ->method('get')
             ->with('parameter_bag')
@@ -59,12 +59,12 @@ class CoverArtControllerTest extends TestCase
     public function testServeCoverReturnsImage(): void
     {
         $projectDir = dirname(__DIR__, 2);
-        $uploadsDir = $projectDir . '/public/uploads';
-        $coversDir = $uploadsDir . '/covers';
-        if (! is_dir($coversDir)) {
-            mkdir($coversDir, 0777, true);
+        $uploadsDir = $projectDir.'/public/uploads';
+        $coversDir = $uploadsDir.'/covers';
+        if (!is_dir($coversDir)) {
+            mkdir($coversDir, 0o777, true);
         }
-        $testFile = $coversDir . '/test_cover.jpg';
+        $testFile = $coversDir.'/test_cover.jpg';
         file_put_contents($testFile, 'cover content');
 
         $coverArt = $this->createMock(CoverArt::class);
@@ -119,7 +119,7 @@ class CoverArtControllerTest extends TestCase
     public function testServeCoverBlocksDirectoryTraversal(): void
     {
         $projectDir = dirname(__DIR__, 2);
-        $traversalFile = $projectDir . '/test_cover_traversal.txt';
+        $traversalFile = $projectDir.'/test_cover_traversal.txt';
         file_put_contents($traversalFile, 'test');
 
         $coverArt = $this->createMock(CoverArt::class);
@@ -143,11 +143,11 @@ class CoverArtControllerTest extends TestCase
     public function testServeCoverWithMimeType(): void
     {
         $projectDir = dirname(__DIR__, 2);
-        $coversDir = $projectDir . '/public/uploads/covers';
-        if (! is_dir($coversDir)) {
-            mkdir($coversDir, 0777, true);
+        $coversDir = $projectDir.'/public/uploads/covers';
+        if (!is_dir($coversDir)) {
+            mkdir($coversDir, 0o777, true);
         }
-        $testFile = $coversDir . '/test_mime.png';
+        $testFile = $coversDir.'/test_mime.png';
         file_put_contents($testFile, 'png content');
 
         $coverArt = $this->createMock(CoverArt::class);
@@ -171,11 +171,11 @@ class CoverArtControllerTest extends TestCase
     public function testServeCoverWithUnknownExtension(): void
     {
         $projectDir = dirname(__DIR__, 2);
-        $coversDir = $projectDir . '/public/uploads/covers';
-        if (! is_dir($coversDir)) {
-            mkdir($coversDir, 0777, true);
+        $coversDir = $projectDir.'/public/uploads/covers';
+        if (!is_dir($coversDir)) {
+            mkdir($coversDir, 0o777, true);
         }
-        $testFile = $coversDir . '/test_unknown.bin';
+        $testFile = $coversDir.'/test_unknown.bin';
         file_put_contents($testFile, 'bin content');
 
         $coverArt = $this->createMock(CoverArt::class);
@@ -199,11 +199,11 @@ class CoverArtControllerTest extends TestCase
     public function testServePrimaryCoverReturnsImage(): void
     {
         $projectDir = dirname(__DIR__, 2);
-        $coversDir = $projectDir . '/public/uploads/covers';
-        if (! is_dir($coversDir)) {
-            mkdir($coversDir, 0777, true);
+        $coversDir = $projectDir.'/public/uploads/covers';
+        if (!is_dir($coversDir)) {
+            mkdir($coversDir, 0o777, true);
         }
-        $testFile = $coversDir . '/primary_cover.jpg';
+        $testFile = $coversDir.'/primary_cover.jpg';
         file_put_contents($testFile, 'primary cover');
 
         $manga = $this->createMock(Manga::class);
@@ -293,7 +293,7 @@ class CoverArtControllerTest extends TestCase
     public function testServePrimaryCoverBlocksDirectoryTraversal(): void
     {
         $projectDir = dirname(__DIR__, 2);
-        $traversalFile = $projectDir . '/test_primary_traversal.txt';
+        $traversalFile = $projectDir.'/test_primary_traversal.txt';
         file_put_contents($traversalFile, 'test');
 
         $manga = $this->createMock(Manga::class);
@@ -320,5 +320,4 @@ class CoverArtControllerTest extends TestCase
             unlink($traversalFile);
         }
     }
-
 }

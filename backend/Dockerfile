@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     libjpeg-dev \
     libfreetype6-dev \
     libpq-dev \
+    && docker-php-ext-configure gd --with-jpeg --with-freetype \
     && docker-php-ext-install zip intl pcntl mbstring gd pdo pdo_pgsql pgsql \
     && pecl install apcu && docker-php-ext-enable apcu \
     && pecl install pcov && docker-php-ext-enable pcov
@@ -40,12 +41,14 @@ RUN apt-get update && apt-get install -y \
     libjpeg-dev \
     libfreetype6-dev \
     libpq-dev \
+    && docker-php-ext-configure gd --with-jpeg --with-freetype \
     && docker-php-ext-install zip intl pcntl mbstring gd pdo pdo_pgsql pgsql \
     && pecl install apcu && docker-php-ext-enable apcu \
     && pecl install pcov && docker-php-ext-enable pcov \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /app /app
+COPY --from=builder /usr/local/bin/composer /usr/local/bin/composer
 
 WORKDIR /app
 

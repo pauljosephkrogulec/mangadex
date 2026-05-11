@@ -68,11 +68,11 @@ class FileCleanupSubscriber implements EventSubscriber
         $baseDir = null;
         foreach ($pages as $pagePath) {
             $fullPath = $this->getFullPath($pagePath);
-            if ($fullPath !== null && file_exists($fullPath)) {
+            if (null !== $fullPath && file_exists($fullPath)) {
                 try {
                     $this->filesystem->remove($fullPath);
                     // Track the base directory for cleanup
-                    if ($baseDir === null) {
+                    if (null === $baseDir) {
                         $baseDir = dirname($fullPath);
                     }
                 } catch (IOExceptionInterface $e) {
@@ -82,11 +82,11 @@ class FileCleanupSubscriber implements EventSubscriber
         }
 
         // Remove the chapter directory if it's empty
-        if ($baseDir !== null && is_dir($baseDir)) {
+        if (null !== $baseDir && is_dir($baseDir)) {
             try {
                 // Use Filesystem to remove directory only if empty
                 $files = scandir($baseDir);
-                if ($files !== false && count($files) <= 2) { // Only . and ..
+                if (false !== $files && count($files) <= 2) { // Only . and ..
                     $this->filesystem->remove($baseDir);
                 }
             } catch (IOExceptionInterface $e) {
@@ -103,8 +103,8 @@ class FileCleanupSubscriber implements EventSubscriber
 
         // $publicPath is like '/covers/1/cover.jpg' or '/chapters/1/1.jpg'
         // Uploads directory is at 'public/uploads/'
-        $baseDir = dirname(__DIR__, 2) . '/public';
-        $fullPath = $baseDir . $publicPath;
+        $baseDir = dirname(__DIR__, 2).'/public';
+        $fullPath = $baseDir.$publicPath;
 
         return $fullPath;
     }

@@ -16,7 +16,7 @@ class FileStorageServiceTest extends TestCase
     protected function setUp(): void
     {
         $this->service = new FileStorageService();
-        $this->publicDir = dirname(__DIR__, 2) . '/public';
+        $this->publicDir = dirname(__DIR__, 2).'/public';
     }
 
     public function testStoreCover(): void
@@ -32,7 +32,7 @@ class FileStorageServiceTest extends TestCase
         $this->assertStringContainsString('manga_123', $result);
 
         // Cleanup
-        $fullPath = $this->publicDir . $result;
+        $fullPath = $this->publicDir.$result;
         if (file_exists($fullPath)) {
             unlink($fullPath);
         }
@@ -52,7 +52,7 @@ class FileStorageServiceTest extends TestCase
         $this->assertStringContainsString('vol_default', $result);
 
         // Cleanup
-        $fullPath = $this->publicDir . $result;
+        $fullPath = $this->publicDir.$result;
         if (file_exists($fullPath)) {
             unlink($fullPath);
         }
@@ -61,7 +61,7 @@ class FileStorageServiceTest extends TestCase
     public function testStoreChapterPages(): void
     {
         $files = [];
-        for ($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < 3; ++$i) {
             $tmpFile = tempnam(sys_get_temp_dir(), 'test_page_');
             file_put_contents($tmpFile, 'fake page content');
             $files[] = new UploadedFile($tmpFile, "page{$i}.jpg", 'image/jpeg', null, true);
@@ -75,25 +75,25 @@ class FileStorageServiceTest extends TestCase
 
         // Cleanup
         foreach ($result as $path) {
-            $fullPath = $this->publicDir . $path;
+            $fullPath = $this->publicDir.$path;
             if (file_exists($fullPath)) {
                 unlink($fullPath);
             }
         }
-        $chapterDir = $this->publicDir . '/uploads/chapters/789';
+        $chapterDir = $this->publicDir.'/uploads/chapters/789';
         if (is_dir($chapterDir)) {
-            array_map('unlink', glob($chapterDir . '/*'));
+            array_map('unlink', glob($chapterDir.'/*'));
             rmdir($chapterDir);
         }
     }
 
     public function testDeleteFile(): void
     {
-        $uploadsDir = $this->publicDir . '/uploads';
-        if (! is_dir($uploadsDir)) {
-            mkdir($uploadsDir, 0755, true);
+        $uploadsDir = $this->publicDir.'/uploads';
+        if (!is_dir($uploadsDir)) {
+            mkdir($uploadsDir, 0o755, true);
         }
-        $testFile = $uploadsDir . '/test_file.txt';
+        $testFile = $uploadsDir.'/test_file.txt';
         file_put_contents($testFile, 'test content');
 
         $this->assertFileExists($testFile);
@@ -109,14 +109,14 @@ class FileStorageServiceTest extends TestCase
 
     public function testDeleteFiles(): void
     {
-        $uploadsDir = $this->publicDir . '/uploads';
-        if (! is_dir($uploadsDir)) {
-            mkdir($uploadsDir, 0755, true);
+        $uploadsDir = $this->publicDir.'/uploads';
+        if (!is_dir($uploadsDir)) {
+            mkdir($uploadsDir, 0o755, true);
         }
 
         $files = [];
-        for ($i = 0; $i < 3; $i++) {
-            $testFile = $uploadsDir . "/test_{$i}.txt";
+        for ($i = 0; $i < 3; ++$i) {
+            $testFile = $uploadsDir."/test_{$i}.txt";
             file_put_contents($testFile, 'test');
             $files[] = "/test_{$i}.txt";
         }
@@ -124,7 +124,7 @@ class FileStorageServiceTest extends TestCase
         $this->service->deleteFiles($files);
 
         foreach ($files as $file) {
-            $this->assertFileDoesNotExist($uploadsDir . '/' . basename($file));
+            $this->assertFileDoesNotExist($uploadsDir.'/'.basename($file));
         }
     }
 

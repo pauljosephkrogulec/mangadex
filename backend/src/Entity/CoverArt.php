@@ -96,6 +96,7 @@ class CoverArt
     public function setManga(Manga $manga): static
     {
         $this->manga = $manga;
+
         return $this;
     }
 
@@ -107,6 +108,7 @@ class CoverArt
     public function setImagePath(string $imagePath): static
     {
         $this->imagePath = $imagePath;
+
         return $this;
     }
 
@@ -118,6 +120,7 @@ class CoverArt
     public function setVolume(?string $volume): static
     {
         $this->volume = $volume;
+
         return $this;
     }
 
@@ -134,6 +137,7 @@ class CoverArt
     public function setIsPrimary(bool $isPrimary): static
     {
         $this->isPrimary = $isPrimary;
+
         return $this;
     }
 }

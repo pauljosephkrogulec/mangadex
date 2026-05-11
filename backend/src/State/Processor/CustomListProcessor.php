@@ -23,9 +23,9 @@ final class CustomListProcessor implements ProcessorInterface
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): CustomList
     {
-        if ($data instanceof CustomList && $data->getUser() === null) {
+        if ($data instanceof CustomList && null === $data->getUser()) {
             $user = $this->security->getUser();
-            if ($user !== null) {
+            if (null !== $user) {
                 $data->setUser($user);
             }
         }

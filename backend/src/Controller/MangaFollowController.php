@@ -21,7 +21,7 @@ class MangaFollowController extends AbstractController
     public function __invoke(Manga $manga, Request $request): JsonResponse
     {
         $user = $this->getUser();
-        if (! $user instanceof \App\Entity\User) {
+        if (!$user instanceof \App\Entity\User) {
             throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException('User not authenticated');
         }
 
@@ -32,7 +32,7 @@ class MangaFollowController extends AbstractController
 
         $method = $request->getMethod();
 
-        if ($method === 'POST') {
+        if ('POST' === $method) {
             if ($existingFollow) {
                 return new JsonResponse(['message' => 'Already following this manga'], 409);
             }
@@ -50,8 +50,8 @@ class MangaFollowController extends AbstractController
             ], 201);
         }
 
-        if ($method === 'DELETE') {
-            if (! $existingFollow) {
+        if ('DELETE' === $method) {
+            if (!$existingFollow) {
                 return new JsonResponse(['message' => 'Not following this manga'], 404);
             }
 
@@ -61,8 +61,8 @@ class MangaFollowController extends AbstractController
             return new JsonResponse(null, 204);
         }
 
-        if ($method === 'GET') {
-            if (! $existingFollow) {
+        if ('GET' === $method) {
+            if (!$existingFollow) {
                 return new JsonResponse(['following' => false], 200);
             }
 

@@ -16,16 +16,17 @@ class FileStorageService
         $filename = $this->generateCoverFilename($file, $mangaId, $volume);
         $file->move($coversDir, $filename);
 
-        return '/covers/' . $filename;
+        return '/covers/'.$filename;
     }
 
     /**
      * @param array<UploadedFile> $files
+     *
      * @return array<string> Array of public file paths
      */
     public function storeChapterPages(array $files, string $chapterId): array
     {
-        $chapterDir = $this->getUploadsDir('chapters/' . $chapterId);
+        $chapterDir = $this->getUploadsDir('chapters/'.$chapterId);
         $pagePaths = [];
 
         foreach ($files as $index => $file) {
@@ -34,7 +35,7 @@ class FileStorageService
             $filename = sprintf('page_%03d.%s', $pageNumber, $ext);
             $file->move($chapterDir, $filename);
 
-            $pagePaths[] = '/chapters/' . $chapterId . '/' . $filename;
+            $pagePaths[] = '/chapters/'.$chapterId.'/'.$filename;
         }
 
         return $pagePaths;
@@ -42,7 +43,7 @@ class FileStorageService
 
     public function deleteFile(string $publicPath): void
     {
-        $fullPath = __DIR__ . '/../../public/uploads' . $publicPath;
+        $fullPath = __DIR__.'/../../public/uploads'.$publicPath;
         if (file_exists($fullPath)) {
             unlink($fullPath);
         }
@@ -61,8 +62,8 @@ class FileStorageService
     private function generateCoverFilename(UploadedFile $file, string $mangaId, ?string $volume): string
     {
         $ext = $file->guessExtension() ?? 'jpg';
-        $volumePart = $volume !== null ? preg_replace('/[^a-zA-Z0-9_-]/', '', $volume) : 'default';
-        if ($volumePart === '') {
+        $volumePart = null !== $volume ? preg_replace('/[^a-zA-Z0-9_-]/', '', $volume) : 'default';
+        if ('' === $volumePart) {
             $volumePart = 'default';
         }
         $timestamp = time();
@@ -72,10 +73,10 @@ class FileStorageService
 
     private function getUploadsDir(string $subdir): string
     {
-        $dir = __DIR__ . '/../../public/' . self::UPLOADS_DIR . '/' . $subdir;
+        $dir = __DIR__.'/../../public/'.self::UPLOADS_DIR.'/'.$subdir;
 
-        if (! is_dir($dir)) {
-            mkdir($dir, 0755, true);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0o755, true);
         }
 
         return $dir;

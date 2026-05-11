@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\State;
 
 use ApiPlatform\Metadata\Operation;
+use ApiPlatform\State\Pagination\TraversablePaginator;
 use ApiPlatform\State\ProviderInterface;
 use App\Entity\Chapter;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,6 +23,7 @@ final class MangaFeedProvider implements ProviderInterface
     /**
      * @param array<string, mixed> $uriVariables
      * @param array<string, mixed> $context
+     *
      * @return iterable<Chapter>
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): iterable
@@ -32,7 +34,7 @@ final class MangaFeedProvider implements ProviderInterface
         $filters = $context['filters'] ?? [];
 
         // Map allowed sort fields to DQL-safe field paths
-        $allowedFields = ['chapterNumber' => 'c.chapterNumber', 'volume' => 'c.volume', 'createdAt' => 'c.createdAt', 'language' => 'c.language'];
+        $allowedFields = ['chapterNumber' => 'c.chapterNumber', 'volume' => 'c.volume', 'createdAt' => 'c.createdAt', 'language' => 'c.language', 'title' => 'c.title'];
         $field = 'c.chapterNumber';
         $direction = 'ASC';
 
@@ -40,7 +42,7 @@ final class MangaFeedProvider implements ProviderInterface
             foreach ($filters['order'] as $f => $d) {
                 if (is_string($f) && is_string($d) && isset($allowedFields[$f])) {
                     $field = $allowedFields[$f];
-                    $direction = strtoupper($d) === 'DESC' ? 'DESC' : 'ASC';
+                    $direction = 'DESC' === strtoupper($d) ? 'DESC' : 'ASC';
                     break;
                 }
             }
@@ -60,6 +62,19 @@ final class MangaFeedProvider implements ProviderInterface
                ->setParameter('language', $filters['language']);
         }
 
+        // Count query (simpler — no joins or ordering needed)
+        $countQb = $this->entityManager->getRepository(Chapter::class)->createQueryBuilder('c')
+            ->select('COUNT(c.id)')
+            ->where('c.manga = :manga')
+            ->setParameter('manga', $mangaId);
+
+        if (isset($filters['language']) && is_string($filters['language'])) {
+            $countQb->andWhere('c.language = :language')
+                    ->setParameter('language', $filters['language']);
+        }
+
+        $totalItems = (int) $countQb->getQuery()->getSingleScalarResult();
+
         // Apply pagination from context
         $page = max(1, (int) ($filters['page'] ?? 1));
         $itemsPerPage = min(100, max(1, (int) ($filters['itemsPerPage'] ?? 20)));
@@ -69,6 +84,11 @@ final class MangaFeedProvider implements ProviderInterface
         /** @var array<Chapter> $result */
         $result = $qb->getQuery()->getResult();
 
-        return $result ?? [];
+        return new TraversablePaginator(
+            new \ArrayIterator($result ?? []),
+            (float) $page,
+            (float) $itemsPerPage,
+            (float) $totalItems
+        );
     }
 }

@@ -103,6 +103,7 @@ class Tag
     public function setName(string $name): static
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -114,6 +115,7 @@ class Tag
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -125,6 +127,7 @@ class Tag
     public function setGroupName(string $groupName): static
     {
         $this->groupName = $groupName;
+
         return $this;
     }
 
@@ -136,6 +139,7 @@ class Tag
     public function setIsPrimary(bool $isPrimary): static
     {
         $this->isPrimary = $isPrimary;
+
         return $this;
     }
 
@@ -149,10 +153,11 @@ class Tag
 
     public function addManga(Manga $manga): static
     {
-        if (! $this->manga->contains($manga)) {
+        if (!$this->manga->contains($manga)) {
             $this->manga->add($manga);
             $manga->addTag($this);
         }
+
         return $this;
     }
 
@@ -161,6 +166,7 @@ class Tag
         if ($this->manga->removeElement($manga)) {
             $manga->removeTag($this);
         }
+
         return $this;
     }
 }

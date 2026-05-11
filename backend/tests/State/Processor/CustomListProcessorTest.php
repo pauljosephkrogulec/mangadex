@@ -79,5 +79,4 @@ class CustomListProcessorTest extends TestCase
 
         $this->assertNull($customList->getUser());
     }
-
 }

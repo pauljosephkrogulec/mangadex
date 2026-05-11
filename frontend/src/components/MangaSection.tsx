@@ -45,7 +45,7 @@ export default function MangaSection({
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
-  const [hasOverflow, setHasOverflow] = useState(false);
+  const [, setHasOverflow] = useState(false);
 
   useEffect(() => {
     let cancelled = false;

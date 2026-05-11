@@ -1,37 +1,47 @@
 [
-  {
-    "ref": "admin",
-    "email": "admin@example.com",
-    "username": "admin",
-    "password": "admin123",
-    "roles": ["ROLE_ADMIN"]
-  },
-  {
-    "ref": "mangareader1",
-    "email": "user1@example.com",
-    "username": "mangareader1",
-    "password": "password123",
-    "roles": ["ROLE_USER"]
-  },
-  {
-    "ref": "mangareader2",
-    "email": "user2@example.com",
-    "username": "mangareader2",
-    "password": "password123",
-    "roles": ["ROLE_USER"]
-  },
-  {
-    "ref": "animefan",
-    "email": "fan@example.com",
-    "username": "animefan",
-    "password": "password123",
-    "roles": ["ROLE_USER"]
-  },
-  {
-    "ref": "scanlator",
-    "email": "scan@example.com",
-    "username": "scanlator",
-    "password": "password123",
-    "roles": ["ROLE_USER"]
-  }
+    {
+        "ref": "admin",
+        "email": "admin@example.com",
+        "username": "admin",
+        "password": "admin123",
+        "roles": [
+            "ROLE_ADMIN"
+        ]
+    },
+    {
+        "ref": "mangareader1",
+        "email": "user1@example.com",
+        "username": "mangareader1",
+        "password": "password123",
+        "roles": [
+            "ROLE_USER"
+        ]
+    },
+    {
+        "ref": "mangareader2",
+        "email": "user2@example.com",
+        "username": "mangareader2",
+        "password": "password123",
+        "roles": [
+            "ROLE_USER"
+        ]
+    },
+    {
+        "ref": "animefan",
+        "email": "fan@example.com",
+        "username": "animefan",
+        "password": "password123",
+        "roles": [
+            "ROLE_USER"
+        ]
+    },
+    {
+        "ref": "scanlator",
+        "email": "scan@example.com",
+        "username": "scanlator",
+        "password": "password123",
+        "roles": [
+            "ROLE_USER"
+        ]
+    }
 ]

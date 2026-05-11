@@ -107,12 +107,12 @@ class FileCleanupSubscriberTest extends TestCase
 
     public function testPostRemoveHandlesFilesystemExceptionForCoverArt(): void
     {
-        $publicDir = dirname(__DIR__, 2) . '/public';
-        $uploadsDir = $publicDir . '/uploads/covers';
-        if (! is_dir($uploadsDir)) {
-            mkdir($uploadsDir, 0777, true);
+        $publicDir = dirname(__DIR__, 2).'/public';
+        $uploadsDir = $publicDir.'/uploads/covers';
+        if (!is_dir($uploadsDir)) {
+            mkdir($uploadsDir, 0o777, true);
         }
-        $testFile = $uploadsDir . '/cover_exception.jpg';
+        $testFile = $uploadsDir.'/cover_exception.jpg';
         file_put_contents($testFile, 'test content');
 
         $coverArt = new CoverArt();
@@ -137,11 +137,11 @@ class FileCleanupSubscriberTest extends TestCase
 
     public function testPostRemoveHandlesFilesystemExceptionForChapter(): void
     {
-        $publicDir = dirname(__DIR__, 2) . '/public';
-        $testFile = $publicDir . '/uploads/chapters/exception_test/1.jpg';
+        $publicDir = dirname(__DIR__, 2).'/public';
+        $testFile = $publicDir.'/uploads/chapters/exception_test/1.jpg';
         $uploadsDir = dirname($testFile);
-        if (! is_dir($uploadsDir)) {
-            mkdir($uploadsDir, 0777, true);
+        if (!is_dir($uploadsDir)) {
+            mkdir($uploadsDir, 0o777, true);
         }
         file_put_contents($testFile, 'test content');
 
@@ -211,12 +211,12 @@ class FileCleanupSubscriberTest extends TestCase
     public function testDeleteCoverArtFileWithExistingFile(): void
     {
         // Create a temp file in the uploads directory
-        $publicDir = dirname(__DIR__, 2) . '/public';
-        $uploadsDir = $publicDir . '/uploads/covers/test';
-        if (! is_dir($uploadsDir)) {
-            mkdir($uploadsDir, 0777, true);
+        $publicDir = dirname(__DIR__, 2).'/public';
+        $uploadsDir = $publicDir.'/uploads/covers/test';
+        if (!is_dir($uploadsDir)) {
+            mkdir($uploadsDir, 0o777, true);
         }
-        $testFile = $uploadsDir . '/cover.jpg';
+        $testFile = $uploadsDir.'/cover.jpg';
         file_put_contents($testFile, 'test image content');
 
         // The getFullPath returns unresolved path like:
@@ -235,6 +235,7 @@ class FileCleanupSubscriberTest extends TestCase
             ->with($this->callback(function ($path) use ($testFile) {
                 // The path should resolve to our test file
                 $realPath = realpath($path);
+
                 return $realPath === $testFile;
             }));
 
@@ -252,13 +253,13 @@ class FileCleanupSubscriberTest extends TestCase
     public function testDeleteChapterFilesWithExistingFiles(): void
     {
         // Create temp files in the uploads directory
-        $publicDir = dirname(__DIR__, 2) . '/public';
-        $uploadsDir = $publicDir . '/uploads/chapters/test';
-        if (! is_dir($uploadsDir)) {
-            mkdir($uploadsDir, 0777, true);
+        $publicDir = dirname(__DIR__, 2).'/public';
+        $uploadsDir = $publicDir.'/uploads/chapters/test';
+        if (!is_dir($uploadsDir)) {
+            mkdir($uploadsDir, 0o777, true);
         }
-        $testFile1 = $uploadsDir . '/1.jpg';
-        $testFile2 = $uploadsDir . '/2.jpg';
+        $testFile1 = $uploadsDir.'/1.jpg';
+        $testFile2 = $uploadsDir.'/2.jpg';
         file_put_contents($testFile1, 'page 1');
         file_put_contents($testFile2, 'page 2');
 
@@ -311,17 +312,17 @@ class FileCleanupSubscriberTest extends TestCase
     public function testDeleteChapterFilesWithNonEmptyDirectory(): void
     {
         // Create temp files - directory will NOT be empty after removing pages
-        $uploadsDir = __DIR__ . '/../../public/uploads/chapters/test2';
-        if (! is_dir($uploadsDir)) {
-            mkdir($uploadsDir, 0777, true);
+        $uploadsDir = __DIR__.'/../../public/uploads/chapters/test2';
+        if (!is_dir($uploadsDir)) {
+            mkdir($uploadsDir, 0o777, true);
         }
-        $testFile1 = $uploadsDir . '/1.jpg';
-        $testFile2 = $uploadsDir . '/2.jpg';
+        $testFile1 = $uploadsDir.'/1.jpg';
+        $testFile2 = $uploadsDir.'/2.jpg';
         file_put_contents($testFile1, 'page 1');
         file_put_contents($testFile2, 'page 2');
 
         // Add a file that's NOT a page to keep directory non-empty
-        $otherFile = $uploadsDir . '/other.txt';
+        $otherFile = $uploadsDir.'/other.txt';
         file_put_contents($otherFile, 'not a page');
 
         $chapter = new Chapter();
@@ -353,11 +354,11 @@ class FileCleanupSubscriberTest extends TestCase
 
     public function testDeleteCoverArtFileWithIOException(): void
     {
-        $publicDir = dirname(__DIR__, 2) . '/public';
-        $testFile = $publicDir . '/uploads/covers/test_cover_path.jpg';
+        $publicDir = dirname(__DIR__, 2).'/public';
+        $testFile = $publicDir.'/uploads/covers/test_cover_path.jpg';
         $uploadsDir = dirname($testFile);
-        if (! is_dir($uploadsDir)) {
-            mkdir($uploadsDir, 0777, true);
+        if (!is_dir($uploadsDir)) {
+            mkdir($uploadsDir, 0o777, true);
         }
         file_put_contents($testFile, 'test content');
 
@@ -384,11 +385,11 @@ class FileCleanupSubscriberTest extends TestCase
 
     public function testDeleteChapterFilesWithIOException(): void
     {
-        $publicDir = dirname(__DIR__, 2) . '/public';
-        $testFile = $publicDir . '/uploads/chapters/io_test/1.jpg';
+        $publicDir = dirname(__DIR__, 2).'/public';
+        $testFile = $publicDir.'/uploads/chapters/io_test/1.jpg';
         $uploadsDir = dirname($testFile);
-        if (! is_dir($uploadsDir)) {
-            mkdir($uploadsDir, 0777, true);
+        if (!is_dir($uploadsDir)) {
+            mkdir($uploadsDir, 0o777, true);
         }
         file_put_contents($testFile, 'test content');
 
@@ -431,16 +432,16 @@ class FileCleanupSubscriberTest extends TestCase
     public function testDeleteChapterFilesWithEmptyDirectory(): void
     {
         // Create temp files and then delete them to test directory cleanup
-        $uploadsDir = __DIR__ . '/../../public/uploads/chapters/test_empty';
-        if (! is_dir($uploadsDir)) {
-            mkdir($uploadsDir, 0777, true);
+        $uploadsDir = __DIR__.'/../../public/uploads/chapters/test_empty';
+        if (!is_dir($uploadsDir)) {
+            mkdir($uploadsDir, 0o777, true);
         }
 
         $chapter = new Chapter();
         $chapter->setPages(['/uploads/chapters/test_empty/1.jpg']);
 
         // Create the file so it can be deleted
-        $testFile = $uploadsDir . '/1.jpg';
+        $testFile = $uploadsDir.'/1.jpg';
         file_put_contents($testFile, 'page 1');
 
         $args = $this->createMock(LifecycleEventArgs::class);
@@ -481,12 +482,12 @@ class FileCleanupSubscriberTest extends TestCase
 
     public function testDeleteChapterFilesWithIOExceptionOnDirectoryCleanup(): void
     {
-        $publicDir = dirname(__DIR__, 2) . '/public';
-        $uploadsDir = $publicDir . '/uploads/chapters/dir_io_test';
-        if (! is_dir($uploadsDir)) {
-            mkdir($uploadsDir, 0777, true);
+        $publicDir = dirname(__DIR__, 2).'/public';
+        $uploadsDir = $publicDir.'/uploads/chapters/dir_io_test';
+        if (!is_dir($uploadsDir)) {
+            mkdir($uploadsDir, 0o777, true);
         }
-        $testFile = $uploadsDir . '/1.jpg';
+        $testFile = $uploadsDir.'/1.jpg';
         file_put_contents($testFile, 'page 1');
 
         $chapter = new Chapter();
@@ -506,10 +507,11 @@ class FileCleanupSubscriberTest extends TestCase
             ->willReturnCallback(function ($path) use ($realFilesystem, &$callCount) {
                 ++$callCount;
                 // First call: remove the file (succeeds)
-                if ($callCount === 1) {
+                if (1 === $callCount) {
                     if (file_exists($path)) {
                         $realFilesystem->remove($path);
                     }
+
                     return;
                 }
                 // Second call: remove the directory (throws IOException)

@@ -190,6 +190,7 @@ class Manga
     public function setTitle(string $title): static
     {
         $this->title = $title;
+
         return $this;
     }
 
@@ -207,6 +208,7 @@ class Manga
     public function setAltTitles(?array $altTitles): static
     {
         $this->altTitles = $altTitles;
+
         return $this;
     }
 
@@ -218,6 +220,7 @@ class Manga
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -229,6 +232,7 @@ class Manga
     public function setStatus(string $status): static
     {
         $this->status = $status;
+
         return $this;
     }
 
@@ -240,6 +244,7 @@ class Manga
     public function setYear(?int $year): static
     {
         $this->year = $year;
+
         return $this;
     }
 
@@ -275,6 +280,7 @@ class Manga
     public function setContentRating(string $contentRating): static
     {
         $this->contentRating = $contentRating;
+
         return $this;
     }
 
@@ -286,6 +292,7 @@ class Manga
     public function setDemographic(string $demographic): static
     {
         $this->demographic = $demographic;
+
         return $this;
     }
 
@@ -299,16 +306,18 @@ class Manga
 
     public function addCreator(Creator $creator): static
     {
-        if (! $this->creators->contains($creator)) {
+        if (!$this->creators->contains($creator)) {
             $this->creators->add($creator);
             $creator->addManga($this);
         }
+
         return $this;
     }
 
     public function removeCreator(Creator $creator): static
     {
         $this->creators->removeElement($creator);
+
         return $this;
     }
 
@@ -322,16 +331,18 @@ class Manga
 
     public function addTag(Tag $tag): static
     {
-        if (! $this->tags->contains($tag)) {
+        if (!$this->tags->contains($tag)) {
             $this->tags->add($tag);
             $tag->addManga($this);
         }
+
         return $this;
     }
 
     public function removeTag(Tag $tag): static
     {
         $this->tags->removeElement($tag);
+
         return $this;
     }
 
@@ -345,10 +356,11 @@ class Manga
 
     public function addChapter(Chapter $chapter): static
     {
-        if (! $this->chapters->contains($chapter)) {
+        if (!$this->chapters->contains($chapter)) {
             $this->chapters->add($chapter);
             $chapter->setManga($this);
         }
+
         return $this;
     }
 
@@ -358,6 +370,7 @@ class Manga
             // Note: We don't set manga to null because JoinColumn(nullable: false)
             // If you need to orphan chapters, set nullable: true in the mapping
         }
+
         return $this;
     }
 
@@ -371,10 +384,11 @@ class Manga
 
     public function addCoverArt(CoverArt $coverArt): static
     {
-        if (! $this->coverArts->contains($coverArt)) {
+        if (!$this->coverArts->contains($coverArt)) {
             $this->coverArts->add($coverArt);
             $coverArt->setManga($this);
         }
+
         return $this;
     }
 
@@ -383,6 +397,7 @@ class Manga
         if ($this->coverArts->removeElement($coverArt)) {
             // Note: We don't set manga to null because JoinColumn(nullable: false)
         }
+
         return $this;
     }
 
@@ -396,10 +411,11 @@ class Manga
 
     public function addFollower(MangaFollow $follow): static
     {
-        if (! $this->followers->contains($follow)) {
+        if (!$this->followers->contains($follow)) {
             $this->followers->add($follow);
             $follow->setManga($this);
         }
+
         return $this;
     }
 
@@ -408,6 +424,7 @@ class Manga
         if ($this->followers->removeElement($follow)) {
             // Note: MangaFollow has nullable=false on manga
         }
+
         return $this;
     }
 }

@@ -15,30 +15,30 @@ class JsonChapterFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
-        $filePath = __DIR__ . '/json/chapters.json';
+        $filePath = __DIR__.'/json/chapters.json';
 
-        if (! file_exists($filePath)) {
+        if (!file_exists($filePath)) {
             return;
         }
 
         $content = file_get_contents($filePath);
 
-        if ($content === false) {
+        if (false === $content) {
             return;
         }
 
         $data = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
 
-        if (! is_array($data)) {
+        if (!is_array($data)) {
             return;
         }
 
         foreach ($data as $item) {
-            if (! is_array($item)) {
+            if (!is_array($item)) {
                 continue;
             }
             $chapter = new Chapter();
-            $manga = $this->getReference('manga_' . $item['manga'], Manga::class);
+            $manga = $this->getReference('manga_'.$item['manga'], Manga::class);
             $chapter->setManga($manga);
             $chapter->setVolume($item['volume'] ?? null);
             $chapter->setChapterNumber($item['chapterNumber']);
@@ -47,12 +47,12 @@ class JsonChapterFixtures extends Fixture implements DependentFixtureInterface
             $chapter->setPages($item['pages']);
 
             if (isset($item['scanlationGroup'])) {
-                $scanlationGroup = $this->getReference('scanlation_group_' . $item['scanlationGroup'], ScanlationGroup::class);
+                $scanlationGroup = $this->getReference('scanlation_group_'.$item['scanlationGroup'], ScanlationGroup::class);
                 $chapter->setScanlationGroup($scanlationGroup);
             }
 
             $manager->persist($chapter);
-            $this->addReference('chapter_' . $item['ref'], $chapter);
+            $this->addReference('chapter_'.$item['ref'], $chapter);
         }
 
         $manager->flush();

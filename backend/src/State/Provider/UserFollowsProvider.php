@@ -26,6 +26,7 @@ final class UserFollowsProvider implements ProviderInterface
     /**
      * @param array<string, mixed> $uriVariables
      * @param array<string, mixed> $context
+     *
      * @return iterable<MangaFollow>
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): iterable
@@ -34,7 +35,7 @@ final class UserFollowsProvider implements ProviderInterface
 
         // Ownership check: only the user themselves or an admin can view follows
         $currentUser = $this->security->getUser();
-        if ($currentUser === null || ($currentUser->getId() !== $userId && ! $this->security->isGranted('ROLE_ADMIN'))) {
+        if (null === $currentUser || ($currentUser->getId() !== $userId && !$this->security->isGranted('ROLE_ADMIN'))) {
             throw new AccessDeniedHttpException('You can only view your own follows');
         }
 

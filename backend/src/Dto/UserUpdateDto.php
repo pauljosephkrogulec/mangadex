@@ -25,6 +25,7 @@ class UserUpdateDto
     public function setUsername(?string $username): static
     {
         $this->username = $username;
+
         return $this;
     }
 
@@ -36,6 +37,7 @@ class UserUpdateDto
     public function setPassword(?string $password): static
     {
         $this->password = $password;
+
         return $this;
     }
 }

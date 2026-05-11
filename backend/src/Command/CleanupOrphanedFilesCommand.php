@@ -56,11 +56,11 @@ class CleanupOrphanedFilesCommand extends Command
 
         $deletedCount = 0;
 
-        if (! $chaptersOnly) {
+        if (!$chaptersOnly) {
             $deletedCount += $this->cleanupOrphanedCovers($io, $dryRun);
         }
 
-        if (! $coversOnly) {
+        if (!$coversOnly) {
             $deletedCount += $this->cleanupOrphanedChapters($io, $dryRun);
         }
 
@@ -83,15 +83,16 @@ class CleanupOrphanedFilesCommand extends Command
         $validPaths = [];
         foreach ($qb->getQuery()->toIterable() as $row) {
             $path = $row['imagePath'];
-            if (! empty($path)) {
+            if (!empty($path)) {
                 $validPaths[$this->getFullPath($path)] = true;
             }
         }
         $this->em->clear();
 
         $coversDir = $this->getUploadsDir('covers');
-        if (! is_dir($coversDir)) {
+        if (!is_dir($coversDir)) {
             $io->info('Covers directory does not exist yet.');
+
             return 0;
         }
 
@@ -99,39 +100,39 @@ class CleanupOrphanedFilesCommand extends Command
         $entries = scandir($coversDir);
 
         foreach ($entries ?: [] as $entry) {
-            if ($entry === '.' || $entry === '..') {
+            if ('.' === $entry || '..' === $entry) {
                 continue;
             }
 
-            $fullPath = $coversDir . '/' . $entry;
+            $fullPath = $coversDir.'/'.$entry;
 
             // Covers are stored in UUID subdirectories: covers/{uuid}/{filename}
             if (is_dir($fullPath)) {
                 $files = scandir($fullPath);
                 foreach ($files ?: [] as $file) {
-                    if ($file === '.' || $file === '..') {
+                    if ('.' === $file || '..' === $file) {
                         continue;
                     }
-                    $filePath = $fullPath . '/' . $file;
-                    if (is_file($filePath) && ! isset($validPaths[$filePath])) {
+                    $filePath = $fullPath.'/'.$file;
+                    if (is_file($filePath) && !isset($validPaths[$filePath])) {
                         $io->writeln(sprintf('  %s <fg=red>%s/%s</>', $dryRun ? 'Would delete:' : 'Deleting:', $entry, $file));
 
-                        if (! $dryRun) {
+                        if (!$dryRun) {
                             try {
                                 $this->filesystem->remove($filePath);
                             } catch (IOExceptionInterface $e) {
-                                $io->error('Failed to delete: ' . $e->getMessage());
+                                $io->error('Failed to delete: '.$e->getMessage());
                                 continue;
                             }
                         }
-                        $deleted++;
+                        ++$deleted;
                     }
                 }
 
                 // Remove empty UUID directories
-                if (! $dryRun) {
+                if (!$dryRun) {
                     $remaining = scandir($fullPath);
-                    if ($remaining !== false && count($remaining) <= 2) {
+                    if (false !== $remaining && count($remaining) <= 2) {
                         try {
                             $this->filesystem->remove($fullPath);
                             $io->writeln(sprintf('  Removed empty directory: <fg=yellow>covers/%s/</>', $entry));
@@ -140,18 +141,18 @@ class CleanupOrphanedFilesCommand extends Command
                         }
                     }
                 }
-            } elseif (is_file($fullPath) && ! isset($validPaths[$fullPath])) {
+            } elseif (is_file($fullPath) && !isset($validPaths[$fullPath])) {
                 $io->writeln(sprintf('  %s <fg=red>%s</>', $dryRun ? 'Would delete:' : 'Deleting:', $entry));
 
-                if (! $dryRun) {
+                if (!$dryRun) {
                     try {
                         $this->filesystem->remove($fullPath);
                     } catch (IOExceptionInterface $e) {
-                        $io->error('Failed to delete: ' . $e->getMessage());
+                        $io->error('Failed to delete: '.$e->getMessage());
                         continue;
                     }
                 }
-                $deleted++;
+                ++$deleted;
             }
         }
 
@@ -170,7 +171,7 @@ class CleanupOrphanedFilesCommand extends Command
             $pages = $row['pages'];
             if (is_array($pages)) {
                 foreach ($pages as $pagePath) {
-                    if (! empty($pagePath)) {
+                    if (!empty($pagePath)) {
                         $validPaths[$this->getFullPath($pagePath)] = true;
                     }
                 }
@@ -179,8 +180,9 @@ class CleanupOrphanedFilesCommand extends Command
         $this->em->clear();
 
         $chaptersDir = $this->getUploadsDir('chapters');
-        if (! is_dir($chaptersDir)) {
+        if (!is_dir($chaptersDir)) {
             $io->info('Chapters directory does not exist yet.');
+
             return 0;
         }
 
@@ -188,42 +190,42 @@ class CleanupOrphanedFilesCommand extends Command
         $chapterDirs = scandir($chaptersDir);
 
         foreach ($chapterDirs ?: [] as $dir) {
-            if ($dir === '.' || $dir === '..') {
+            if ('.' === $dir || '..' === $dir) {
                 continue;
             }
 
-            $chapterPath = $chaptersDir . '/' . $dir;
-            if (! is_dir($chapterPath)) {
+            $chapterPath = $chaptersDir.'/'.$dir;
+            if (!is_dir($chapterPath)) {
                 continue;
             }
 
             $files = scandir($chapterPath);
 
             foreach ($files ?: [] as $file) {
-                if ($file === '.' || $file === '..') {
+                if ('.' === $file || '..' === $file) {
                     continue;
                 }
 
-                $fullPath = $chapterPath . '/' . $file;
-                if (is_file($fullPath) && ! isset($validPaths[$fullPath])) {
+                $fullPath = $chapterPath.'/'.$file;
+                if (is_file($fullPath) && !isset($validPaths[$fullPath])) {
                     $io->writeln(sprintf('  %s <fg=red>chapters/%s/%s</>', $dryRun ? 'Would delete:' : 'Deleting:', $dir, $file));
 
-                    if (! $dryRun) {
+                    if (!$dryRun) {
                         try {
                             $this->filesystem->remove($fullPath);
                         } catch (IOExceptionInterface $e) {
-                            $io->error('Failed to delete: ' . $e->getMessage());
+                            $io->error('Failed to delete: '.$e->getMessage());
                             continue;
                         }
                     }
-                    $deleted++;
+                    ++$deleted;
                 }
             }
 
             // Clean up empty chapter directories
-            if (! $dryRun) {
+            if (!$dryRun) {
                 $remaining = scandir($chapterPath);
-                if ($remaining !== false && count($remaining) <= 2) {
+                if (false !== $remaining && count($remaining) <= 2) {
                     try {
                         $this->filesystem->remove($chapterPath);
                         $msg = sprintf('  Removed empty directory: <fg=yellow>chapters/%s/</>', $dir);
@@ -242,8 +244,8 @@ class CleanupOrphanedFilesCommand extends Command
     {
         // $publicPath is like '/covers/1/cover.jpg' (without /uploads prefix)
         // Uploads directory is at 'public/uploads/'
-        $baseDir = dirname(__DIR__, 2) . '/public/uploads';
-        $fullPath = $baseDir . $publicPath;
+        $baseDir = dirname(__DIR__, 2).'/public/uploads';
+        $fullPath = $baseDir.$publicPath;
 
         return $fullPath;
     }
@@ -251,7 +253,8 @@ class CleanupOrphanedFilesCommand extends Command
     private function getUploadsDir(string $subdir): string
     {
         // $subdir is 'covers' or 'chapters'
-        $baseDir = dirname(__DIR__, 2) . '/public/uploads';
-        return $baseDir . '/' . $subdir;
+        $baseDir = dirname(__DIR__, 2).'/public/uploads';
+
+        return $baseDir.'/'.$subdir;
     }
 }

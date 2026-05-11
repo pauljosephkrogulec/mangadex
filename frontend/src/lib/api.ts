@@ -87,8 +87,8 @@ export const mangaApi = {
   list: (params?: Record<string, string | number>) =>
     api.get<HydraCollection<Manga>>("/mangas", { params }),
 
-  get: (id: string) =>
-    api.get<Manga>(`/mangas/${id}`),
+  get: (id: string, params?: Record<string, string | number>) =>
+    api.get<Manga>(`/mangas/${id}`, { params }),
 
   create: (data: MangaWrite) =>
     api.post<Manga>("/mangas", data),

@@ -48,7 +48,7 @@ class UploadControllerTest extends TestCase
         $this->entityManager
             ->method('getRepository')
             ->willReturnCallback(function ($entityClass) {
-                return match($entityClass) {
+                return match ($entityClass) {
                     Manga::class => $this->mangaRepository,
                     Chapter::class => $this->chapterRepository,
                     default => null,
@@ -90,7 +90,7 @@ class UploadControllerTest extends TestCase
             return in_array($id, ['security.token_storage', 'serializer']);
         });
         $container->method('get')->willReturnCallback(function ($id) use ($tokenStorage, $serializer) {
-            return match($id) {
+            return match ($id) {
                 'security.token_storage' => $tokenStorage,
                 'serializer' => $serializer,
                 default => null,

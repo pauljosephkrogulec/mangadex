@@ -1,77 +1,87 @@
 [
-  {
-    "ref": "follow-1",
-    "user": "mangareader1",
-    "manga": "jeonjijeok-dokja-sijeom"
-  },
-  {
-    "ref": "follow-2",
-    "user": "mangareader1",
-    "manga": "latna-saga-survival-of-a-sword-king"
-  },
-  {
-    "ref": "follow-3",
-    "user": "mangareader1",
-    "manga": "sss-geup-jugeoya-saneun-hunter"
-  },
-  {
-    "ref": "follow-4",
-    "user": "mangareader1",
-    "manga": "the-archmage-returns-after-4000-years"
-  },
-  {
-    "ref": "follow-5",
-    "user": "mangareader1",
-    "manga": "na-honjaman-level-up"
-  },
-  {
-    "ref": "follow-6",
-    "user": "mangareader2",
-    "manga": "the-max-level-hero-strikes-back"
-  },
-  {
-    "ref": "follow-7",
-    "user": "mangareader2",
-    "manga": "second-life-ranker"
-  },
-  {
-    "ref": "follow-8",
-    "user": "mangareader2",
-    "manga": "a-returners-magic-should-be-special"
-  },
-  {
-    "ref": "follow-9",
-    "user": "admin",
-    "manga": "latna-saga-survival-of-a-sword-king"
-  },
-  {
-    "ref": "follow-10",
-    "user": "admin",
-    "manga": "sss-geup-jugeoya-saneun-hunter"
-  },
-  {
-    "ref": "follow-11",
-    "user": "admin",
-    "manga": "jeonjijeok-dokja-sijeom"
-  },
-  {
-    "ref": "follow-12",
-    "user": "admin",
-    "manga": "na-honjaman-level-up"
-  },
-  {
-    "ref": "follow-13",
-    "user": "animefan",
-    "manga": "who-made-me-a-princess"
-  },
-  {
-    "ref": "follow-14",
-    "user": "animefan",
-    "manga": "the-villainess-turns-the-hourglass"
-  },
-  {
-    "ref": "follow-15",
-    "user": "animefan",
-    "manga": "doctor-elise"
-  }
+    {
+        "ref": "follow-1",
+        "user": "admin",
+        "manga": "kusuriya-no-hitorigoto"
+    },
+    {
+        "ref": "follow-2",
+        "user": "admin",
+        "manga": "chiyu-mahou-no-machigatta-tsukaikata-senjou-wo-kakeru-kaifuku-youin"
+    },
+    {
+        "ref": "follow-3",
+        "user": "admin",
+        "manga": "sousou-no-frieren"
+    },
+    {
+        "ref": "follow-4",
+        "user": "admin",
+        "manga": "isekai-de-cheat-skill-wo-te-ni-shita-ore-wa-genjitsu-sekai-wo-mo-musou-suru-level-up-wa-jinsei-wo-ka"
+    },
+    {
+        "ref": "follow-5",
+        "user": "mangareader1",
+        "manga": "horimiya"
+    },
+    {
+        "ref": "follow-6",
+        "user": "mangareader1",
+        "manga": "mieruko-chan"
+    },
+    {
+        "ref": "follow-7",
+        "user": "mangareader2",
+        "manga": "tokidoki-bosotto-russia-go-de-dereru-tonari-no-alya-san"
+    },
+    {
+        "ref": "follow-8",
+        "user": "mangareader2",
+        "manga": "mieruko-chan"
+    },
+    {
+        "ref": "follow-9",
+        "user": "mangareader2",
+        "manga": "dungeon-meshi"
+    },
+    {
+        "ref": "follow-10",
+        "user": "animefan",
+        "manga": "isekai-mokushiroku-mynoghra-hametsu-no-bunmei-de-hajimeru-sekai-seifuku"
+    },
+    {
+        "ref": "follow-11",
+        "user": "animefan",
+        "manga": "dungeon-meshi"
+    },
+    {
+        "ref": "follow-12",
+        "user": "animefan",
+        "manga": "sono-bisque-doll-wa-koi-o-suru"
+    },
+    {
+        "ref": "follow-13",
+        "user": "animefan",
+        "manga": "kaette-kudasai-akutsu-san"
+    },
+    {
+        "ref": "follow-14",
+        "user": "scanlator",
+        "manga": "isekai-de-cheat-skill-wo-te-ni-shita-ore-wa-genjitsu-sekai-wo-mo-musou-suru-level-up-wa-jinsei-wo-ka"
+    },
+    {
+        "ref": "follow-15",
+        "user": "scanlator",
+        "manga": "taida-na-akujoku-kizoku-ni-tensei-shita-ore-scenario-wo-bukkowashitara-kikakugai-no-maryoku-de-saiky"
+    },
+    {
+        "ref": "follow-16",
+        "user": "scanlator",
+        "manga": "tokidoki-bosotto-russia-go-de-dereru-tonari-no-alya-san"
+    },
+    {
+        "ref": "follow-17",
+        "user": "scanlator",
+        "manga": "chainsaw-man"
+    }
 ]

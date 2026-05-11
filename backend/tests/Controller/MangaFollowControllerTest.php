@@ -36,7 +36,7 @@ class MangaFollowControllerTest extends TestCase
         $this->entityManager
             ->method('getRepository')
             ->willReturnCallback(function ($className) {
-                return match($className) {
+                return match ($className) {
                     MangaFollow::class => $this->repository,
                     default => throw new \RuntimeException("Unexpected repository: $className"),
                 };

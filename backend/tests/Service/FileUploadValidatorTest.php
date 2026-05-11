@@ -65,5 +65,4 @@ class FileUploadValidatorTest extends TestCase
         $this->assertSame('Invalid file type', $result['page_1']);
         $this->assertArrayNotHasKey('page_2', $result);
     }
-
 }

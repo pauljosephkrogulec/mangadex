@@ -21,7 +21,7 @@ final class UserUpdateProcessor implements ProcessorInterface
         /** @var ProcessorInterface<UserUpdateDto, User> */
         private ProcessorInterface $decorated,
         private UserPasswordHasherInterface $passwordHasher,
-        private Security $security
+        private Security $security,
     ) {
     }
 
@@ -30,17 +30,17 @@ final class UserUpdateProcessor implements ProcessorInterface
         if ($data instanceof UserUpdateDto && isset($context['previous_data'])) {
             // Defense-in-depth: verify the current user owns this record
             $currentUser = $this->security->getUser();
-            if ($currentUser !== $context['previous_data'] && ! $this->security->isGranted('ROLE_ADMIN')) {
+            if ($currentUser !== $context['previous_data'] && !$this->security->isGranted('ROLE_ADMIN')) {
                 throw new AccessDeniedHttpException('You can only update your own profile');
             }
             /** @var User $user */
             $user = $context['previous_data'];
 
-            if ($data->getUsername() !== null) {
+            if (null !== $data->getUsername()) {
                 $user->setUsername($data->getUsername());
             }
 
-            if ($data->getPassword() !== null) {
+            if (null !== $data->getPassword()) {
                 $hashedPassword = $this->passwordHasher->hashPassword($user, $data->getPassword());
                 $user->setPassword($hashedPassword);
             }

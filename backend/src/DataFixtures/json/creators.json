@@ -1,892 +1,202 @@
 [
-  {
-    "ref": "774-nanashi-artist",
-    "name": "774 (Nanashi)",
-    "type": "artist"
-  },
-  {
-    "ref": "774-nanashi-author",
-    "name": "774 (Nanashi)",
-    "type": "author"
-  },
-  {
-    "ref": "abe-tsukasa-artist",
-    "name": "Abe Tsukasa",
-    "type": "artist"
-  },
-  {
-    "ref": "aizawa-daisuke-author",
-    "name": "Aizawa Daisuke",
-    "type": "author"
-  },
-  {
-    "ref": "akutami-gege-artist",
-    "name": "Akutami Gege",
-    "type": "artist"
-  },
-  {
-    "ref": "akutami-gege-author",
-    "name": "Akutami Gege",
-    "type": "author"
-  },
-  {
-    "ref": "azumi-kei-author",
-    "name": "Azumi Kei",
-    "type": "author"
-  },
-  {
-    "ref": "baba-okina-author",
-    "name": "Baba Okina",
-    "type": "author"
-  },
-  {
-    "ref": "chugong-author",
-    "name": "Chugong (추공)",
-    "type": "author"
-  },
-  {
-    "ref": "fujikawa-yuka-artist",
-    "name": "Fujikawa Yuka",
-    "type": "artist"
-  },
-  {
-    "ref": "fujimoto-tatsuki-artist",
-    "name": "Fujimoto Tatsuki",
-    "type": "artist"
-  },
-  {
-    "ref": "fujimoto-tatsuki-author",
-    "name": "Fujimoto Tatsuki",
-    "type": "author"
-  },
-  {
-    "ref": "fukuda-shinichi-artist",
-    "name": "Fukuda Shinichi",
-    "type": "artist"
-  },
-  {
-    "ref": "fukuda-shinichi-author",
-    "name": "Fukuda Shinichi",
-    "type": "author"
-  },
-  {
-    "ref": "fuse-author",
-    "name": "Fuse",
-    "type": "author"
-  },
-  {
-    "ref": "gi-so-ryeong-author",
-    "name": "Gi So-Ryeong (기소령)",
-    "type": "author"
-  },
-  {
-    "ref": "harawata-saizou-author",
-    "name": "Harawata Saizou",
-    "type": "author"
-  },
-  {
-    "ref": "hyouju-issei-artist",
-    "name": "Hyouju Issei",
-    "type": "artist"
-  },
-  {
-    "ref": "hyuuga-natsu-author",
-    "name": "Hyuuga Natsu",
-    "type": "author"
-  },
-  {
-    "ref": "itomachi-akine-artist",
-    "name": "Itomachi Akine",
-    "type": "artist"
-  },
-  {
-    "ref": "izumi-tomoki-artist",
-    "name": "Izumi Tomoki",
-    "type": "artist"
-  },
-  {
-    "ref": "izumi-tomoki-author",
-    "name": "Izumi Tomoki",
-    "type": "author"
-  },
-  {
-    "ref": "jang-sung-rak-artist",
-    "name": "Jang Sung-Rak (장성락)",
-    "type": "artist"
-  },
-  {
-    "ref": "kakashi-asahiro-artist",
-    "name": "Kakashi Asahiro",
-    "type": "artist"
-  },
-  {
-    "ref": "kawakami-taiki-artist",
-    "name": "Kawakami Taiki",
-    "type": "artist"
-  },
-  {
-    "ref": "kino-kotora-artist",
-    "name": "Kino Kotora",
-    "type": "artist"
-  },
-  {
-    "ref": "kinojo-miya-author",
-    "name": "Kinojo Miya",
-    "type": "author"
-  },
-  {
-    "ref": "mikami-saka-artist",
-    "name": "Mikami Saka",
-    "type": "artist"
-  },
-  {
-    "ref": "mikami-saka-author",
-    "name": "Mikami Saka",
-    "type": "author"
-  },
-  {
-    "ref": "mishima-yomu-author",
-    "name": "Mishima Yomu",
-    "type": "author"
-  },
-  {
-    "ref": "miura-kentarou-artist",
-    "name": "Miura Kentarou",
-    "type": "artist"
-  },
-  {
-    "ref": "miura-kentarou-author",
-    "name": "Miura Kentarou",
-    "type": "author"
-  },
-  {
-    "ref": "mori-kouji-author",
-    "name": "Mori Kouji",
-    "type": "author"
-  },
-  {
-    "ref": "murata-yuusuke-artist",
-    "name": "Murata Yuusuke",
-    "type": "artist"
-  },
-  {
-    "ref": "nanao-itsuki-author",
-    "name": "Nanao Itsuki",
-    "type": "author"
-  },
-  {
-    "ref": "nekokurage-artist",
-    "name": "Nekokurage",
-    "type": "artist"
-  },
-  {
-    "ref": "nishi-osamu-artist",
-    "name": "Nishi Osamu ",
-    "type": "artist"
-  },
-  {
-    "ref": "nishi-osamu-author",
-    "name": "Nishi Osamu ",
-    "type": "author"
-  },
-  {
-    "ref": "nokomi-artist",
-    "name": "Nokomi (のこみ)",
-    "type": "artist"
-  },
-  {
-    "ref": "one-author",
-    "name": "ONE",
-    "type": "author"
-  },
-  {
-    "ref": "oda-tomohito-artist",
-    "name": "Oda Tomohito",
-    "type": "artist"
-  },
-  {
-    "ref": "oda-tomohito-author",
-    "name": "Oda Tomohito",
-    "type": "author"
-  },
-  {
-    "ref": "ononata-manimani-author",
-    "name": "Ononata Manimani",
-    "type": "author"
-  },
-  {
-    "ref": "redice-studio-artist",
-    "name": "REDICE Studio (레드아이스 스튜디오)",
-    "type": "artist"
-  },
-  {
-    "ref": "rifujin-na-magonote-author",
-    "name": "Rifujin na Magonote",
-    "type": "author"
-  },
-  {
-    "ref": "sakamoto-akira-artist",
-    "name": "Sakamoto Akira",
-    "type": "artist"
-  },
-  {
-    "ref": "sakano-anri-artist",
-    "name": "Sakano Anri",
-    "type": "artist"
-  },
-  {
-    "ref": "sakano-anri-author",
-    "name": "Sakano Anri",
-    "type": "author"
-  },
-  {
-    "ref": "shiosato-jun-artist",
-    "name": "Shiosato Jun",
-    "type": "artist"
-  },
-  {
-    "ref": "sogano-shachi-author",
-    "name": "Sogano Shachi",
-    "type": "author"
-  },
-  {
-    "ref": "studio-gaga-artist",
-    "name": "Studio Gaga",
-    "type": "artist"
-  },
-  {
-    "ref": "takahiro-author",
-    "name": "Takahiro",
-    "type": "author"
-  },
-  {
-    "ref": "takemura-youhei-artist",
-    "name": "Takemura Youhei",
-    "type": "artist"
-  },
-  {
-    "ref": "tanabata-satori-author",
-    "name": "Tanabata Satori",
-    "type": "author"
-  },
-  {
-    "ref": "yamada-kanehito-author",
-    "name": "Yamada Kanehito",
-    "type": "author"
-  },
-  {
-    "ref": "h-goon-author",
-    "name": "h-goon (현군)",
-    "type": "author"
-  },
-  {
-    "ref": "zunta-artist",
-    "name": "zunta",
-    "type": "artist"
-  },
-  {
-    "ref": "ahbin",
-    "name": "Ahbin",
-    "type": "artist"
-  },
-  {
-    "ref": "aloha-로하",
-    "name": "Aloha (로하)",
-    "type": "artist"
-  },
-  {
-    "ref": "ant-studio-앤트스튜디오",
-    "name": "Ant Studio (앤트스튜디오)",
-    "type": "artist"
-  },
-  {
-    "ref": "ant-studio-앤트스튜디오-author",
-    "name": "Ant Studio (앤트스튜디오)",
-    "type": "author"
-  },
-  {
-    "ref": "baek-jiyeon",
-    "name": "Baek Jiyeon",
-    "type": "artist"
-  },
-  {
-    "ref": "barnicle-따개비",
-    "name": "Barnicle (따개비)",
-    "type": "author"
-  },
-  {
-    "ref": "berry-열매",
-    "name": "Berry (열매)",
-    "type": "author"
-  },
-  {
-    "ref": "bill-k",
-    "name": "Bill K",
-    "type": "artist"
-  },
-  {
-    "ref": "binu",
-    "name": "Binu",
-    "type": "artist"
-  },
-  {
-    "ref": "blue-canna-푸른칸나",
-    "name": "Blue Canna (푸른칸나)",
-    "type": "artist"
-  },
-  {
-    "ref": "candlebambi",
-    "name": "Candlebambi",
-    "type": "artist"
-  },
-  {
-    "ref": "cha-sohee-차소희",
-    "name": "Cha Sohee (차소희)",
-    "type": "author"
-  },
-  {
-    "ref": "chara",
-    "name": "Chara",
-    "type": "artist"
-  },
-  {
-    "ref": "chungcho-청초",
-    "name": "Chungcho (청초)",
-    "type": "author"
-  },
-  {
-    "ref": "dalseul-달슬",
-    "name": "Dalseul (달슬)",
-    "type": "author"
-  },
-  {
-    "ref": "daul-다울",
-    "name": "DAUL (다울)",
-    "type": "author"
-  },
-  {
-    "ref": "dcbo-cdbo",
-    "name": "DCBO (CDBO)",
-    "type": "artist"
-  },
-  {
-    "ref": "devils-tail-악마꼬리",
-    "name": "Devil's Tail (악마꼬리)",
-    "type": "author"
-  },
-  {
-    "ref": "eongsseu",
-    "name": "Eongsseu",
-    "type": "artist"
-  },
-  {
-    "ref": "gabi-nam-가비남",
-    "name": "Gabi Nam (가비남)",
-    "type": "author"
-  },
-  {
-    "ref": "gammon-몬",
-    "name": "Gammon (몬)",
-    "type": "artist"
-  },
-  {
-    "ref": "go-eunchae",
-    "name": "Go Eunchae",
-    "type": "author"
-  },
-  {
-    "ref": "gwon-gyeoeul-권겨을",
-    "name": "Gwon Gyeoeul (권겨을)",
-    "type": "author"
-  },
-  {
-    "ref": "gyammi",
-    "name": "Gyammi",
-    "type": "author"
-  },
-  {
-    "ref": "han-jinseo",
-    "name": "Han Jinseo",
-    "type": "author"
-  },
-  {
-    "ref": "han-jinseo-artist",
-    "name": "Han Jinseo",
-    "type": "artist"
-  },
-  {
-    "ref": "han-mint-한민트",
-    "name": "Han Mint (한민트)",
-    "type": "author"
-  },
-  {
-    "ref": "hanirim",
-    "name": "hanirim",
-    "type": "author"
-  },
-  {
-    "ref": "harara-하라라",
-    "name": "Harara (하라라)",
-    "type": "artist"
-  },
-  {
-    "ref": "hayol",
-    "name": "HaYol",
-    "type": "author"
-  },
-  {
-    "ref": "heejuk-hj",
-    "name": "Heejuk (HJ)",
-    "type": "author"
-  },
-  {
-    "ref": "hong-hee-su",
-    "name": "Hong Hee Su",
-    "type": "author"
-  },
-  {
-    "ref": "hongseul",
-    "name": "Hongseul",
-    "type": "artist"
-  },
-  {
-    "ref": "inkhead-잉크헤드",
-    "name": "Inkhead (잉크헤드)",
-    "type": "author"
-  },
-  {
-    "ref": "iro",
-    "name": "Iro",
-    "type": "artist"
-  },
-  {
-    "ref": "jeong-yeon-정연",
-    "name": "Jeong Yeon (정연)",
-    "type": "author"
-  },
-  {
-    "ref": "jin-saeha-진세하",
-    "name": "Jin Saeha (진세하)",
-    "type": "author"
-  },
-  {
-    "ref": "jo-hyunyeong",
-    "name": "Jo Hyunyeong",
-    "type": "artist"
-  },
-  {
-    "ref": "jooahri-주아리",
-    "name": "Jooahri (주아리)",
-    "type": "author"
-  },
-  {
-    "ref": "ju-hyeon",
-    "name": "Ju Hyeon",
-    "type": "author"
-  },
-  {
-    "ref": "kd-dragon-김덕용",
-    "name": "KD-DRAGON (김덕용)",
-    "type": "artist"
-  },
-  {
-    "ref": "kiarne-키아르네",
-    "name": "Kiarne (키아르네)",
-    "type": "author"
-  },
-  {
-    "ref": "kim-roah-김로아",
-    "name": "Kim Roah (김로아)",
-    "type": "author"
-  },
-  {
-    "ref": "kimint-키민트",
-    "name": "Kimint (키민트)",
-    "type": "artist"
-  },
-  {
-    "ref": "kin",
-    "name": "Kin",
-    "type": "author"
-  },
-  {
-    "ref": "kinlip",
-    "name": "kinlip",
-    "type": "artist"
-  },
-  {
-    "ref": "kittyspice",
-    "name": "Kitty&Spice",
-    "type": "author"
-  },
-  {
-    "ref": "lee-dong-uk-이동욱",
-    "name": "Lee Dong-uk (이동욱)",
-    "type": "author"
-  },
-  {
-    "ref": "lee-jiha",
-    "name": "Lee Jiha",
-    "type": "author"
-  },
-  {
-    "ref": "lemon-frog-레몬개구리",
-    "name": "Lemon Frog (레몬개구리)",
-    "type": "author"
-  },
-  {
-    "ref": "liaran-리아란",
-    "name": "Liaran (리아란)",
-    "type": "author"
-  },
-  {
-    "ref": "maginot-line-마지노선",
-    "name": "Maginot Line (마지노선)",
-    "type": "author"
-  },
-  {
-    "ref": "mangle",
-    "name": "Mangle",
-    "type": "artist"
-  },
-  {
-    "ref": "melting",
-    "name": "Melting",
-    "type": "artist"
-  },
-  {
-    "ref": "milcha-밀차",
-    "name": "Milcha (밀차)",
-    "type": "author"
-  },
-  {
-    "ref": "mini",
-    "name": "Mini",
-    "type": "artist"
-  },
-  {
-    "ref": "minjakk",
-    "name": "MinJakk",
-    "type": "artist"
-  },
-  {
-    "ref": "nakhasan-낙하산",
-    "name": "Nakhasan (낙하산)",
-    "type": "author"
-  },
-  {
-    "ref": "namu",
-    "name": "Namu",
-    "type": "author"
-  },
-  {
-    "ref": "neida-네이다",
-    "name": "Neida (네이다)",
-    "type": "author"
-  },
-  {
-    "ref": "nokki",
-    "name": "Nokki",
-    "type": "author"
-  },
-  {
-    "ref": "nongnong-농농",
-    "name": "NongNong (농농)",
-    "type": "artist"
-  },
-  {
-    "ref": "orka",
-    "name": "ORKA",
-    "type": "artist"
-  },
-  {
-    "ref": "p-sicut-vis",
-    "name": "P (sicut_vis)",
-    "type": "artist"
-  },
-  {
-    "ref": "pan4",
-    "name": "PAN4",
-    "type": "artist"
-  },
-  {
-    "ref": "peachberry-피치베리",
-    "name": "Peachberry (피치베리)",
-    "type": "author"
-  },
-  {
-    "ref": "peachberry-피치베리-artist",
-    "name": "Peachberry (피치베리)",
-    "type": "artist"
-  },
-  {
-    "ref": "ping-별나래",
-    "name": "PING (별나래)",
-    "type": "author"
-  },
-  {
-    "ref": "pingmin",
-    "name": "Pingmin",
-    "type": "artist"
-  },
-  {
-    "ref": "plutus",
-    "name": "Plutus",
-    "type": "author"
-  },
-  {
-    "ref": "rada",
-    "name": "Rada",
-    "type": "artist"
-  },
-  {
-    "ref": "rakhyun",
-    "name": "Rakhyun",
-    "type": "artist"
-  },
-  {
-    "ref": "redgu-붉구",
-    "name": "Redgu (붉구)",
-    "type": "author"
-  },
-  {
-    "ref": "reva",
-    "name": "Reva",
-    "type": "author"
-  },
-  {
-    "ref": "reva-artist",
-    "name": "Reva",
-    "type": "artist"
-  },
-  {
-    "ref": "roal",
-    "name": "Roal",
-    "type": "artist"
-  },
-  {
-    "ref": "sadoyeon-사도연",
-    "name": "Sadoyeon (사도연)",
-    "type": "author"
-  },
-  {
-    "ref": "saenal-박새날",
-    "name": "Saenal (박새날)",
-    "type": "author"
-  },
-  {
-    "ref": "saha-사하",
-    "name": "SAHA (사하)",
-    "type": "author"
-  },
-  {
-    "ref": "salk-삵",
-    "name": "Salk (삵)",
-    "type": "author"
-  },
-  {
-    "ref": "sam-woel-삼월",
-    "name": "Sam Woel (삼월)",
-    "type": "author"
-  },
-  {
-    "ref": "sanho",
-    "name": "Sanho",
-    "type": "artist"
-  },
-  {
-    "ref": "sanho-author",
-    "name": "Sanho",
-    "type": "author"
-  },
-  {
-    "ref": "sansobee-산소비",
-    "name": "Sansobee (산소비)",
-    "type": "author"
-  },
-  {
-    "ref": "seo-gwijo-서귀조",
-    "name": "Seo Gwijo (서귀조)",
-    "type": "author"
-  },
-  {
-    "ref": "shin-noah-신노아",
-    "name": "Shin Noah (신노아)",
-    "type": "author"
-  },
-  {
-    "ref": "sing-n-song-싱숑",
-    "name": "sing N song (싱숑)",
-    "type": "author"
-  },
-  {
-    "ref": "siya",
-    "name": "Siya",
-    "type": "author"
-  },
-  {
-    "ref": "sleepy-c-슬리피-c",
-    "name": "Sleepy-C (슬리피-C)",
-    "type": "artist"
-  },
-  {
-    "ref": "soda-ice-뽕따맛스크류바",
-    "name": "Soda Ice (뽕따맛스크류바)",
-    "type": "author"
-  },
-  {
-    "ref": "soon-q-권순규",
-    "name": "SOON Q (권순규)",
-    "type": "author"
-  },
-  {
-    "ref": "soon-q-권순규-artist",
-    "name": "SOON Q (권순규)",
-    "type": "artist"
-  },
-  {
-    "ref": "sosori-소소리",
-    "name": "Sosori (소소리)",
-    "type": "author"
-  },
-  {
-    "ref": "spoon-스푼",
-    "name": "Spoon (스푼)",
-    "type": "author"
-  },
-  {
-    "ref": "spoon-스푼-artist",
-    "name": "Spoon (스푼)",
-    "type": "artist"
-  },
-  {
-    "ref": "ssalsoop",
-    "name": "Ssalsoop",
-    "type": "author"
-  },
-  {
-    "ref": "stonehead-돌대",
-    "name": "Stonehead (돌대)",
-    "type": "artist"
-  },
-  {
-    "ref": "studio-khit-스튜디오-크힛",
-    "name": "Studio Khit (스튜디오 크힛)",
-    "type": "artist"
-  },
-  {
-    "ref": "suji-kim",
-    "name": "Suji Kim",
-    "type": "author"
-  },
-  {
-    "ref": "summer-light",
-    "name": "Summer Light",
-    "type": "artist"
-  },
-  {
-    "ref": "sunset-선셋",
-    "name": "Sunset (선셋)",
-    "type": "artist"
-  },
-  {
-    "ref": "suol-수월",
-    "name": "SUOL (수월)",
-    "type": "artist"
-  },
-  {
-    "ref": "team-argo",
-    "name": "Team Argo",
-    "type": "artist"
-  },
-  {
-    "ref": "umi",
-    "name": "UMI",
-    "type": "author"
-  },
-  {
-    "ref": "usoi",
-    "name": "USOI",
-    "type": "author"
-  },
-  {
-    "ref": "usonan-유소난",
-    "name": "Usonan (유소난)",
-    "type": "author"
-  },
-  {
-    "ref": "via",
-    "name": "Via",
-    "type": "artist"
-  },
-  {
-    "ref": "whale-고래",
-    "name": "Whale (고래)",
-    "type": "artist"
-  },
-  {
-    "ref": "wookjakga-욱작가",
-    "name": "Wookjakga (욱작가)",
-    "type": "artist"
-  },
-  {
-    "ref": "yasen",
-    "name": "Yasen",
-    "type": "author"
-  },
-  {
-    "ref": "yc",
-    "name": "YC",
-    "type": "author"
-  },
-  {
-    "ref": "ykb-임경배",
-    "name": "YKB (임경배)",
-    "type": "author"
-  },
-  {
-    "ref": "yu-ryeo-han-유려한",
-    "name": "Yu Ryeo Han (유려한)",
-    "type": "author"
-  },
-  {
-    "ref": "yudo-유도",
-    "name": "Yudo (유도)",
-    "type": "author"
-  },
-  {
-    "ref": "yudo-유도-artist",
-    "name": "Yudo (유도)",
-    "type": "artist"
-  },
-  {
-    "ref": "yuin",
-    "name": "Yuin",
-    "type": "author"
-  },
-  {
-    "ref": "yulji-율지",
-    "name": "Yulji (율지)",
-    "type": "author"
-  },
-  {
-    "ref": "yuri",
-    "name": "Yuri",
-    "type": "artist"
-  },
-  {
-    "ref": "yuun-유운",
-    "name": "Yuun (유운)",
-    "type": "author"
-  },
-  {
-    "ref": "yuun-유운-artist",
-    "name": "Yuun (유운)",
-    "type": "artist"
-  },
-  {
-    "ref": "오둥둥",
-    "name": "오둥둥",
-    "type": "artist"
-  }
+    {
+        "ref": "kim-yong-hyun-author",
+        "name": "Kim Yong-Hyun",
+        "type": "author"
+    },
+    {
+        "ref": "park-sung-woo-artist",
+        "name": "Park Sung-Woo",
+        "type": "artist"
+    },
+    {
+        "ref": "lee-jae-hoon-author",
+        "name": "Lee Jae-Hoon",
+        "type": "author"
+    },
+    {
+        "ref": "choi-min-seo-artist",
+        "name": "Choi Min-Seo",
+        "type": "artist"
+    },
+    {
+        "ref": "jang-hyun-woo-author",
+        "name": "Jang Hyun-Woo",
+        "type": "author"
+    },
+    {
+        "ref": "yoon-seo-yeon-artist",
+        "name": "Yoon Seo-Yeon",
+        "type": "artist"
+    },
+    {
+        "ref": "park-ji-eun-author",
+        "name": "Park Ji-Eun",
+        "type": "author"
+    },
+    {
+        "ref": "kang-dong-ho-artist",
+        "name": "Kang Dong-Ho",
+        "type": "artist"
+    },
+    {
+        "ref": "oh-seung-min-author",
+        "name": "Oh Seung-Min",
+        "type": "author"
+    },
+    {
+        "ref": "bae-jin-young-artist",
+        "name": "Bae Jin-Young",
+        "type": "artist"
+    },
+    {
+        "ref": "yoo-jin-ho-author",
+        "name": "Yoo Jin-Ho",
+        "type": "author"
+    },
+    {
+        "ref": "jeong-ha-na-artist",
+        "name": "Jeong Ha-Na",
+        "type": "artist"
+    },
+    {
+        "ref": "shin-woo-jin-author",
+        "name": "Shin Woo-Jin",
+        "type": "author"
+    },
+    {
+        "ref": "maeng-ki-soo-artist",
+        "name": "Maeng Ki-Soo",
+        "type": "artist"
+    },
+    {
+        "ref": "ahn-hyo-seok-author",
+        "name": "Ahn Hyo-Seok",
+        "type": "author"
+    },
+    {
+        "ref": "go-bong-hwa-artist",
+        "name": "Go Bong-Hwa",
+        "type": "artist"
+    },
+    {
+        "ref": "bae-yong-joon-author",
+        "name": "Bae Yong-Joon",
+        "type": "author"
+    },
+    {
+        "ref": "seol-hyun-ju-artist",
+        "name": "Seol Hyun-Ju",
+        "type": "artist"
+    },
+    {
+        "ref": "kwak-dong-soo-author",
+        "name": "Kwak Dong-Soo",
+        "type": "author"
+    },
+    {
+        "ref": "im-ji-yeon-artist",
+        "name": "Im Ji-Yeon",
+        "type": "artist"
+    },
+    {
+        "ref": "son-ki-woon-author",
+        "name": "Son Ki-Woon",
+        "type": "author"
+    },
+    {
+        "ref": "ryu-ho-jin-artist",
+        "name": "Ryu Ho-Jin",
+        "type": "artist"
+    },
+    {
+        "ref": "cha-sang-min-author",
+        "name": "Cha Sang-Min",
+        "type": "author"
+    },
+    {
+        "ref": "do-eun-hye-artist",
+        "name": "Do Eun-Hye",
+        "type": "artist"
+    },
+    {
+        "ref": "jung-pil-won-author",
+        "name": "Jung Pil-Won",
+        "type": "author"
+    },
+    {
+        "ref": "byun-young-joon-artist",
+        "name": "Byun Young-Joon",
+        "type": "artist"
+    },
+    {
+        "ref": "woo-geun-tak-author",
+        "name": "Woo Geun-Tak",
+        "type": "author"
+    },
+    {
+        "ref": "gong-min-ji-artist",
+        "name": "Gong Min-Ji",
+        "type": "artist"
+    },
+    {
+        "ref": "hong-jin-woo-author",
+        "name": "Hong Jin-Woo",
+        "type": "author"
+    },
+    {
+        "ref": "na-yeon-soo-artist",
+        "name": "Na Yeon-Soo",
+        "type": "artist"
+    },
+    {
+        "ref": "hwang-do-hoon-author",
+        "name": "Hwang Do-Hoon",
+        "type": "author"
+    },
+    {
+        "ref": "sung-ki-won-artist",
+        "name": "Sung Ki-Won",
+        "type": "artist"
+    },
+    {
+        "ref": "seo-dong-chul-author",
+        "name": "Seo Dong-Chul",
+        "type": "author"
+    },
+    {
+        "ref": "joo-hyun-ah-artist",
+        "name": "Joo Hyun-Ah",
+        "type": "artist"
+    },
+    {
+        "ref": "ko-jae-won-author",
+        "name": "Ko Jae-Won",
+        "type": "author"
+    },
+    {
+        "ref": "ha-jin-sung-artist",
+        "name": "Ha Jin-Sung",
+        "type": "artist"
+    },
+    {
+        "ref": "yoon-tae-ho-author",
+        "name": "Yoon Tae-Ho",
+        "type": "author"
+    },
+    {
+        "ref": "heo-jin-wook-artist",
+        "name": "Heo Jin-Wook",
+        "type": "artist"
+    },
+    {
+        "ref": "jang-jae-hyuk-author",
+        "name": "Jang Jae-Hyuk",
+        "type": "author"
+    },
+    {
+        "ref": "min-soo-ah-artist",
+        "name": "Min Soo-Ah",
+        "type": "artist"
+    }
 ]

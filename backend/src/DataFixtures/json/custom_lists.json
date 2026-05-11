@@ -1,77 +1,77 @@
 [
-  {
-    "ref": "favorites-1",
-    "name": "My Favorite Manga",
-    "visibility": "public",
-    "user": "mangareader1",
-    "mangas": [
-      "jeonjijeok-dokja-sijeom",
-      "sss-geup-jugeoya-saneun-hunter",
-      "latna-saga-survival-of-a-sword-king"
-    ]
-  },
-  {
-    "ref": "action-1",
-    "name": "Action Packed",
-    "visibility": "public",
-    "user": "mangareader1",
-    "mangas": [
-      "the-archmage-returns-after-4000-years",
-      "the-skeleton-soldier-failed-to-defend-the-dungeon",
-      "the-monstrous-dukes-adopted-daughter"
-    ]
-  },
-  {
-    "ref": "read-later-1",
-    "name": "Read Later",
-    "visibility": "private",
-    "user": "mangareader1",
-    "mangas": [
-      "the-max-level-hero-strikes-back",
-      "a-returners-magic-should-be-special"
-    ]
-  },
-  {
-    "ref": "top-picks-2",
-    "name": "Top Picks",
-    "visibility": "public",
-    "user": "mangareader2",
-    "mangas": [
-      "na-honjaman-level-up",
-      "second-life-ranker"
-    ]
-  },
-  {
-    "ref": "romance-2",
-    "name": "Romance Reads",
-    "visibility": "public",
-    "user": "mangareader2",
-    "mangas": [
-      "who-made-me-a-princess",
-      "the-villainess-turns-the-hourglass",
-      "doctor-elise"
-    ]
-  },
-  {
-    "ref": "hidden-2",
-    "name": "Hidden Gems",
-    "visibility": "hidden",
-    "user": "mangareader2",
-    "mangas": [
-      "roxana",
-      "agyeogui-ending-jugeumppun"
-    ]
-  },
-  {
-    "ref": "admin-picks",
-    "name": "Admin Picks",
-    "visibility": "public",
-    "user": "admin",
-    "mangas": [
-      "latna-saga-survival-of-a-sword-king",
-      "jeonjijeok-dokja-sijeom",
-      "sss-geup-jugeoya-saneun-hunter",
-      "the-archmage-returns-after-4000-years"
-    ]
-  }
+    {
+        "ref": "favorites-1",
+        "name": "My Favorite Manga",
+        "visibility": "public",
+        "user": "mangareader1",
+        "mangas": [
+            "dungeon-meshi",
+            "isekai-mokushiroku-mynoghra-hametsu-no-bunmei-de-hajimeru-sekai-seifuku",
+            "kaette-kudasai-akutsu-san"
+        ]
+    },
+    {
+        "ref": "action-1",
+        "name": "Action Packed",
+        "visibility": "public",
+        "user": "mangareader1",
+        "mangas": [
+            "shuumatsu-no-valkyrie",
+            "boku-no-kokoro-no-yabai-yatsu",
+            "dungeon-meshi"
+        ]
+    },
+    {
+        "ref": "read-later-1",
+        "name": "Read Later",
+        "visibility": "private",
+        "user": "mangareader1",
+        "mangas": [
+            "kaoru-hana-wa-rin-to-saku",
+            "ki-ni-natteru-hito-ga-otoko-ja-nakatta"
+        ]
+    },
+    {
+        "ref": "top-picks-2",
+        "name": "Top Picks",
+        "visibility": "public",
+        "user": "mangareader2",
+        "mangas": [
+            "tokidoki-bosotto-russia-go-de-dereru-tonari-no-alya-san",
+            "sono-bisque-doll-wa-koi-o-suru"
+        ]
+    },
+    {
+        "ref": "romance-2",
+        "name": "Romance Reads",
+        "visibility": "public",
+        "user": "mangareader2",
+        "mangas": [
+            "tensei-shitara-slime-datta-ken",
+            "hazure-waku-no-joutai-ijou-skill-de-saikyou-ni-natta-ore-ga-subete-o-juurin-suru-made",
+            "dungeon-meshi"
+        ]
+    },
+    {
+        "ref": "hidden-2",
+        "name": "Hidden Gems",
+        "visibility": "hidden",
+        "user": "mangareader2",
+        "mangas": [
+            "horimiya",
+            "isekai-de-cheat-skill-wo-te-ni-shita-ore-wa-genjitsu-sekai-wo-mo-musou-suru-level-up-wa-jinsei-wo-ka"
+        ]
+    },
+    {
+        "ref": "admin-picks",
+        "name": "Admin Picks",
+        "visibility": "public",
+        "user": "admin",
+        "mangas": [
+            "taida-na-akujoku-kizoku-ni-tensei-shita-ore-scenario-wo-bukkowashitara-kikakugai-no-maryoku-de-saiky",
+            "spy-family",
+            "tokidoki-bosotto-russia-go-de-dereru-tonari-no-alya-san",
+            "isekai-mokushiroku-mynoghra-hametsu-no-bunmei-de-hajimeru-sekai-seifuku"
+        ]
+    }
 ]

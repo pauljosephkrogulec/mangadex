@@ -20,7 +20,7 @@ class DebugJwtTest extends WebTestCase
 
         // Create user
         $user = $em->getRepository(User::class)->findOneBy(['email' => 'test@example.com']);
-        if (! $user) {
+        if (!$user) {
             $user = new User();
             $user->setEmail('test@example.com');
             $user->setUsername('testuser');
@@ -48,10 +48,10 @@ class DebugJwtTest extends WebTestCase
         // Try authenticated request with the same client
         $client->request(
             'GET',
-            '/api/users/' . $user->getId(),
+            '/api/users/'.$user->getId(),
             [],
             [],
-            ['CONTENT_TYPE' => 'application/json', 'HTTP_AUTHORIZATION' => 'Bearer ' . $token],
+            ['CONTENT_TYPE' => 'application/json', 'HTTP_AUTHORIZATION' => 'Bearer '.$token],
             ''
         );
 

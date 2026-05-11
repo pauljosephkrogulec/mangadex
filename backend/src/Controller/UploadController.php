@@ -35,19 +35,19 @@ class UploadController extends AbstractController
         $file = $request->files->get('cover');
         $mangaId = $request->request->get('mangaId');
         $volume = $request->request->get('volume');
-        $volume = $volume !== null ? (string) $volume : null;
+        $volume = null !== $volume ? (string) $volume : null;
         $isPrimary = $request->request->getBoolean('isPrimary', false);
 
-        if (! $file) {
+        if (!$file) {
             return $this->json(['error' => 'No cover file provided'], Response::HTTP_BAD_REQUEST);
         }
 
-        if (! is_string($mangaId) || $mangaId === '') {
+        if (!is_string($mangaId) || '' === $mangaId) {
             return $this->json(['error' => 'Valid mangaId is required'], Response::HTTP_BAD_REQUEST);
         }
 
         $manga = $em->getRepository(Manga::class)->find($mangaId);
-        if (! $manga) {
+        if (!$manga) {
             return $this->json(['error' => 'Manga not found'], Response::HTTP_NOT_FOUND);
         }
 
@@ -57,7 +57,7 @@ class UploadController extends AbstractController
         }
 
         $mangaId = $manga->getId();
-        if ($mangaId === null) {
+        if (null === $mangaId) {
             return $this->json(['error' => 'Manga ID is null'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
@@ -97,17 +97,17 @@ class UploadController extends AbstractController
         }
 
         $chapter = $em->getRepository(Chapter::class)->find($id);
-        if (! $chapter) {
+        if (!$chapter) {
             return $this->json(['error' => 'Chapter not found'], Response::HTTP_NOT_FOUND);
         }
 
         $validationErrors = $this->uploadValidator->validateMultipleImages($files);
-        if (! empty($validationErrors)) {
+        if (!empty($validationErrors)) {
             return $this->json(['errors' => $validationErrors], Response::HTTP_BAD_REQUEST);
         }
 
         $chapterId = $chapter->getId();
-        if ($chapterId === null) {
+        if (null === $chapterId) {
             return $this->json(['error' => 'Chapter ID is null'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 

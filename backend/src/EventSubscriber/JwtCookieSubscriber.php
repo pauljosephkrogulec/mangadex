@@ -13,7 +13,7 @@ class JwtCookieSubscriber
 {
     public function __construct(
         #[Autowire('%kernel.environment%')]
-        private string $appEnv
+        private string $appEnv,
     ) {
     }
 
@@ -30,7 +30,7 @@ class JwtCookieSubscriber
                 0,
                 '/',
                 null,
-                $this->appEnv === 'prod',
+                'prod' === $this->appEnv,
                 true,
                 false,
                 'lax'

@@ -40,6 +40,7 @@ class UserRegistrationProcessorTest extends TestCase
         $this->decoratedMock->method('process')
             ->willReturnCallback(function ($user) use (&$createdUser) {
                 $createdUser = $user;
+
                 return $user;
             });
 
@@ -80,8 +81,8 @@ class UserRegistrationProcessorTest extends TestCase
             ->method('process')
             ->with($this->callback(function ($user) {
                 return $user instanceof User
-                    && $user->getEmail() === 'test@example.com'
-                    && $user->getUsername() === 'testuser';
+                    && 'test@example.com' === $user->getEmail()
+                    && 'testuser' === $user->getUsername();
             }))
             ->willReturn(new User());
 
@@ -103,6 +104,7 @@ class UserRegistrationProcessorTest extends TestCase
         $this->decoratedMock->method('process')
             ->willReturnCallback(function ($user) use (&$returnedUser) {
                 $returnedUser = $user;
+
                 return $user;
             });
 

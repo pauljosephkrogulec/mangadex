@@ -81,6 +81,7 @@ class Creator
     public function setName(string $name): static
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -100,6 +101,7 @@ class Creator
     public function setType(string $type): static
     {
         $this->type = $type;
+
         return $this;
     }
 
@@ -113,12 +115,13 @@ class Creator
 
     public function addManga(Manga $manga): static
     {
-        if (! $this->manga->contains($manga)) {
+        if (!$this->manga->contains($manga)) {
             $this->manga->add($manga);
-            if (! $manga->getCreators()->contains($this)) {
+            if (!$manga->getCreators()->contains($this)) {
                 $manga->getCreators()->add($this);
             }
         }
+
         return $this;
     }
 
@@ -127,6 +130,7 @@ class Creator
         if ($this->manga->removeElement($manga)) {
             $manga->removeCreator($this);
         }
+
         return $this;
     }
 }

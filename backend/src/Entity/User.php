@@ -117,6 +117,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): static
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -128,6 +129,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUsername(string $username): static
     {
         $this->username = $username;
+
         return $this;
     }
 
@@ -138,6 +140,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         /** @var non-empty-string $email */
         $email = $this->email;
+
         return $email;
     }
 
@@ -151,6 +154,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $roles[] = 'ROLE_USER';
         /** @var array<string> $uniqueRoles */
         $uniqueRoles = array_unique($roles);
+
         return $uniqueRoles;
     }
 
@@ -160,6 +164,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
+
         return $this;
     }
 
@@ -171,6 +176,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
+
         return $this;
     }
 
@@ -189,10 +195,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function addFollowedManga(MangaFollow $follow): static
     {
-        if (! $this->followedMangas->contains($follow)) {
+        if (!$this->followedMangas->contains($follow)) {
             $this->followedMangas->add($follow);
             $follow->setUser($this);
         }
+
         return $this;
     }
 
@@ -201,6 +208,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->followedMangas->removeElement($follow)) {
             // Note: MangaFollow has nullable=false on user, so we don't set to null
         }
+
         return $this;
     }
 }

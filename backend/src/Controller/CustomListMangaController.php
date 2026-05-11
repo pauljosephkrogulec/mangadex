@@ -23,30 +23,30 @@ class CustomListMangaController extends AbstractController
     public function __invoke(CustomList $customList, Request $request): JsonResponse
     {
         $user = $this->getUser();
-        if (! $user) {
+        if (!$user) {
             throw new AccessDeniedHttpException('User not authenticated');
         }
 
         $listUserId = $customList->getUser()->getId();
         $currentUserId = $user instanceof \App\Entity\User ? $user->getId() : null;
 
-        if ($listUserId !== $currentUserId && ! $this->isGranted('ROLE_ADMIN')) {
+        if ($listUserId !== $currentUserId && !$this->isGranted('ROLE_ADMIN')) {
             throw new AccessDeniedHttpException('You can only modify your own lists');
         }
 
         $mangaId = $request->attributes->get('mangaId');
-        if (! $mangaId) {
+        if (!$mangaId) {
             return new JsonResponse(['message' => 'Manga ID is required'], 400);
         }
 
         $manga = $this->entityManager->getRepository(Manga::class)->find($mangaId);
-        if (! $manga) {
+        if (!$manga) {
             throw new NotFoundHttpException('Manga not found');
         }
 
         $method = $request->getMethod();
 
-        if ($method === 'POST') {
+        if ('POST' === $method) {
             if ($customList->getMangas()->contains($manga)) {
                 return new JsonResponse(['message' => 'Manga already in list'], 409);
             }
@@ -57,8 +57,8 @@ class CustomListMangaController extends AbstractController
             return new JsonResponse(['message' => 'Manga added to list'], 200);
         }
 
-        if ($method === 'DELETE') {
-            if (! $customList->getMangas()->contains($manga)) {
+        if ('DELETE' === $method) {
+            if (!$customList->getMangas()->contains($manga)) {
                 return new JsonResponse(['message' => 'Manga not in list'], 404);
             }
 

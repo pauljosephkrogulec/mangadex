@@ -15,7 +15,7 @@ class FileUploadValidator
     private const MAX_FILE_SIZE = '5M';
 
     public function __construct(
-        private readonly ValidatorInterface $validator
+        private readonly ValidatorInterface $validator,
     ) {
     }
 
@@ -33,6 +33,7 @@ class FileUploadValidator
 
     /**
      * @param array<UploadedFile> $files
+     *
      * @return array<string, string> Array of filename => error message
      */
     public function validateMultipleImages(array $files): array
@@ -42,7 +43,7 @@ class FileUploadValidator
         foreach ($files as $index => $file) {
             $violations = $this->validateImage($file);
             if (count($violations) > 0) {
-                $errors["page_" . ($index + 1)] = (string) $violations->get(0)->getMessage();
+                $errors['page_'.($index + 1)] = (string) $violations->get(0)->getMessage();
             }
         }
 

@@ -18,7 +18,7 @@ final class UserRegistrationProcessor implements ProcessorInterface
     public function __construct(
         /** @var ProcessorInterface<UserRegistrationDto, User> */
         private ProcessorInterface $decorated,
-        private UserPasswordHasherInterface $passwordHasher
+        private UserPasswordHasherInterface $passwordHasher,
     ) {
     }
 

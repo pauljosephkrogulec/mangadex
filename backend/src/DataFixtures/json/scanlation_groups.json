@@ -1,92 +1,52 @@
 [
-  {
-    "ref": "mangaplus",
-    "name": "MangaPlus",
-    "website": "https://mangaplus.shueisha.co.jp"
-  },
-  {
-    "ref": "viz-media",
-    "name": "VIZ Media",
-    "website": "https://www.viz.com"
-  },
-  {
-    "ref": "crunchyroll",
-    "name": "Crunchyroll",
-    "website": "https://www.crunchyroll.com"
-  },
-  {
-    "ref": "mangadex",
-    "name": "MangaDex",
-    "website": "https://mangadex.org"
-  },
-  {
-    "ref": "fan-scanlation-group-a",
-    "name": "Scanlation Group A",
-    "website": null
-  },
-  {
-    "ref": "fan-scanlation-group-b",
-    "name": "Scanlation Group B",
-    "website": null
-  },
-  {
-    "ref": "fan-scanlation-group-c",
-    "name": "Scanlation Group C",
-    "website": null
-  },
-  {
-    "ref": "bucci-gang",
-    "name": "BUCCI GANG",
-    "website": null
-  },
-  {
-    "ref": "drakon",
-    "name": "DRAKON",
-    "website": null
-  },
-  {
-    "ref": "flame-comics",
-    "name": "Flame Comics",
-    "website": "https://flamecomics.com/"
-  },
-  {
-    "ref": "kraken-manga",
-    "name": "Kraken Manga",
-    "website": "https://falconscans.com/"
-  },
-  {
-    "ref": "lunalotusscans",
-    "name": "LunaLotusScans",
-    "website": null
-  },
-  {
-    "ref": "manga-weebs",
-    "name": "Manga Weebs",
-    "website": null
-  },
-  {
-    "ref": "pocket-comics",
-    "name": "Pocket Comics",
-    "website": "https://www.pocketcomics.com"
-  },
-  {
-    "ref": "rizz-fables",
-    "name": "Rizz Fables",
-    "website": "https://rizzfables.com/"
-  },
-  {
-    "ref": "tappytoon",
-    "name": "TappyToon",
-    "website": "https://www.tappytoon.com"
-  },
-  {
-    "ref": "trashscanlations",
-    "name": "trashscanlations",
-    "website": null
-  },
-  {
-    "ref": "webnovel",
-    "name": "Webnovel",
-    "website": "https://www.webnovel.com/"
-  }
+    {
+        "ref": "mangaplus",
+        "name": "MangaPlus",
+        "website": "https:\/\/mangaplus.shueisha.co.jp"
+    },
+    {
+        "ref": "viz-media",
+        "name": "VIZ Media",
+        "website": "https:\/\/www.viz.com"
+    },
+    {
+        "ref": "crunchyroll",
+        "name": "Crunchyroll",
+        "website": "https:\/\/www.crunchyroll.com"
+    },
+    {
+        "ref": "tapas",
+        "name": "Tapas",
+        "website": "https:\/\/tapas.io"
+    },
+    {
+        "ref": "webtoon-eng",
+        "name": "Webtoon English",
+        "website": "https:\/\/www.webtoons.com"
+    },
+    {
+        "ref": "flame-scan",
+        "name": "Flame Scans",
+        "website": null
+    },
+    {
+        "ref": "luminous-scan",
+        "name": "Luminous Scans",
+        "website": null
+    },
+    {
+        "ref": "asura-scan",
+        "name": "Asura Scans",
+        "website": null
+    },
+    {
+        "ref": "reaper-scan",
+        "name": "Reaper Scans",
+        "website": null
+    },
+    {
+        "ref": "leviatan-scan",
+        "name": "Leviatan Scans",
+        "website": null
+    }
 ]

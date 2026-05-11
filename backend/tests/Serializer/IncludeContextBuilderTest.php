@@ -99,7 +99,7 @@ class IncludeContextBuilderTest extends TestCase
 
         $context = $this->builder->createFromRequest($request, true);
 
-        $chaptersCount = count(array_filter($context['groups'], fn ($g) => $g === 'manga:include:chapters'));
+        $chaptersCount = count(array_filter($context['groups'], fn ($g) => 'manga:include:chapters' === $g));
         $this->assertSame(1, $chaptersCount);
     }
 

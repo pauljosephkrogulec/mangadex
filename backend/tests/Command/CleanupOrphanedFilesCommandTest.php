@@ -53,7 +53,7 @@ class CleanupOrphanedFilesCommandTest extends TestCase
         $this->entityManager
             ->method('getRepository')
             ->willReturnCallback(function ($class) {
-                return match($class) {
+                return match ($class) {
                     CoverArt::class => $this->coverArtRepository,
                     Chapter::class => $this->chapterRepository,
                     default => null,
@@ -156,8 +156,8 @@ class CleanupOrphanedFilesCommandTest extends TestCase
 
     public function testCleanupOrphanedCoversNoDirectory(): void
     {
-        $publicDir = dirname(__DIR__, 2) . '/public';
-        $coversDir = $publicDir . '/uploads/covers';
+        $publicDir = dirname(__DIR__, 2).'/public';
+        $coversDir = $publicDir.'/uploads/covers';
         // Remove the covers directory to test the "does not exist" path
         if (is_dir($coversDir)) {
             // Recursively remove all files and subdirectories
@@ -182,15 +182,15 @@ class CleanupOrphanedFilesCommandTest extends TestCase
         $this->assertStringContainsString('does not exist', $outputText);
 
         // Restore for other tests
-        if (! is_dir($coversDir)) {
-            mkdir($coversDir, 0777, true);
+        if (!is_dir($coversDir)) {
+            mkdir($coversDir, 0o777, true);
         }
     }
 
     public function testCleanupOrphanedChaptersNoDirectory(): void
     {
-        $publicDir = dirname(__DIR__, 2) . '/public';
-        $chaptersDir = $publicDir . '/uploads/chapters';
+        $publicDir = dirname(__DIR__, 2).'/public';
+        $chaptersDir = $publicDir.'/uploads/chapters';
         // Remove the chapters directory to test the "does not exist" path
         if (is_dir($chaptersDir)) {
             $it = new \RecursiveDirectoryIterator($chaptersDir, \RecursiveDirectoryIterator::SKIP_DOTS);
@@ -214,21 +214,21 @@ class CleanupOrphanedFilesCommandTest extends TestCase
         $this->assertStringContainsString('does not exist', $outputText);
 
         // Restore for other tests
-        if (! is_dir($chaptersDir)) {
-            mkdir($chaptersDir, 0777, true);
+        if (!is_dir($chaptersDir)) {
+            mkdir($chaptersDir, 0o777, true);
         }
     }
 
     public function testCleanupOrphanedChaptersWithNonDirectoryEntry(): void
     {
-        $publicDir = dirname(__DIR__, 2) . '/public';
-        $chaptersDir = $publicDir . '/uploads/chapters';
-        if (! is_dir($chaptersDir)) {
-            mkdir($chaptersDir, 0777, true);
+        $publicDir = dirname(__DIR__, 2).'/public';
+        $chaptersDir = $publicDir.'/uploads/chapters';
+        if (!is_dir($chaptersDir)) {
+            mkdir($chaptersDir, 0o777, true);
         }
         // Create a regular file in the chapters root (not a directory)
         // This tests the `is_dir` check at line 157
-        $nonDirFile = $chaptersDir . '/not_a_dir.txt';
+        $nonDirFile = $chaptersDir.'/not_a_dir.txt';
         file_put_contents($nonDirFile, 'this is a file, not a directory');
 
         $this->chapterQuery->method('toIterable')->willReturn([]);
@@ -248,12 +248,12 @@ class CleanupOrphanedFilesCommandTest extends TestCase
 
     public function testCleanupOrphanedCoversDeletesFile(): void
     {
-        $publicDir = dirname(__DIR__, 2) . '/public';
-        $coversDir = $publicDir . '/uploads/covers';
-        if (! is_dir($coversDir)) {
-            mkdir($coversDir, 0777, true);
+        $publicDir = dirname(__DIR__, 2).'/public';
+        $coversDir = $publicDir.'/uploads/covers';
+        if (!is_dir($coversDir)) {
+            mkdir($coversDir, 0o777, true);
         }
-        $orphanedFile = $coversDir . '/orphaned_cover.jpg';
+        $orphanedFile = $coversDir.'/orphaned_cover.jpg';
         file_put_contents($orphanedFile, 'orphaned');
 
         // Configure the query to return a valid cover path
@@ -281,12 +281,12 @@ class CleanupOrphanedFilesCommandTest extends TestCase
 
     public function testCleanupOrphanedCoversDryRun(): void
     {
-        $publicDir = dirname(__DIR__, 2) . '/public';
-        $coversDir = $publicDir . '/uploads/covers';
-        if (! is_dir($coversDir)) {
-            mkdir($coversDir, 0777, true);
+        $publicDir = dirname(__DIR__, 2).'/public';
+        $coversDir = $publicDir.'/uploads/covers';
+        if (!is_dir($coversDir)) {
+            mkdir($coversDir, 0o777, true);
         }
-        $orphanedFile = $coversDir . '/dry_run_cover.jpg';
+        $orphanedFile = $coversDir.'/dry_run_cover.jpg';
         file_put_contents($orphanedFile, 'orphaned');
 
         $this->coverArtQuery
@@ -312,12 +312,12 @@ class CleanupOrphanedFilesCommandTest extends TestCase
 
     public function testCleanupOrphanedCoversSuccessMessage(): void
     {
-        $publicDir = dirname(__DIR__, 2) . '/public';
-        $coversDir = $publicDir . '/uploads/covers';
-        if (! is_dir($coversDir)) {
-            mkdir($coversDir, 0777, true);
+        $publicDir = dirname(__DIR__, 2).'/public';
+        $coversDir = $publicDir.'/uploads/covers';
+        if (!is_dir($coversDir)) {
+            mkdir($coversDir, 0o777, true);
         }
-        $orphanedFile = $coversDir . '/success_orphan.jpg';
+        $orphanedFile = $coversDir.'/success_orphan.jpg';
         file_put_contents($orphanedFile, 'orphaned');
 
         $this->coverArtQuery
@@ -342,12 +342,12 @@ class CleanupOrphanedFilesCommandTest extends TestCase
 
     public function testCleanupOrphanedChaptersDeletesOrphanedFile(): void
     {
-        $publicDir = dirname(__DIR__, 2) . '/public';
-        $chaptersDir = $publicDir . '/uploads/chapters/orphaned_chapter_test';
-        if (! is_dir($chaptersDir)) {
-            mkdir($chaptersDir, 0777, true);
+        $publicDir = dirname(__DIR__, 2).'/public';
+        $chaptersDir = $publicDir.'/uploads/chapters/orphaned_chapter_test';
+        if (!is_dir($chaptersDir)) {
+            mkdir($chaptersDir, 0o777, true);
         }
-        $orphanedFile = $chaptersDir . '/1.jpg';
+        $orphanedFile = $chaptersDir.'/1.jpg';
         file_put_contents($orphanedFile, 'orphaned page');
 
         // Configure the query to return valid page paths
@@ -378,13 +378,13 @@ class CleanupOrphanedFilesCommandTest extends TestCase
 
     public function testCleanupOrphanedChaptersRemovesEmptyDirectory(): void
     {
-        $publicDir = dirname(__DIR__, 2) . '/public';
-        $chapterDir = $publicDir . '/uploads/chapters/empty_dir_test';
-        if (! is_dir($chapterDir)) {
-            mkdir($chapterDir, 0777, true);
+        $publicDir = dirname(__DIR__, 2).'/public';
+        $chapterDir = $publicDir.'/uploads/chapters/empty_dir_test';
+        if (!is_dir($chapterDir)) {
+            mkdir($chapterDir, 0o777, true);
         }
         // Put a file in the directory — it will be deleted by the command
-        $orphanedFile = $chapterDir . '/page.jpg';
+        $orphanedFile = $chapterDir.'/page.jpg';
         file_put_contents($orphanedFile, 'page');
 
         $this->chapterQuery
@@ -414,12 +414,12 @@ class CleanupOrphanedFilesCommandTest extends TestCase
 
     public function testCleanupOrphanedChaptersIOExceptionOnDirectoryCleanup(): void
     {
-        $publicDir = dirname(__DIR__, 2) . '/public';
-        $chapterDir = $publicDir . '/uploads/chapters/dir_io_test';
-        if (! is_dir($chapterDir)) {
-            mkdir($chapterDir, 0777, true);
+        $publicDir = dirname(__DIR__, 2).'/public';
+        $chapterDir = $publicDir.'/uploads/chapters/dir_io_test';
+        if (!is_dir($chapterDir)) {
+            mkdir($chapterDir, 0o777, true);
         }
-        $orphanedFile = $chapterDir . '/page.jpg';
+        $orphanedFile = $chapterDir.'/page.jpg';
         file_put_contents($orphanedFile, 'orphaned');
 
         $this->chapterQuery
@@ -434,11 +434,12 @@ class CleanupOrphanedFilesCommandTest extends TestCase
             ->method('remove')
             ->willReturnCallback(function ($path) use ($realFilesystem, &$callCount) {
                 ++$callCount;
-                if ($callCount === 1) {
+                if (1 === $callCount) {
                     // First call: remove the orphaned file (succeeds)
                     if (file_exists($path)) {
                         $realFilesystem->remove($path);
                     }
+
                     return;
                 }
                 // Second call: remove the directory (throws IOException)
@@ -466,12 +467,12 @@ class CleanupOrphanedFilesCommandTest extends TestCase
 
     public function testCleanupOrphanedCoversIOException(): void
     {
-        $publicDir = dirname(__DIR__, 2) . '/public';
-        $coversDir = $publicDir . '/uploads/covers';
-        if (! is_dir($coversDir)) {
-            mkdir($coversDir, 0777, true);
+        $publicDir = dirname(__DIR__, 2).'/public';
+        $coversDir = $publicDir.'/uploads/covers';
+        if (!is_dir($coversDir)) {
+            mkdir($coversDir, 0o777, true);
         }
-        $orphanedFile = $coversDir . '/io_cover_test.jpg';
+        $orphanedFile = $coversDir.'/io_cover_test.jpg';
         file_put_contents($orphanedFile, 'orphaned');
 
         $this->coverArtQuery
@@ -502,12 +503,12 @@ class CleanupOrphanedFilesCommandTest extends TestCase
 
     public function testCleanupOrphanedChaptersIOException(): void
     {
-        $publicDir = dirname(__DIR__, 2) . '/public';
-        $chapterDir = $publicDir . '/uploads/chapters/io_chapter_test';
-        if (! is_dir($chapterDir)) {
-            mkdir($chapterDir, 0777, true);
+        $publicDir = dirname(__DIR__, 2).'/public';
+        $chapterDir = $publicDir.'/uploads/chapters/io_chapter_test';
+        if (!is_dir($chapterDir)) {
+            mkdir($chapterDir, 0o777, true);
         }
-        $orphanedFile = $chapterDir . '/page.jpg';
+        $orphanedFile = $chapterDir.'/page.jpg';
         file_put_contents($orphanedFile, 'orphaned');
 
         $this->chapterQuery
@@ -541,12 +542,12 @@ class CleanupOrphanedFilesCommandTest extends TestCase
 
     public function testCleanupOrphanedCoversIOExceptionInUuidSubdirectory(): void
     {
-        $publicDir = dirname(__DIR__, 2) . '/public';
-        $uuidDir = $publicDir . '/uploads/covers/io-uuid-test';
-        $orphanedFile = $uuidDir . '/cover.jpg';
+        $publicDir = dirname(__DIR__, 2).'/public';
+        $uuidDir = $publicDir.'/uploads/covers/io-uuid-test';
+        $orphanedFile = $uuidDir.'/cover.jpg';
 
-        if (! is_dir($uuidDir)) {
-            mkdir($uuidDir, 0777, true);
+        if (!is_dir($uuidDir)) {
+            mkdir($uuidDir, 0o777, true);
         }
         file_put_contents($orphanedFile, 'orphaned');
 
@@ -577,8 +578,8 @@ class CleanupOrphanedFilesCommandTest extends TestCase
         }
         if (is_dir($uuidDir)) {
             foreach (scandir($uuidDir) ?: [] as $f) {
-                if ($f !== '.' && $f !== '..') {
-                    unlink($uuidDir . '/' . $f);
+                if ('.' !== $f && '..' !== $f) {
+                    unlink($uuidDir.'/'.$f);
                 }
             }
             rmdir($uuidDir);
@@ -587,12 +588,12 @@ class CleanupOrphanedFilesCommandTest extends TestCase
 
     public function testCleanupOrphanedCoversIOExceptionOnEmptyDirectoryCleanup(): void
     {
-        $publicDir = dirname(__DIR__, 2) . '/public';
-        $uuidDir = $publicDir . '/uploads/covers/dir-io-test';
-        $orphanedFile = $uuidDir . '/page.jpg';
+        $publicDir = dirname(__DIR__, 2).'/public';
+        $uuidDir = $publicDir.'/uploads/covers/dir-io-test';
+        $orphanedFile = $uuidDir.'/page.jpg';
 
-        if (! is_dir($uuidDir)) {
-            mkdir($uuidDir, 0777, true);
+        if (!is_dir($uuidDir)) {
+            mkdir($uuidDir, 0o777, true);
         }
         file_put_contents($orphanedFile, 'orphaned');
 
@@ -607,11 +608,12 @@ class CleanupOrphanedFilesCommandTest extends TestCase
             ->method('remove')
             ->willReturnCallback(function ($path) use ($realFilesystem, &$callCount) {
                 ++$callCount;
-                if ($callCount === 1) {
+                if (1 === $callCount) {
                     // First call: remove the orphaned file (succeeds)
                     if (file_exists($path)) {
                         $realFilesystem->remove($path);
                     }
+
                     return;
                 }
                 // Second call: remove the empty UUID directory (throws)
@@ -635,8 +637,8 @@ class CleanupOrphanedFilesCommandTest extends TestCase
 
         if (is_dir($uuidDir)) {
             foreach (scandir($uuidDir) ?: [] as $f) {
-                if ($f !== '.' && $f !== '..') {
-                    unlink($uuidDir . '/' . $f);
+                if ('.' !== $f && '..' !== $f) {
+                    unlink($uuidDir.'/'.$f);
                 }
             }
             rmdir($uuidDir);
@@ -645,12 +647,12 @@ class CleanupOrphanedFilesCommandTest extends TestCase
 
     public function testCleanupOrphanedCoversDeletesFileInUuidSubdirectory(): void
     {
-        $publicDir = dirname(__DIR__, 2) . '/public';
-        $uuidDir = $publicDir . '/uploads/covers/550e8400-e29b-41d4-a716-446655440000';
-        $orphanedFile = $uuidDir . '/cover.jpg';
+        $publicDir = dirname(__DIR__, 2).'/public';
+        $uuidDir = $publicDir.'/uploads/covers/550e8400-e29b-41d4-a716-446655440000';
+        $orphanedFile = $uuidDir.'/cover.jpg';
 
-        if (! is_dir($uuidDir)) {
-            mkdir($uuidDir, 0777, true);
+        if (!is_dir($uuidDir)) {
+            mkdir($uuidDir, 0o777, true);
         }
         file_put_contents($orphanedFile, 'orphaned cover in uuid dir');
 
@@ -679,8 +681,8 @@ class CleanupOrphanedFilesCommandTest extends TestCase
         if (is_dir($uuidDir)) {
             // Remove any remaining files in the UUID dir first
             foreach (scandir($uuidDir) ?: [] as $f) {
-                if ($f !== '.' && $f !== '..') {
-                    unlink($uuidDir . '/' . $f);
+                if ('.' !== $f && '..' !== $f) {
+                    unlink($uuidDir.'/'.$f);
                 }
             }
             rmdir($uuidDir);
@@ -689,12 +691,12 @@ class CleanupOrphanedFilesCommandTest extends TestCase
 
     public function testCleanupOrphanedCoversDryRunInUuidSubdirectory(): void
     {
-        $publicDir = dirname(__DIR__, 2) . '/public';
-        $uuidDir = $publicDir . '/uploads/covers/dry-run-uuid-test';
-        $orphanedFile = $uuidDir . '/page.png';
+        $publicDir = dirname(__DIR__, 2).'/public';
+        $uuidDir = $publicDir.'/uploads/covers/dry-run-uuid-test';
+        $orphanedFile = $uuidDir.'/page.png';
 
-        if (! is_dir($uuidDir)) {
-            mkdir($uuidDir, 0777, true);
+        if (!is_dir($uuidDir)) {
+            mkdir($uuidDir, 0o777, true);
         }
         file_put_contents($orphanedFile, 'dry run orphaned cover');
 
@@ -722,8 +724,8 @@ class CleanupOrphanedFilesCommandTest extends TestCase
         }
         if (is_dir($uuidDir)) {
             foreach (scandir($uuidDir) ?: [] as $f) {
-                if ($f !== '.' && $f !== '..') {
-                    unlink($uuidDir . '/' . $f);
+                if ('.' !== $f && '..' !== $f) {
+                    unlink($uuidDir.'/'.$f);
                 }
             }
             rmdir($uuidDir);
