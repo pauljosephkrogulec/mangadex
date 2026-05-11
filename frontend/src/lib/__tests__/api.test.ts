@@ -279,3 +279,627 @@ describe("integration — api.get + handleResponse", () => {
     });
   });
 });
+
+// ── API endpoint modules ────────────────────────────────────────────────────
+
+describe("mangaApi", () => {
+  let mock: MockAdapter;
+
+  beforeEach(() => {
+    mock = new MockAdapter(api);
+  });
+
+  afterEach(() => {
+    mock.restore();
+  });
+
+  it("list sends GET /mangas with params", async () => {
+    mock.onGet("/mangas").reply((config) => {
+      expect(config.params).toEqual({ page: 1, itemsPerPage: 20 });
+      return [200, { member: [], totalItems: 0 }];
+    });
+
+    const { mangaApi } = await import("../api");
+    await mangaApi.list({ page: 1, itemsPerPage: 20 });
+  });
+
+  it("get sends GET /mangas/:id", async () => {
+    mock.onGet("/mangas/abc-123").reply(200, { id: "abc-123", title: "Test" });
+
+    const { mangaApi } = await import("../api");
+    const res = await mangaApi.get("abc-123");
+
+    expect(res.data.title).toBe("Test");
+  });
+
+  it("create sends POST /mangas", async () => {
+    mock.onPost("/mangas").reply((config) => {
+      const body = JSON.parse(config.data);
+      expect(body.title).toBe("New Manga");
+      return [201, { id: "1", title: "New Manga" }];
+    });
+
+    const { mangaApi } = await import("../api");
+    await mangaApi.create({ title: "New Manga" } as never);
+  });
+
+  it("update sends PUT /mangas/:id", async () => {
+    mock.onPut("/mangas/abc").reply((config) => {
+      const body = JSON.parse(config.data);
+      expect(body.title).toBe("Updated");
+      return [200, { id: "abc", title: "Updated" }];
+    });
+
+    const { mangaApi } = await import("../api");
+    await mangaApi.update("abc", { title: "Updated" });
+  });
+
+  it("delete sends DELETE /mangas/:id", async () => {
+    mock.onDelete("/mangas/abc").reply(204);
+
+    const { mangaApi } = await import("../api");
+    await mangaApi.delete("abc");
+  });
+});
+
+describe("chapterApi", () => {
+  let mock: MockAdapter;
+
+  beforeEach(() => {
+    mock = new MockAdapter(api);
+  });
+
+  afterEach(() => {
+    mock.restore();
+  });
+
+  it("list sends GET /chapters", async () => {
+    mock.onGet("/chapters").reply(200, { member: [], totalItems: 0 });
+
+    const { chapterApi } = await import("../api");
+    const res = await chapterApi.list();
+
+    expect(res.data.totalItems).toBe(0);
+  });
+
+  it("get sends GET /chapters/:id", async () => {
+    mock.onGet("/chapters/ch-1").reply(200, { id: "ch-1" });
+
+    const { chapterApi } = await import("../api");
+    await chapterApi.get("ch-1");
+  });
+
+  it("pageUrl returns the correct URL string", async () => {
+    const { chapterApi } = await import("../api");
+    const url = chapterApi.pageUrl("ch-1", 3);
+    expect(url).toBe("/api/chapters/ch-1/pages/3");
+  });
+});
+
+describe("coverArtApi", () => {
+  let mock: MockAdapter;
+
+  beforeEach(() => {
+    mock = new MockAdapter(api);
+  });
+
+  afterEach(() => {
+    mock.restore();
+  });
+
+  it("list sends GET /cover_arts", async () => {
+    mock.onGet("/cover_arts").reply(200, { member: [] });
+
+    const { coverArtApi } = await import("../api");
+    await coverArtApi.list();
+  });
+
+  it("get sends GET /cover_arts/:id", async () => {
+    mock.onGet("/cover_arts/ca-1").reply(200, { id: "ca-1" });
+
+    const { coverArtApi } = await import("../api");
+    await coverArtApi.get("ca-1");
+  });
+});
+
+describe("tagApi", () => {
+  let mock: MockAdapter;
+
+  beforeEach(() => {
+    mock = new MockAdapter(api);
+  });
+
+  afterEach(() => {
+    mock.restore();
+  });
+
+  it("list sends GET /tags", async () => {
+    mock.onGet("/tags").reply((config) => {
+      expect(config.params).toEqual({ order: { name: "asc" } });
+      return [200, { member: [], totalItems: 0 }];
+    });
+
+    const { tagApi } = await import("../api");
+    await tagApi.list({ order: { name: "asc" } });
+  });
+});
+
+describe("userApi", () => {
+  let mock: MockAdapter;
+
+  beforeEach(() => {
+    mock = new MockAdapter(api);
+  });
+
+  afterEach(() => {
+    mock.restore();
+  });
+
+  it("get sends GET /users/:id", async () => {
+    mock.onGet("/users/u-1").reply(200, { id: "u-1" });
+
+    const { userApi } = await import("../api");
+    await userApi.get("u-1");
+  });
+
+  it("follows sends GET /users/:id/follows", async () => {
+    mock.onGet("/users/u-1/follows").reply(200, { member: [] });
+
+    const { userApi } = await import("../api");
+    await userApi.follows("u-1");
+  });
+});
+
+describe("authApi", () => {
+  let mock: MockAdapter;
+
+  beforeEach(() => {
+    mock = new MockAdapter(api);
+  });
+
+  afterEach(() => {
+    mock.restore();
+  });
+
+  it("login sends POST /login_check", async () => {
+    mock.onPost("/login_check").reply((config) => {
+      const body = JSON.parse(config.data);
+      expect(body.username).toBe("user");
+      expect(body.password).toBe("pass");
+      return [200, { token: "jwt-token" }];
+    });
+
+    const { authApi } = await import("../api");
+    await authApi.login({ username: "user", password: "pass" });
+  });
+
+  it("register sends POST /users", async () => {
+    mock.onPost("/users").reply((config) => {
+      const body = JSON.parse(config.data);
+      expect(body.email).toBe("test@test.com");
+      return [201, { id: "1", email: "test@test.com" }];
+    });
+
+    const { authApi } = await import("../api");
+    await authApi.register({ email: "test@test.com" } as never);
+  });
+});
+
+describe("followApi", () => {
+  let mock: MockAdapter;
+
+  beforeEach(() => {
+    mock = new MockAdapter(api);
+  });
+
+  afterEach(() => {
+    mock.restore();
+  });
+
+  it("follows sends GET /users/:id/follows", async () => {
+    mock.onGet("/users/u-1/follows").reply(200, { member: [] });
+
+    const { followApi } = await import("../api");
+    await followApi.follows("u-1");
+  });
+});
+
+describe("creatorApi", () => {
+  let mock: MockAdapter;
+
+  beforeEach(() => {
+    mock = new MockAdapter(api);
+  });
+
+  afterEach(() => {
+    mock.restore();
+  });
+
+  it("list sends GET /creators", async () => {
+    mock.onGet("/creators").reply(200, { member: [] });
+
+    const { creatorApi } = await import("../api");
+    await creatorApi.list();
+  });
+
+  it("get sends GET /creators/:id", async () => {
+    mock.onGet("/creators/cr-1").reply(200, { id: "cr-1" });
+
+    const { creatorApi } = await import("../api");
+    await creatorApi.get("cr-1");
+  });
+
+  it("create sends POST /creators", async () => {
+    mock.onPost("/creators").reply(201, { id: "cr-1" });
+
+    const { creatorApi } = await import("../api");
+    await creatorApi.create({ name: "Test" } as never);
+  });
+
+  it("update sends PUT /creators/:id", async () => {
+    mock.onPut("/creators/cr-1").reply(200, { id: "cr-1" });
+
+    const { creatorApi } = await import("../api");
+    await creatorApi.update("cr-1", { name: "Updated" });
+  });
+
+  it("delete sends DELETE /creators/:id", async () => {
+    mock.onDelete("/creators/cr-1").reply(204);
+
+    const { creatorApi } = await import("../api");
+    await creatorApi.delete("cr-1");
+  });
+});
+
+describe("scanlationGroupApi", () => {
+  let mock: MockAdapter;
+
+  beforeEach(() => {
+    mock = new MockAdapter(api);
+  });
+
+  afterEach(() => {
+    mock.restore();
+  });
+
+  it("list sends GET /scanlation_groups", async () => {
+    mock.onGet("/scanlation_groups").reply(200, { member: [] });
+
+    const { scanlationGroupApi } = await import("../api");
+    await scanlationGroupApi.list();
+  });
+
+  it("get sends GET /scanlation_groups/:id", async () => {
+    mock.onGet("/scanlation_groups/sg-1").reply(200, { id: "sg-1" });
+
+    const { scanlationGroupApi } = await import("../api");
+    await scanlationGroupApi.get("sg-1");
+  });
+
+  it("create sends POST /scanlation_groups", async () => {
+    mock.onPost("/scanlation_groups").reply(201, { id: "sg-1" });
+
+    const { scanlationGroupApi } = await import("../api");
+    await scanlationGroupApi.create({ name: "Group" } as never);
+  });
+
+  it("update sends PUT /scanlation_groups/:id", async () => {
+    mock.onPut("/scanlation_groups/sg-1").reply(200, { id: "sg-1" });
+
+    const { scanlationGroupApi } = await import("../api");
+    await scanlationGroupApi.update("sg-1", { name: "Updated" });
+  });
+
+  it("delete sends DELETE /scanlation_groups/:id", async () => {
+    mock.onDelete("/scanlation_groups/sg-1").reply(204);
+
+    const { scanlationGroupApi } = await import("../api");
+    await scanlationGroupApi.delete("sg-1");
+  });
+});
+
+describe("customListApi", () => {
+  let mock: MockAdapter;
+
+  beforeEach(() => {
+    mock = new MockAdapter(api);
+  });
+
+  afterEach(() => {
+    mock.restore();
+  });
+
+  it("get sends GET /custom_lists/:id", async () => {
+    mock.onGet("/custom_lists/cl-1").reply(200, { id: "cl-1" });
+
+    const { customListApi } = await import("../api");
+    await customListApi.get("cl-1");
+  });
+
+  it("create sends POST /custom_lists", async () => {
+    mock.onPost("/custom_lists").reply(201, { id: "cl-1" });
+
+    const { customListApi } = await import("../api");
+    await customListApi.create({ name: "My List" } as never);
+  });
+
+  it("update sends PUT /custom_lists/:id", async () => {
+    mock.onPut("/custom_lists/cl-1").reply(200, { id: "cl-1" });
+
+    const { customListApi } = await import("../api");
+    await customListApi.update("cl-1", { name: "Updated" });
+  });
+
+  it("delete sends DELETE /custom_lists/:id", async () => {
+    mock.onDelete("/custom_lists/cl-1").reply(204);
+
+    const { customListApi } = await import("../api");
+    await customListApi.delete("cl-1");
+  });
+
+  it("addManga sends POST /custom_lists/:id/mangas/:mangaId", async () => {
+    mock.onPost("/custom_lists/cl-1/mangas/m-1").reply(200);
+
+    const { customListApi } = await import("../api");
+    await customListApi.addManga("cl-1", "m-1");
+  });
+
+  it("removeManga sends DELETE /custom_lists/:id/mangas/:mangaId", async () => {
+    mock.onDelete("/custom_lists/cl-1/mangas/m-1").reply(204);
+
+    const { customListApi } = await import("../api");
+    await customListApi.removeManga("cl-1", "m-1");
+  });
+});
+
+describe("mangaApi additional endpoints", () => {
+  let mock: MockAdapter;
+
+  beforeEach(() => {
+    mock = new MockAdapter(api);
+  });
+
+  afterEach(() => {
+    mock.restore();
+  });
+
+  it("feed sends GET /mangas/:id/feed", async () => {
+    mock.onGet("/mangas/m-1/feed").reply(200, { member: [] });
+
+    const { mangaApi } = await import("../api");
+    await mangaApi.feed("m-1");
+  });
+
+  it("follow sends POST /mangas/:id/follow", async () => {
+    mock.onPost("/mangas/m-1/follow").reply(200);
+
+    const { mangaApi } = await import("../api");
+    await mangaApi.follow("m-1");
+  });
+
+  it("unfollow sends DELETE /mangas/:id/follow", async () => {
+    mock.onDelete("/mangas/m-1/follow").reply(204);
+
+    const { mangaApi } = await import("../api");
+    await mangaApi.unfollow("m-1");
+  });
+
+  it("followStatus sends GET /mangas/:id/follow", async () => {
+    mock.onGet("/mangas/m-1/follow").reply(200, { following: true });
+
+    const { mangaApi } = await import("../api");
+    const res = await mangaApi.followStatus("m-1");
+    expect(res.data.following).toBe(true);
+  });
+});
+
+describe("chapterApi additional endpoints", () => {
+  let mock: MockAdapter;
+
+  beforeEach(() => {
+    mock = new MockAdapter(api);
+  });
+
+  afterEach(() => {
+    mock.restore();
+  });
+
+  it("create sends POST /chapters", async () => {
+    mock.onPost("/chapters").reply(201, { id: "ch-1" });
+
+    const { chapterApi } = await import("../api");
+    await chapterApi.create({ title: "Ch 1" } as never);
+  });
+
+  it("update sends PUT /chapters/:id", async () => {
+    mock.onPut("/chapters/ch-1").reply(200, { id: "ch-1" });
+
+    const { chapterApi } = await import("../api");
+    await chapterApi.update("ch-1", { title: "Updated" });
+  });
+
+  it("delete sends DELETE /chapters/:id", async () => {
+    mock.onDelete("/chapters/ch-1").reply(204);
+
+    const { chapterApi } = await import("../api");
+    await chapterApi.delete("ch-1");
+  });
+
+  it("uploadPages sends POST /chapters/:id/upload-pages", async () => {
+    let capturedData: unknown = null;
+    mock.onPost("/chapters/ch-1/upload-pages").reply((config) => {
+      capturedData = config.data;
+      return [200, { chapterId: "ch-1", pages: ["p1.jpg"], pageCount: 1 }];
+    });
+
+    const { chapterApi } = await import("../api");
+    const file = new File(["content"], "page1.jpg", { type: "image/jpeg" });
+    const res = await chapterApi.uploadPages("ch-1", [file]);
+
+    expect(res.data.chapterId).toBe("ch-1");
+    expect(res.data.pages).toEqual(["p1.jpg"]);
+    // Verify the request was sent (mock adapter serializes FormData,
+    // so we check it captured something)
+    expect(capturedData).not.toBeNull();
+    expect(res.data.pageCount).toBe(1);
+  });
+});
+
+describe("tagApi additional endpoints", () => {
+  let mock: MockAdapter;
+
+  beforeEach(() => {
+    mock = new MockAdapter(api);
+  });
+
+  afterEach(() => {
+    mock.restore();
+  });
+
+  it("get sends GET /tags/:id", async () => {
+    mock.onGet("/tags/t-1").reply(200, { id: "t-1" });
+
+    const { tagApi } = await import("../api");
+    await tagApi.get("t-1");
+  });
+
+  it("create sends POST /tags", async () => {
+    mock.onPost("/tags").reply(201, { id: "t-1" });
+
+    const { tagApi } = await import("../api");
+    await tagApi.create({ name: "Action" } as never);
+  });
+
+  it("update sends PUT /tags/:id", async () => {
+    mock.onPut("/tags/t-1").reply(200, { id: "t-1" });
+
+    const { tagApi } = await import("../api");
+    await tagApi.update("t-1", { name: "Updated" });
+  });
+
+  it("delete sends DELETE /tags/:id", async () => {
+    mock.onDelete("/tags/t-1").reply(204);
+
+    const { tagApi } = await import("../api");
+    await tagApi.delete("t-1");
+  });
+});
+
+describe("userApi additional endpoints", () => {
+  let mock: MockAdapter;
+
+  beforeEach(() => {
+    mock = new MockAdapter(api);
+  });
+
+  afterEach(() => {
+    mock.restore();
+  });
+
+  it("update sends PUT /users/:id", async () => {
+    mock.onPut("/users/u-1").reply(200, { id: "u-1" });
+
+    const { userApi } = await import("../api");
+    await userApi.update("u-1", { displayName: "NewName" });
+  });
+
+  it("delete sends DELETE /users/:id", async () => {
+    mock.onDelete("/users/u-1").reply(204);
+
+    const { userApi } = await import("../api");
+    await userApi.delete("u-1");
+  });
+});
+
+describe("coverArtApi additional endpoints", () => {
+  let mock: MockAdapter;
+
+  beforeEach(() => {
+    mock = new MockAdapter(api);
+  });
+
+  afterEach(() => {
+    mock.restore();
+  });
+
+  it("create sends POST /cover_arts", async () => {
+    mock.onPost("/cover_arts").reply(201, { id: "ca-1" });
+
+    const { coverArtApi } = await import("../api");
+    await coverArtApi.create({ imagePath: "/cover.jpg" } as never);
+  });
+
+  it("update sends PUT /cover_arts/:id", async () => {
+    mock.onPut("/cover_arts/ca-1").reply(200, { id: "ca-1" });
+
+    const { coverArtApi } = await import("../api");
+    await coverArtApi.update("ca-1", { volume: "2" });
+  });
+
+  it("delete sends DELETE /cover_arts/:id", async () => {
+    mock.onDelete("/cover_arts/ca-1").reply(204);
+
+    const { coverArtApi } = await import("../api");
+    await coverArtApi.delete("ca-1");
+  });
+
+  it("upload sends POST /covers/upload with FormData (with optional params)", async () => {
+    mock.onPost("/covers/upload").reply(200, {
+      id: "ca-1",
+      imagePath: "/covers/test.jpg",
+      volume: "1",
+      isPrimary: true,
+      manga: { id: "m-1", title: "Test" },
+    });
+
+    const { coverArtApi } = await import("../api");
+    const file = new File(["fake-image"], "cover.jpg", { type: "image/jpeg" });
+    const res = await coverArtApi.upload("m-1", file, "1", true);
+
+    expect(res.data.id).toBe("ca-1");
+    expect(res.data.imagePath).toBe("/covers/test.jpg");
+    expect(res.data.volume).toBe("1");
+    expect(res.data.isPrimary).toBe(true);
+  });
+
+  it("upload sends POST /covers/upload without optional volume and isPrimary", async () => {
+    mock.onPost("/covers/upload").reply(200, {
+      id: "ca-2",
+      imagePath: "/covers/test2.jpg",
+      volume: null,
+      isPrimary: false,
+      manga: { id: "m-2", title: "Test 2" },
+    });
+
+    const { coverArtApi } = await import("../api");
+    const file = new File(["fake-image"], "cover.jpg", { type: "image/jpeg" });
+    const res = await coverArtApi.upload("m-2", file);
+
+    expect(res.data.id).toBe("ca-2");
+    expect(res.data.imagePath).toBe("/covers/test2.jpg");
+    expect(res.data.volume).toBeNull();
+  });
+});
+
+// ── Isolated env var test (LAST—resets module cache) ────────────────────────
+
+describe("NEXT_PUBLIC_API_URL env var", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it("defaults to /api when env is not set", async () => {
+    // The default import (at top of file) already proves this,
+    // but we verify via a fresh dynamic import too.
+    vi.resetModules();
+    const { default: freshApi } = await import("../api");
+    expect(freshApi.defaults.baseURL).toBe("/api");
+  });
+
+  it("uses custom URL when NEXT_PUBLIC_API_URL is set", async () => {
+    vi.stubEnv("NEXT_PUBLIC_API_URL", "https://custom-api.example.com");
+    vi.resetModules();
+    const { default: freshApi } = await import("../api");
+    expect(freshApi.defaults.baseURL).toBe("https://custom-api.example.com");
+  });
+});
