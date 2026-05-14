@@ -31,6 +31,8 @@
         </include>
         <exclude>
             <file>src/Kernel.php</file>
+            <file>src/Command/DownloadChapterImagesCommand.php</file>
+            <file>src/Command/GenerateFixturesDataCommand.php</file>
             <directory>src/Entity</directory>
             <directory>src/DataFixtures</directory>
         </exclude>

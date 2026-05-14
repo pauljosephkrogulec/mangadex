@@ -36,11 +36,9 @@ class UserFollowsProviderTest extends TestCase
         $this->queryMock = $this->createStub(Query::class);
 
         $this->emMock->method('getRepository')
-            ->with(MangaFollow::class)
             ->willReturn($this->followRepoMock);
 
         $this->followRepoMock->method('createQueryBuilder')
-            ->with('mf')
             ->willReturn($this->qbMock);
 
         $this->qbMock->method('leftJoin')->willReturnSelf();
@@ -65,7 +63,6 @@ class UserFollowsProviderTest extends TestCase
         $this->securityMock->method('getUser')
             ->willReturn($user);
         $this->securityMock->method('isGranted')
-            ->with('ROLE_ADMIN')
             ->willReturn(false);
 
         $this->queryMock->method('getResult')
@@ -85,7 +82,6 @@ class UserFollowsProviderTest extends TestCase
         $this->securityMock->method('getUser')
             ->willReturn($currentUser);
         $this->securityMock->method('isGranted')
-            ->with('ROLE_ADMIN')
             ->willReturn(false);
 
         $operation = $this->createStub(Operation::class);
@@ -104,7 +100,6 @@ class UserFollowsProviderTest extends TestCase
         $this->securityMock->method('getUser')
             ->willReturn($user);
         $this->securityMock->method('isGranted')
-            ->with('ROLE_ADMIN')
             ->willReturn(false);
 
         $this->queryMock->method('getResult')

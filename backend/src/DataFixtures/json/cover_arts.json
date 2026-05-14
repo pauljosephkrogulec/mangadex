@@ -48,17 +48,17 @@
         "fromApi": true
     },
     {
-        "ref": "one-punch-man-cover-primary",
-        "manga": "one-punch-man",
-        "imagePath": "\/covers\/d8a959f7-648e-4c8d-8f23-f1f3f8e129f3\/c46d56c9-f577-42cc-bc61-3fcbb19f8ab7.jpg",
+        "ref": "otome-game-sekai-wa-mob-ni-kibishii-sekai-desu-cover-primary",
+        "manga": "otome-game-sekai-wa-mob-ni-kibishii-sekai-desu",
+        "imagePath": "\/covers\/28c77530-dfa1-4b05-8ec3-998960ba24d4\/2a87c2b5-83ab-4cfa-96fd-da840f6f0e6f.jpg",
         "volume": null,
         "isPrimary": true,
         "fromApi": true
     },
     {
-        "ref": "otome-game-sekai-wa-mob-ni-kibishii-sekai-desu-cover-primary",
-        "manga": "otome-game-sekai-wa-mob-ni-kibishii-sekai-desu",
-        "imagePath": "\/covers\/28c77530-dfa1-4b05-8ec3-998960ba24d4\/2a87c2b5-83ab-4cfa-96fd-da840f6f0e6f.jpg",
+        "ref": "one-punch-man-cover-primary",
+        "manga": "one-punch-man",
+        "imagePath": "\/covers\/d8a959f7-648e-4c8d-8f23-f1f3f8e129f3\/c46d56c9-f577-42cc-bc61-3fcbb19f8ab7.jpg",
         "volume": null,
         "isPrimary": true,
         "fromApi": true
@@ -330,7 +330,7 @@
     {
         "ref": "yancha-gal-no-anjou-san-cover-primary",
         "manga": "yancha-gal-no-anjou-san",
-        "imagePath": "\/covers\/5e3a710f-0b0d-482b-9e84-d9c91960c625\/fad61627-9586-40c0-bc09-c7a0ee9a83c7.jpg",
+        "imagePath": "\/covers\/5e3a710f-0b0d-482b-9e84-d9c91960c625\/7b6a0ffa-3017-406a-ab9e-1f9923b48095.jpg",
         "volume": null,
         "isPrimary": true,
         "fromApi": true

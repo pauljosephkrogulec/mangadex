@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import ChapterList from "../ChapterList";
 import type { Chapter } from "@/lib/types";
@@ -485,9 +485,7 @@ describe("ChapterList", () => {
     );
 
     const toInput = screen.getByLabelText("Filter to chapter");
-    await user.type(toInput, "10");
-    // user.type fires per character: "1" then "10"
-    // Check the last call after full value "10" is typed
+    fireEvent.change(toInput, { target: { value: "10" } });
     expect(onFilterChange).toHaveBeenLastCalledWith("", "10");
   });
 
@@ -571,7 +569,7 @@ describe("ChapterList", () => {
 
   // ── Row links ─────────────────────────────────────────────────────────────
 
-  it("each chapter row links to /chapter/{id}", () => {
+  it("each chapter row links to /chapter/{id} when no mangaId", () => {
     const chapters = [
       buildChapter({ id: "ch-42", title: "Awesome Chapter" }),
     ];
@@ -586,6 +584,24 @@ describe("ChapterList", () => {
 
     const link = screen.getByText("Awesome Chapter").closest("a");
     expect(link).toHaveAttribute("href", "/chapter/ch-42");
+  });
+
+  it("each chapter row links to /manga/{mangaId}/chapter/{id} when mangaId provided", () => {
+    const chapters = [
+      buildChapter({ id: "ch-42", title: "Awesome Chapter" }),
+    ];
+
+    render(
+      <ChapterList
+        {...defaultProps}
+        chapters={chapters}
+        totalItems={1}
+        mangaId="manga-99"
+      />,
+    );
+
+    const link = screen.getByText("Awesome Chapter").closest("a");
+    expect(link).toHaveAttribute("href", "/manga/manga-99/chapter/ch-42");
   });
 
   // ── Pagination ────────────────────────────────────────────────────────────

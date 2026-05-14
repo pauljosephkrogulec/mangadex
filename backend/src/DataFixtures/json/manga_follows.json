@@ -2,86 +2,86 @@
     {
         "ref": "follow-1",
         "user": "admin",
-        "manga": "kusuriya-no-hitorigoto"
+        "manga": "chiyu-mahou-no-machigatta-tsukaikata-senjou-wo-kakeru-kaifuku-youin"
     },
     {
         "ref": "follow-2",
         "user": "admin",
-        "manga": "chiyu-mahou-no-machigatta-tsukaikata-senjou-wo-kakeru-kaifuku-youin"
+        "manga": "mieruko-chan"
     },
     {
         "ref": "follow-3",
         "user": "admin",
-        "manga": "sousou-no-frieren"
+        "manga": "chainsaw-man"
     },
     {
         "ref": "follow-4",
-        "user": "admin",
-        "manga": "isekai-de-cheat-skill-wo-te-ni-shita-ore-wa-genjitsu-sekai-wo-mo-musou-suru-level-up-wa-jinsei-wo-ka"
+        "user": "mangareader1",
+        "manga": "boku-no-kokoro-no-yabai-yatsu"
     },
     {
         "ref": "follow-5",
         "user": "mangareader1",
-        "manga": "horimiya"
+        "manga": "dungeon-ni-hisomu-yandere-na-kanojo-ni-ore-wa-nandomo-korosareru"
     },
     {
         "ref": "follow-6",
         "user": "mangareader1",
-        "manga": "mieruko-chan"
+        "manga": "oshi-no-ko"
     },
     {
         "ref": "follow-7",
         "user": "mangareader2",
-        "manga": "tokidoki-bosotto-russia-go-de-dereru-tonari-no-alya-san"
+        "manga": "sono-bisque-doll-wa-koi-o-suru"
     },
     {
         "ref": "follow-8",
         "user": "mangareader2",
-        "manga": "mieruko-chan"
+        "manga": "tsuihou-sareru-tabi-ni-skill-o-te-ni-ireta-ore-ga-100-no-isekai-de-2-shuume-musou"
     },
     {
         "ref": "follow-9",
         "user": "mangareader2",
-        "manga": "dungeon-meshi"
+        "manga": "dungeon-ni-hisomu-yandere-na-kanojo-ni-ore-wa-nandomo-korosareru"
     },
     {
         "ref": "follow-10",
         "user": "animefan",
-        "manga": "isekai-mokushiroku-mynoghra-hametsu-no-bunmei-de-hajimeru-sekai-seifuku"
+        "manga": "osoraku-kanojo-wa-ore-no-aniki-wo-neratteru"
     },
     {
         "ref": "follow-11",
         "user": "animefan",
-        "manga": "dungeon-meshi"
+        "manga": "oshi-no-ko"
     },
     {
         "ref": "follow-12",
         "user": "animefan",
-        "manga": "sono-bisque-doll-wa-koi-o-suru"
+        "manga": "maou-ni-natta-node-dungeon-tsukutte-jingai-musume-to-honobono-suru"
     },
     {
         "ref": "follow-13",
         "user": "animefan",
-        "manga": "kaette-kudasai-akutsu-san"
+        "manga": "lv2-kara-cheat-datta-moto-yuusha-kouho-no-mattari-isekai-life"
     },
     {
         "ref": "follow-14",
         "user": "scanlator",
-        "manga": "isekai-de-cheat-skill-wo-te-ni-shita-ore-wa-genjitsu-sekai-wo-mo-musou-suru-level-up-wa-jinsei-wo-ka"
+        "manga": "kumo-desu-ga-nani-ka"
     },
     {
         "ref": "follow-15",
         "user": "scanlator",
-        "manga": "taida-na-akujoku-kizoku-ni-tensei-shita-ore-scenario-wo-bukkowashitara-kikakugai-no-maryoku-de-saiky"
+        "manga": "shuumatsu-no-valkyrie"
     },
     {
         "ref": "follow-16",
         "user": "scanlator",
-        "manga": "tokidoki-bosotto-russia-go-de-dereru-tonari-no-alya-san"
+        "manga": "jujutsu-kaisen"
     },
     {
         "ref": "follow-17",
         "user": "scanlator",
-        "manga": "chainsaw-man"
+        "manga": "isekai-mokushiroku-mynoghra-hametsu-no-bunmei-de-hajimeru-sekai-seifuku"
     }
 ]

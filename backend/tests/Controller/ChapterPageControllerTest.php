@@ -13,6 +13,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 #[AllowMockObjectsWithoutExpectations]
@@ -29,7 +30,6 @@ class ChapterPageControllerTest extends TestCase
         $this->entityManager = $this->createMock(EntityManagerInterface::class);
         $this->entityManager
             ->method('getRepository')
-            ->with(Chapter::class)
             ->willReturn($this->chapterRepository);
 
         $this->controller = new ChapterPageController();
@@ -43,7 +43,6 @@ class ChapterPageControllerTest extends TestCase
             ->willReturnCallback(fn ($id) => 'parameter_bag' === $id);
         $container
             ->method('get')
-            ->with('parameter_bag')
             ->willReturn($parameterBag);
 
         $reflection = new \ReflectionClass($this->controller);
@@ -172,6 +171,7 @@ class ChapterPageControllerTest extends TestCase
             ->willReturn(['/chapters/cache_test/1.jpg']);
 
         $this->chapterRepository
+            ->expects($this->once())
             ->method('find')
             ->with('chapter-1')
             ->willReturn($chapter);
@@ -217,6 +217,7 @@ class ChapterPageControllerTest extends TestCase
             ]);
 
         $this->chapterRepository
+            ->expects($this->once())
             ->method('find')
             ->with('chapter-1')
             ->willReturn($chapter);
@@ -236,6 +237,46 @@ class ChapterPageControllerTest extends TestCase
         }
     }
 
+    public function testServePageWithExternalUrlReturnsRedirect(): void
+    {
+        $chapter = $this->createMock(Chapter::class);
+        $chapter
+            ->method('getPages')
+            ->willReturn(['https://cdn.example.com/images/page1.jpg']);
+
+        $this->chapterRepository
+            ->expects($this->once())
+            ->method('find')
+            ->with('chapter-1')
+            ->willReturn($chapter);
+
+        $response = $this->controller->servePage('chapter-1', 1, $this->entityManager);
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals('https://cdn.example.com/images/page1.jpg', $response->getTargetUrl());
+    }
+
+    public function testServePageWithExternalHttpUrlReturnsRedirect(): void
+    {
+        $chapter = $this->createMock(Chapter::class);
+        $chapter
+            ->method('getPages')
+            ->willReturn(['http://cdn.example.com/images/page1.jpg']);
+
+        $this->chapterRepository
+            ->expects($this->once())
+            ->method('find')
+            ->with('chapter-1')
+            ->willReturn($chapter);
+
+        $response = $this->controller->servePage('chapter-1', 1, $this->entityManager);
+
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals('http://cdn.example.com/images/page1.jpg', $response->getTargetUrl());
+    }
+
     public function testResolveUploadPathBlocksDirectoryTraversal(): void
     {
         $projectDir = dirname(__DIR__, 2);
@@ -248,6 +289,7 @@ class ChapterPageControllerTest extends TestCase
             ->willReturn(['/../../test_traversal.txt']);
 
         $this->chapterRepository
+            ->expects($this->once())
             ->method('find')
             ->with('chapter-1')
             ->willReturn($chapter);

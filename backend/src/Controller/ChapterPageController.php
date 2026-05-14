@@ -8,6 +8,7 @@ use App\Entity\Chapter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -49,8 +50,13 @@ class ChapterPageController extends AbstractController
             throw $this->createNotFoundException('Page number out of range');
         }
 
-        $relativePath = $pages[$pageNum - 1];
-        $fullPath = $this->resolveUploadPath($relativePath);
+        $pageRef = $pages[$pageNum - 1];
+
+        if (str_starts_with($pageRef, 'https://') || str_starts_with($pageRef, 'http://')) {
+            return new RedirectResponse($pageRef);
+        }
+
+        $fullPath = $this->resolveUploadPath($pageRef);
 
         if (null === $fullPath) {
             throw $this->createNotFoundException('Page file not found');

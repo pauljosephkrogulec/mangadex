@@ -17,6 +17,7 @@ interface ChapterListProps {
   sortDir: "asc" | "desc";
   chapterFrom: string;
   chapterTo: string;
+  mangaId?: string;
   onSortChange: (field: SortField) => void;
   onPageChange: (page: number) => void;
   onRetry: () => void;
@@ -86,6 +87,7 @@ export default function ChapterList({
   sortDir,
   chapterFrom = "",
   chapterTo = "",
+  mangaId,
   onSortChange,
   onPageChange,
   onRetry,
@@ -282,7 +284,7 @@ export default function ChapterList({
                   </td>
                   <td className="px-3 py-3 text-sm text-md-text-primary">
                     <Link
-                      href={`/chapter/${chapter.id}`}
+                      href={mangaId ? `/manga/${mangaId}/chapter/${chapter.id}` : `/chapter/${chapter.id}`}
                       className="hover:text-md-accent transition-colors"
                     >
                       {chapter.title || "—"}

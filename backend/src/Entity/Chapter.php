@@ -195,15 +195,27 @@ class Chapter
     #[Groups(['chapter:read'])]
     public function getPageUrls(): array
     {
+        $pages = $this->pages ?? [];
+
+        if ([] === $pages) {
+            return [];
+        }
+
+        // Pages contain full MangaDex CDN URLs → return directly
+        $first = reset($pages);
+        if (is_string($first) && (str_starts_with($first, 'https://') || str_starts_with($first, 'http://'))) {
+            return array_values($pages);
+        }
+
+        // Legacy: pages contain local relative paths → construct API URLs
         if (null === $this->id) {
             return [];
         }
 
         $urls = [];
-        $totalPages = count($this->pages);
         $baseUrl = '/api/chapters/'.$this->id.'/pages';
 
-        for ($i = 0; $i < $totalPages; ++$i) {
+        for ($i = 0; $i < count($pages); ++$i) {
             $urls[] = $baseUrl.'/'.($i + 1);
         }
 

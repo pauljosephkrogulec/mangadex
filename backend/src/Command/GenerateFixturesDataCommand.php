@@ -67,7 +67,6 @@ class GenerateFixturesDataCommand extends Command
         if (!$skipImages) {
             $this->generatePlaceholderImages();
             $this->downloadApiCoverImages();
-            $this->downloadApiChapterPages();
         }
 
         $mangaCount = count($this->mangas);
@@ -394,8 +393,6 @@ class GenerateFixturesDataCommand extends Command
 
         $altPrefixes = ['The ', 'A ', 'The Legend of ', 'Return of the ', 'Rebirth of the '];
 
-        $realMangaWithChapters = min((int) ceil(count($realMangaList) / 2), 25);
-
         for ($i = 0; $i < $count; ++$i) {
             $realChapters = [];
 
@@ -404,33 +401,28 @@ class GenerateFixturesDataCommand extends Command
                 $mangaId = $realMangaList[$i]['id'];
                 $coverFileName = $realMangaList[$i]['coverFileName'];
 
-                if ($i < $realMangaWithChapters) {
-                    try {
-                        $feedChapters = $this->fetchChaptersFromApi($mangaId, 20);
-                        foreach ($feedChapters as $feedCh) {
-                            $pagesData = $this->fetchChapterPagesFromApi($feedCh['id']);
-                            if (null === $pagesData) {
-                                continue;
-                            }
-                            $pages = [];
-                            foreach ($pagesData['data'] as $pageIdx => $pageFile) {
-                                $pages[] = sprintf('page_%03d.jpg', $pageIdx + 1);
-                            }
-                            $realChapters[] = [
-                                'id' => $feedCh['id'],
-                                'chapterNumber' => $feedCh['chapterNumber'],
-                                'title' => $feedCh['title'],
-                                'language' => $feedCh['language'],
-                                'volume' => $feedCh['volume'],
-                                'pages' => $pages,
-                                'hash' => $pagesData['hash'],
-                                'baseUrl' => $pagesData['baseUrl'],
-                                'pageFiles' => $pagesData['data'],
-                            ];
+                try {
+                    $feedChapters = $this->fetchChaptersFromApi($mangaId, 20);
+                    foreach ($feedChapters as $feedCh) {
+                        $pagesData = $this->fetchChapterPagesFromApi($feedCh['id']);
+                        if (null === $pagesData) {
+                            continue;
                         }
-                    } catch (\Throwable $e) {
-                        // Fall through to synthetic chapters
+                        $cdnUrls = [];
+                        foreach ($pagesData['data'] as $pageFile) {
+                            $cdnUrls[] = \sprintf('%s/data/%s/%s', $pagesData['baseUrl'], $pagesData['hash'], $pageFile);
+                        }
+                        $realChapters[] = [
+                            'id' => $feedCh['id'],
+                            'chapterNumber' => $feedCh['chapterNumber'],
+                            'title' => $feedCh['title'],
+                            'language' => $feedCh['language'],
+                            'volume' => $feedCh['volume'],
+                            'pages' => $cdnUrls,
+                        ];
                     }
+                } catch (\Throwable $e) {
+                    // Fall through to synthetic chapters
                 }
             } elseif ($i < count($titles)) {
                 $title = $titles[$i];
@@ -539,10 +531,6 @@ class GenerateFixturesDataCommand extends Command
                     'pages' => $ch['pages'],
                     'scanlationGroup' => $groupKeys[array_rand($groupKeys)],
                     'id' => $ch['id'],
-                    'hash' => $ch['hash'],
-                    'baseUrl' => $ch['baseUrl'],
-                    'pageFiles' => $ch['pageFiles'],
-                    'fromApi' => true,
                 ];
             }
 
@@ -557,10 +545,11 @@ class GenerateFixturesDataCommand extends Command
             $volume = (string) (intdiv($chapterNum, 10) + 1);
             $pageCount = random_int(4, 12);
             $chapterId = Uuid::v4()->toRfc4122();
+            $hash = str_replace('-', '', $chapterId);
 
             $pages = [];
             for ($p = 0; $p < $pageCount; ++$p) {
-                $pages[] = sprintf('page_%03d.jpg', $p + 1);
+                $pages[] = \sprintf('https://uploads.mangadex.org/data/%s/%d-%s.jpg', $hash, $p + 1, \bin2hex(\random_bytes(32)));
             }
 
             $chapterTitles = [
@@ -680,7 +669,6 @@ class GenerateFixturesDataCommand extends Command
         $this->io->section('Generating placeholder images...');
 
         $coverCount = 0;
-        $pageCount = 0;
 
         foreach ($this->coverArts as $cover) {
             if (!empty($cover['fromApi'])) {
@@ -705,30 +693,7 @@ class GenerateFixturesDataCommand extends Command
             }
         }
 
-        foreach ($this->chapters as $chapter) {
-            if (!empty($chapter['fromApi'])) {
-                continue;
-            }
-            if (!isset($chapter['id'])) {
-                continue;
-            }
-            $chapterId = $chapter['id'];
-            $dir = $this->chaptersDir.'/'.$chapterId;
-
-            if (!is_dir($dir)) {
-                mkdir($dir, 0o755, true);
-            }
-
-            foreach ($chapter['pages'] as $page) {
-                $path = $dir.'/'.$page;
-                if (!file_exists($path)) {
-                    $this->createPlaceholderImage($path, 800, 1200);
-                    ++$pageCount;
-                }
-            }
-        }
-
-        $this->io->writeln(sprintf('  Generated %d cover images and %d chapter page images', $coverCount, $pageCount));
+        $this->io->writeln(sprintf('  Generated %d cover images', $coverCount));
     }
 
     private function downloadApiCoverImages(): void
@@ -804,89 +769,6 @@ class GenerateFixturesDataCommand extends Command
         }
 
         $this->io->writeln(sprintf('  Downloaded <info>%d</info> / %d real cover images', $downloaded, $totalExpected));
-    }
-
-    private function downloadApiChapterPages(): void
-    {
-        $apiChapters = array_filter($this->chapters, fn ($ch) => !empty($ch['fromApi']));
-
-        if ([] === $apiChapters) {
-            return;
-        }
-
-        $this->io->section('Downloading real chapter page images from MangaDex...');
-
-        $curlCommands = [];
-        $createdDirs = [];
-        $totalExpected = 0;
-
-        foreach ($apiChapters as $chapter) {
-            $chapterId = $chapter['id'];
-            $hash = $chapter['hash'] ?? null;
-            $baseUrl = $chapter['baseUrl'] ?? 'https://uploads.mangadex.org';
-            $pageFiles = $chapter['pageFiles'] ?? [];
-
-            if (null === $hash || [] === $pageFiles) {
-                continue;
-            }
-
-            $dir = $this->chaptersDir.'/'.$chapterId;
-
-            if (!in_array($dir, $createdDirs, true)) {
-                if (!is_dir($dir)) {
-                    mkdir($dir, 0o755, true);
-                }
-                $createdDirs[] = $dir;
-            }
-
-            foreach ($pageFiles as $idx => $pageFile) {
-                $localName = sprintf('page_%03d.jpg', $idx + 1);
-                $localPath = $dir.'/'.$localName;
-
-                if (file_exists($localPath)) {
-                    continue;
-                }
-
-                $url = escapeshellarg("{$baseUrl}/data/{$hash}/{$pageFile}");
-                $out = escapeshellarg($localPath);
-                $curlCommands[] = "curl -sf -o {$out} {$url}";
-
-                ++$totalExpected;
-            }
-        }
-
-        if (0 === $totalExpected) {
-            $this->io->writeln('  All chapter pages already downloaded');
-
-            return;
-        }
-
-        $batchFile = $this->projectDir.'/var/curl_downloads.txt';
-        $logFile = $this->projectDir.'/var/curl_downloads.log';
-
-        if (!is_dir($this->projectDir.'/var')) {
-            mkdir($this->projectDir.'/var', 0o755, true);
-        }
-
-        $this->io->writeln(sprintf('  Queueing <info>%d</info> page downloads (parallel)...', $totalExpected));
-
-        file_put_contents($batchFile, implode("\n", $curlCommands));
-
-        $cmd = sprintf('cat %s | xargs -P 10 -I {} sh -c "{}" 2>%s', escapeshellarg($batchFile), escapeshellarg($logFile));
-        exec($cmd);
-
-        $downloaded = 0;
-        foreach ($apiChapters as $chapter) {
-            $dir = $this->chaptersDir.'/'.$chapter['id'];
-            foreach ($chapter['pageFiles'] ?? [] as $idx => $pageFile) {
-                $localPath = $dir.'/'.sprintf('page_%03d.jpg', $idx + 1);
-                if (file_exists($localPath)) {
-                    ++$downloaded;
-                }
-            }
-        }
-
-        $this->io->writeln(sprintf('  Downloaded <info>%d</info> / %d real chapter page images', $downloaded, $totalExpected));
     }
 
     private function createPlaceholderImage(string $path, int $width, int $height): void

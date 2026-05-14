@@ -49,7 +49,6 @@ class CoverArtControllerTest extends TestCase
             ->willReturnCallback(fn ($id) => 'parameter_bag' === $id);
         $container
             ->method('get')
-            ->with('parameter_bag')
             ->willReturn($parameterBag);
 
         $reflection = new \ReflectionClass($this->controller);

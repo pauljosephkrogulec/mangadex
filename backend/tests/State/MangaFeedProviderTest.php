@@ -11,8 +11,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 class MangaFeedProviderTest extends TestCase
 {
     private MangaFeedProvider $provider;
@@ -29,7 +31,6 @@ class MangaFeedProviderTest extends TestCase
         $this->queryMock = $this->createStub(Query::class);
 
         $this->emMock->method('getRepository')
-            ->with(Chapter::class)
             ->willReturn($this->chapterRepoMock);
 
         $this->chapterRepoMock

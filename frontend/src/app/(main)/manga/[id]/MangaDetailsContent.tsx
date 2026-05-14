@@ -513,6 +513,7 @@ export default function MangaDetailsContent({ id }: MangaDetailsContentProps) {
             sortDir={sort.dir}
             chapterFrom={chapterFrom}
             chapterTo={chapterTo}
+            mangaId={id}
             onSortChange={handleSortChange}
             onPageChange={handleChapterPageChange}
             onRetry={handleChaptersRetry}

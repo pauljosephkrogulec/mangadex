@@ -5,9 +5,9 @@
         "visibility": "public",
         "user": "mangareader1",
         "mangas": [
-            "dungeon-meshi",
-            "isekai-mokushiroku-mynoghra-hametsu-no-bunmei-de-hajimeru-sekai-seifuku",
-            "kaette-kudasai-akutsu-san"
+            "mairimashita-iruma-kun",
+            "maou-no-ore-ga-dorei-elf-wo-yome-ni-shitanda-ga-dou-medereba-ii",
+            "boku-no-kokoro-no-yabai-yatsu"
         ]
     },
     {
@@ -16,9 +16,9 @@
         "visibility": "public",
         "user": "mangareader1",
         "mangas": [
-            "shuumatsu-no-valkyrie",
-            "boku-no-kokoro-no-yabai-yatsu",
-            "dungeon-meshi"
+            "mairimashita-iruma-kun",
+            "jujutsu-kaisen",
+            "akuyaku-reijou-level-99-watashi-wa-ura-boss-desuga-maou-de-wa-arimasen"
         ]
     },
     {
@@ -27,8 +27,8 @@
         "visibility": "private",
         "user": "mangareader1",
         "mangas": [
-            "kaoru-hana-wa-rin-to-saku",
-            "ki-ni-natteru-hito-ga-otoko-ja-nakatta"
+            "hazure-waku-no-joutai-ijou-skill-de-saikyou-ni-natta-ore-ga-subete-o-juurin-suru-made",
+            "shuumatsu-no-valkyrie"
         ]
     },
     {
@@ -38,7 +38,7 @@
         "user": "mangareader2",
         "mangas": [
             "tokidoki-bosotto-russia-go-de-dereru-tonari-no-alya-san",
-            "sono-bisque-doll-wa-koi-o-suru"
+            "chiyu-mahou-no-machigatta-tsukaikata-senjou-wo-kakeru-kaifuku-youin"
         ]
     },
     {
@@ -47,9 +47,9 @@
         "visibility": "public",
         "user": "mangareader2",
         "mangas": [
-            "tensei-shitara-slime-datta-ken",
-            "hazure-waku-no-joutai-ijou-skill-de-saikyou-ni-natta-ore-ga-subete-o-juurin-suru-made",
-            "dungeon-meshi"
+            "sousou-no-frieren",
+            "lv2-kara-cheat-datta-moto-yuusha-kouho-no-mattari-isekai-life",
+            "mairimashita-iruma-kun"
         ]
     },
     {
@@ -58,8 +58,8 @@
         "visibility": "hidden",
         "user": "mangareader2",
         "mangas": [
-            "horimiya",
-            "isekai-de-cheat-skill-wo-te-ni-shita-ore-wa-genjitsu-sekai-wo-mo-musou-suru-level-up-wa-jinsei-wo-ka"
+            "akuyaku-reijou-level-99-watashi-wa-ura-boss-desuga-maou-de-wa-arimasen",
+            "kage-no-jitsuryokusha-ni-naritakute"
         ]
     },
     {
@@ -68,10 +68,10 @@
         "visibility": "public",
         "user": "admin",
         "mangas": [
-            "taida-na-akujoku-kizoku-ni-tensei-shita-ore-scenario-wo-bukkowashitara-kikakugai-no-maryoku-de-saiky",
-            "spy-family",
-            "tokidoki-bosotto-russia-go-de-dereru-tonari-no-alya-san",
-            "isekai-mokushiroku-mynoghra-hametsu-no-bunmei-de-hajimeru-sekai-seifuku"
+            "one-punch-man",
+            "lv2-kara-cheat-datta-moto-yuusha-kouho-no-mattari-isekai-life",
+            "horimiya",
+            "mieruko-chan"
         ]
     }
 ]

@@ -156,7 +156,6 @@ class UserUpdateProcessorTest extends TestCase
         $this->securityMock->method('getUser')
             ->willReturn($otherUser);
         $this->securityMock->method('isGranted')
-            ->with('ROLE_ADMIN')
             ->willReturn(true);
 
         $this->decoratedMock->expects($this->once())->method('process')
@@ -186,7 +185,6 @@ class UserUpdateProcessorTest extends TestCase
         $this->securityMock->method('getUser')
             ->willReturn($otherUser);
         $this->securityMock->method('isGranted')
-            ->with('ROLE_ADMIN')
             ->willReturn(false);
 
         $operation = $this->createStub(Operation::class);

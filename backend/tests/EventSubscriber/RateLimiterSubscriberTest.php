@@ -99,7 +99,6 @@ class RateLimiterSubscriberTest extends TestCase
 
         $this->registrationFactory
             ->method('create')
-            ->with('127.0.0.1')
             ->willReturn($regLimiter);
 
         $apiLimit = $this->createMock(RateLimit::class);
@@ -110,7 +109,6 @@ class RateLimiterSubscriberTest extends TestCase
 
         $this->apiFactory
             ->method('create')
-            ->with('127.0.0.1')
             ->willReturn($apiLimiter);
 
         $event = $this->createMock(RequestEvent::class);
@@ -147,7 +145,6 @@ class RateLimiterSubscriberTest extends TestCase
 
         $this->registrationFactory
             ->method('create')
-            ->with('127.0.0.1')
             ->willReturn($regLimiter);
 
         $this->apiFactory->expects($this->never())->method('create');
@@ -187,7 +184,6 @@ class RateLimiterSubscriberTest extends TestCase
 
         $this->apiFactory
             ->method('create')
-            ->with('10.0.0.1')
             ->willReturn($apiLimiter);
 
         $event = $this->createMock(RequestEvent::class);
@@ -225,7 +221,6 @@ class RateLimiterSubscriberTest extends TestCase
 
         $this->registrationFactory
             ->method('create')
-            ->with('127.0.0.1')
             ->willReturn($regLimiter);
 
         // API limiter should NOT be called because registration endpoint returns early
@@ -266,7 +261,6 @@ class RateLimiterSubscriberTest extends TestCase
 
         $this->loginFactory
             ->method('create')
-            ->with('10.0.0.1')
             ->willReturn($loginLimiter);
 
         $this->registrationFactory->expects($this->never())->method('create');
@@ -306,7 +300,6 @@ class RateLimiterSubscriberTest extends TestCase
 
         $this->loginFactory
             ->method('create')
-            ->with('10.0.0.1')
             ->willReturn($loginLimiter);
 
         $event = $this->createMock(RequestEvent::class);
@@ -344,7 +337,6 @@ class RateLimiterSubscriberTest extends TestCase
 
         $this->apiFactory
             ->method('create')
-            ->with('10.0.0.1')
             ->willReturn($apiLimiter);
 
         $this->loginFactory->expects($this->never())->method('create');
