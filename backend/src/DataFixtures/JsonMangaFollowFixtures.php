@@ -8,10 +8,11 @@ use App\Entity\Manga;
 use App\Entity\MangaFollow;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class JsonMangaFollowFixtures extends Fixture implements DependentFixtureInterface
+class JsonMangaFollowFixtures extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
     public function load(ObjectManager $manager): void
     {

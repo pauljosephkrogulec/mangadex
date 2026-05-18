@@ -32,9 +32,23 @@ const config: CreateAxiosDefaults = {
     "Content-Type": "application/json",
     Accept: "application/ld+json",
   },
+  withCredentials: true,
 };
 
+let authToken: string | null = null;
+
+export function setAuthToken(token: string | null): void {
+  authToken = token;
+}
+
 const api: AxiosInstance = axios.create(config);
+
+api.interceptors.request.use((config) => {
+  if (authToken) {
+    config.headers.Authorization = `Bearer ${authToken}`;
+  }
+  return config;
+});
 
 api.interceptors.response.use(
   (response) => response,
@@ -81,6 +95,9 @@ export const authApi = {
 
   register: (data: UserRegistrationRequest) =>
     api.post<User>("/users", data),
+
+  me: () =>
+    api.get<User>("/me"),
 };
 
 export const mangaApi = {

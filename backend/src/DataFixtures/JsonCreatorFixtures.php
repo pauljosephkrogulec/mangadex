@@ -6,9 +6,10 @@ namespace App\DataFixtures;
 
 use App\Entity\Creator;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class JsonCreatorFixtures extends Fixture
+class JsonCreatorFixtures extends Fixture implements FixtureGroupInterface
 {
     public function load(ObjectManager $manager): void
     {

@@ -3,54 +3,21 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
-
-const navGroups = [
-  {
-    title: "Main",
-    links: [
-      { href: "/", label: "Home", icon: "M" },
-      { href: "/feed", label: "Feed", icon: "F" },
-      { href: "/updates", label: "Updates", icon: "U" },
-    ],
-  },
-  {
-    title: "Account",
-    links: [
-      { href: "/follows", label: "Follows", icon: "H" },
-      { href: "/library", label: "Library", icon: "L" },
-      { href: "/history", label: "History", icon: "H" },
-    ],
-  },
-  {
-    title: "Titles",
-    links: [
-      { href: "/search", label: "Search", icon: "S" },
-      { href: "/recent", label: "Recently Added", icon: "R" },
-      { href: "/popular", label: "Popular", icon: "P" },
-    ],
-  },
-  {
-    title: "Community",
-    links: [
-      { href: "/forums", label: "Forums", icon: "F" },
-      { href: "/groups", label: "Groups", icon: "G" },
-      { href: "/users", label: "Users", icon: "U" },
-    ],
-  },
-  {
-    title: "Info",
-    links: [
-      { href: "/about", label: "About", icon: "I" },
-      { href: "/support", label: "Support Us", icon: "S" },
-      { href: "/rules", label: "Rules", icon: "R" },
-    ],
-  },
-];
+import { useCallback, useEffect, useRef } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
+  return <SidebarInner open={open} onClose={onClose} />;
+}
+
+function SidebarInner({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const { user, loading, logout } = useAuth();
   const pathname = usePathname();
   const sidebarRef = useRef<HTMLDivElement>(null);
+
+  const handleLogout = useCallback(async () => {
+    await logout();
+  }, [logout]);
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -69,6 +36,49 @@ export default function Sidebar({ open, onClose }: { open: boolean; onClose: () 
   useEffect(() => {
     onClose();
   }, [pathname, onClose]);
+
+  const navGroups = [
+    {
+      title: "Main",
+      links: [
+        { href: "/", label: "Home", icon: "M" },
+        { href: "/feed", label: "Feed", icon: "F" },
+        { href: "/updates", label: "Updates", icon: "U" },
+      ],
+    },
+    {
+      title: "Account",
+      links: [
+        { href: "/follows", label: "Follows", icon: "H" },
+        { href: "/library", label: "Library", icon: "L" },
+        { href: "/history", label: "History", icon: "H" },
+      ],
+    },
+    {
+      title: "Titles",
+      links: [
+        { href: "/search", label: "Search", icon: "S" },
+        { href: "/recent", label: "Recently Added", icon: "R" },
+        { href: "/popular", label: "Popular", icon: "P" },
+      ],
+    },
+    {
+      title: "Community",
+      links: [
+        { href: "/forums", label: "Forums", icon: "F" },
+        { href: "/groups", label: "Groups", icon: "G" },
+        { href: "/users", label: "Users", icon: "U" },
+      ],
+    },
+    {
+      title: "Info",
+      links: [
+        { href: "/about", label: "About", icon: "I" },
+        { href: "/support", label: "Support Us", icon: "S" },
+        { href: "/rules", label: "Rules", icon: "R" },
+      ],
+    },
+  ];
 
   return (
     <>
@@ -117,6 +127,56 @@ export default function Sidebar({ open, onClose }: { open: boolean; onClose: () 
               })}
             </div>
           ))}
+
+          {!loading && (
+            <div className="border-t border-md-border pt-3">
+              {user ? (
+                <div className="space-y-1">
+                  <div className="px-3 py-2 flex items-center gap-3">
+                    <span className="w-6 h-6 rounded-full bg-md-accent flex items-center justify-center text-xs font-bold text-white">
+                      {user.username.charAt(0).toUpperCase()}
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm text-md-text-primary truncate">{user.username}</p>
+                      <p className="text-xs text-md-text-secondary truncate">{user.email}</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-400 rounded-lg hover:bg-md-surface-hover transition-colors"
+                  >
+                    <span className="w-6 h-6 rounded-md bg-md-surface border border-md-border flex items-center justify-center text-xs font-medium">L</span>
+                    Sign Out
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-1">
+                  <Link
+                    href="/login"
+                    className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors ${
+                      pathname === "/login"
+                        ? "bg-md-accent/10 text-md-accent"
+                        : "text-md-text-secondary hover:bg-md-surface-hover hover:text-md-text-primary"
+                    }`}
+                  >
+                    <span className="w-6 h-6 rounded-md bg-md-surface border border-md-border flex items-center justify-center text-xs font-medium">L</span>
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/register"
+                    className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors ${
+                      pathname === "/register"
+                        ? "bg-md-accent/10 text-md-accent"
+                        : "text-md-text-secondary hover:bg-md-surface-hover hover:text-md-text-primary"
+                    }`}
+                  >
+                    <span className="w-6 h-6 rounded-md bg-md-surface border border-md-border flex items-center justify-center text-xs font-medium">R</span>
+                    Sign Up
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
         </nav>
 
         <div className="p-4 border-t border-md-border space-y-3">

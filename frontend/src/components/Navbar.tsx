@@ -2,10 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Navbar({ onToggleSidebar }: { onToggleSidebar: () => void }) {
+  const { user, logout } = useAuth();
   const searchRef = useRef<HTMLInputElement>(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -17,6 +21,23 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar: () => voi
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    if (dropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [dropdownOpen]);
+
+  const handleLogout = useCallback(async () => {
+    setDropdownOpen(false);
+    await logout();
+  }, [logout]);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-md-background/80 backdrop-blur-md border-b border-md-border">
@@ -63,12 +84,54 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar: () => voi
             </svg>
           </button>
 
-          <button aria-label="User profile" className="w-8 h-8 rounded-full bg-md-surface border border-md-border flex items-center justify-center text-sm text-md-text-secondary hover:text-md-text-primary transition-colors">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <circle cx="8" cy="5" r="3" stroke="currentColor" strokeWidth="1.5"/>
-              <path d="M2 14c0-3.5 3-5 6-5s6 1.5 6 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-            </svg>
-          </button>
+          {user ? (
+            <div ref={dropdownRef} className="relative">
+              <button
+                onClick={() => setDropdownOpen((p) => !p)}
+                className="w-8 h-8 rounded-full bg-md-accent flex items-center justify-center text-sm font-bold text-white hover:opacity-90 transition-opacity"
+                aria-label="User profile"
+              >
+                {user.username.charAt(0).toUpperCase()}
+              </button>
+
+              {dropdownOpen && (
+                <div className="absolute right-0 top-full mt-2 w-48 rounded-xl bg-md-surface border border-md-border shadow-xl py-2">
+                  <div className="px-4 py-2 border-b border-md-border">
+                    <p className="text-sm font-medium text-md-text-primary">{user.username}</p>
+                    <p className="text-xs text-md-text-secondary truncate">{user.email}</p>
+                  </div>
+                  <Link
+                    href="/profile"
+                    className="block px-4 py-2 text-sm text-md-text-secondary hover:text-md-text-primary hover:bg-md-surface-hover transition-colors"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    Profile
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-md-surface-hover transition-colors"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Link
+                href="/login"
+                className="px-3 py-1.5 text-sm text-md-text-secondary hover:text-md-text-primary transition-colors"
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/register"
+                className="px-3 py-1.5 text-sm bg-md-accent text-white rounded-lg hover:opacity-90 transition-opacity"
+              >
+                Sign Up
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </nav>

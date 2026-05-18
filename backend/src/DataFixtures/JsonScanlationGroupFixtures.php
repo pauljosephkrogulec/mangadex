@@ -6,9 +6,10 @@ namespace App\DataFixtures;
 
 use App\Entity\ScanlationGroup;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class JsonScanlationGroupFixtures extends Fixture
+class JsonScanlationGroupFixtures extends Fixture implements FixtureGroupInterface
 {
     public function load(ObjectManager $manager): void
     {

@@ -6,9 +6,10 @@ namespace App\DataFixtures;
 
 use App\Entity\Tag;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class JsonTagFixtures extends Fixture
+class JsonTagFixtures extends Fixture implements FixtureGroupInterface
 {
     public function load(ObjectManager $manager): void
     {

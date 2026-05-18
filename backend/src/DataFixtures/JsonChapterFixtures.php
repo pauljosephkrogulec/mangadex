@@ -8,10 +8,11 @@ use App\Entity\Chapter;
 use App\Entity\Manga;
 use App\Entity\ScanlationGroup;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class JsonChapterFixtures extends Fixture implements DependentFixtureInterface
+class JsonChapterFixtures extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
     public function load(ObjectManager $manager): void
     {

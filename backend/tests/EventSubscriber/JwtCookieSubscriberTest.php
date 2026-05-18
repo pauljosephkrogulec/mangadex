@@ -9,15 +9,26 @@ use App\EventSubscriber\JwtCookieSubscriber;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class JwtCookieSubscriberTest extends TestCase
 {
+    private function createUser(): User
+    {
+        $user = new User();
+        $user->setEmail('test@example.com');
+        $user->setUsername('testuser');
+        $user->setPassword('hashed');
+
+        return $user;
+    }
+
     public function testOnAuthenticationSuccessSetsCookieInProd(): void
     {
         $subscriber = new JwtCookieSubscriber('prod');
 
         $response = new JsonResponse(['success' => true]);
-        $user = new User();
+        $user = $this->createUser();
         $event = new AuthenticationSuccessEvent(['token' => 'test-jwt-token'], $user, $response);
 
         $subscriber->onAuthenticationSuccess($event);
@@ -37,7 +48,7 @@ class JwtCookieSubscriberTest extends TestCase
         $subscriber = new JwtCookieSubscriber('dev');
 
         $response = new JsonResponse(['success' => true]);
-        $user = new User();
+        $user = $this->createUser();
         $event = new AuthenticationSuccessEvent(['token' => 'test-jwt-token'], $user, $response);
 
         $subscriber->onAuthenticationSuccess($event);
@@ -54,7 +65,7 @@ class JwtCookieSubscriberTest extends TestCase
         $subscriber = new JwtCookieSubscriber('prod');
 
         $response = new JsonResponse(['success' => true]);
-        $user = new User();
+        $user = $this->createUser();
         $event = new AuthenticationSuccessEvent(['user' => 'test'], $user, $response);
 
         $subscriber->onAuthenticationSuccess($event);
@@ -70,7 +81,7 @@ class JwtCookieSubscriberTest extends TestCase
         $subscriber = new JwtCookieSubscriber('prod');
 
         $response = new JsonResponse(['success' => true]);
-        $user = new User();
+        $user = $this->createUser();
         $event = new AuthenticationSuccessEvent(['token' => null], $user, $response);
 
         $subscriber->onAuthenticationSuccess($event);
@@ -86,7 +97,7 @@ class JwtCookieSubscriberTest extends TestCase
         $subscriber = new JwtCookieSubscriber('prod');
 
         $response = new JsonResponse(['success' => true]);
-        $user = new User();
+        $user = $this->createUser();
         $event = new AuthenticationSuccessEvent(['token' => 'test-token'], $user, $response);
 
         $subscriber->onAuthenticationSuccess($event);
@@ -98,5 +109,37 @@ class JwtCookieSubscriberTest extends TestCase
         $this->assertSame('/', $cookie->getPath());
         $this->assertNull($cookie->getDomain());
         $this->assertSame('lax', $cookie->getSameSite());
+    }
+
+    public function testOnAuthenticationSuccessIncludesUserData(): void
+    {
+        $subscriber = new JwtCookieSubscriber('dev');
+
+        $response = new JsonResponse(['success' => true]);
+        $user = $this->createUser();
+        $event = new AuthenticationSuccessEvent(['token' => 'test-jwt-token'], $user, $response);
+
+        $subscriber->onAuthenticationSuccess($event);
+
+        $data = $event->getData();
+        $this->assertArrayHasKey('user', $data);
+        $this->assertSame('test@example.com', $data['user']['email']);
+        $this->assertSame('testuser', $data['user']['username']);
+        $this->assertArrayHasKey('id', $data['user']);
+        $this->assertArrayHasKey('createdAt', $data['user']);
+    }
+
+    public function testOnAuthenticationSuccessNoUserDataWhenUserNotInstanceOfUser(): void
+    {
+        $subscriber = new JwtCookieSubscriber('dev');
+
+        $response = new JsonResponse(['success' => true]);
+        $nonAppUser = $this->createMock(UserInterface::class);
+        $event = new AuthenticationSuccessEvent(['token' => 'test-jwt-token'], $nonAppUser, $response);
+
+        $subscriber->onAuthenticationSuccess($event);
+
+        $data = $event->getData();
+        $this->assertArrayNotHasKey('user', $data);
     }
 }

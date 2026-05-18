@@ -1,4 +1,4 @@
-.PHONY: up down build restart logs logs-backend logs-frontend shell-backend shell-frontend shell-db lint lint-backend lint-frontend fix-backend fix-frontend migrate migrate-diff migrate-rollback install-backend install-frontend test-backend test-backend-coverage test-frontend test-frontend-coverage clear-cache cleanup-files cleanup-files-dry-run fresh setup fixtures generate-fixtures-data
+.PHONY: up down build restart logs logs-backend logs-frontend shell-backend shell-frontend shell-db lint lint-backend lint-frontend fix-backend fix-frontend migrate migrate-diff migrate-rollback install-backend install-frontend test-backend test-backend-coverage test-frontend test-frontend-coverage clear-cache cleanup-files cleanup-files-dry-run fresh setup fixtures fixtures-users generate-fixtures-data
 
 up:
 	docker compose up -d
@@ -56,6 +56,9 @@ setup: fresh
 
 fixtures:
 	docker compose exec backend php bin/console doctrine:fixtures:load --no-interaction
+
+fixtures-users:
+	docker compose exec backend php bin/console doctrine:fixtures:load --group=users --no-interaction
 
 generate-fixtures-data:
 	docker compose exec backend php bin/console app:generate-fixtures-data

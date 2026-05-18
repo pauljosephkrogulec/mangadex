@@ -8,10 +8,11 @@ use App\Entity\Creator;
 use App\Entity\Manga;
 use App\Entity\Tag;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class JsonMangaFixtures extends Fixture implements DependentFixtureInterface
+class JsonMangaFixtures extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
     public function load(ObjectManager $manager): void
     {

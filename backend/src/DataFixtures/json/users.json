@@ -43,5 +43,23 @@
         "roles": [
             "ROLE_USER"
         ]
+    },
+    {
+        "ref": "demo",
+        "email": "demo@example.com",
+        "username": "demo",
+        "password": "demo1234",
+        "roles": [
+            "ROLE_USER"
+        ]
+    },
+    {
+        "ref": "testuser",
+        "email": "test@example.com",
+        "username": "testuser",
+        "password": "password123",
+        "roles": [
+            "ROLE_USER"
+        ]
     }
 ]

@@ -7,10 +7,11 @@ namespace App\DataFixtures;
 use App\Entity\CoverArt;
 use App\Entity\Manga;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class JsonCoverArtFixtures extends Fixture implements DependentFixtureInterface
+class JsonCoverArtFixtures extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
     public function load(ObjectManager $manager): void
     {

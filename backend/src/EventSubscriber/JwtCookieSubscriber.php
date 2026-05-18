@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\EventSubscriber;
 
+use App\Entity\User;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
@@ -21,7 +22,19 @@ class JwtCookieSubscriber
     public function onAuthenticationSuccess(AuthenticationSuccessEvent $event): void
     {
         $response = $event->getResponse();
-        $jwt = $event->getData()['token'] ?? null;
+        $data = $event->getData();
+        $jwt = $data['token'] ?? null;
+        $user = $event->getUser();
+
+        if ($user instanceof User) {
+            $data['user'] = [
+                'id' => $user->getId(),
+                'email' => $user->getEmail(),
+                'username' => $user->getUsername(),
+                'createdAt' => $user->getCreatedAt()->format(\DateTime::ATOM),
+            ];
+            $event->setData($data);
+        }
 
         if (is_string($jwt)) {
             $cookie = new Cookie(
