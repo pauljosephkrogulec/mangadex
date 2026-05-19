@@ -35,10 +35,35 @@ const config: CreateAxiosDefaults = {
   withCredentials: true,
 };
 
-let authToken: string | null = null;
+const STORAGE_KEY = "mangadex_auth_token";
+
+function loadToken(): string | null {
+  if (typeof window === "undefined") return null;
+  try {
+    return localStorage.getItem(STORAGE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+function saveToken(token: string | null): void {
+  if (typeof window === "undefined") return;
+  try {
+    if (token) {
+      localStorage.setItem(STORAGE_KEY, token);
+    } else {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+  } catch {
+    // localStorage unavailable
+  }
+}
+
+let authToken: string | null = loadToken();
 
 export function setAuthToken(token: string | null): void {
   authToken = token;
+  saveToken(token);
 }
 
 const api: AxiosInstance = axios.create(config);

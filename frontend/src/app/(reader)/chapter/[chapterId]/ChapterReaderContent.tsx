@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { chapterApi, mangaApi, handleResponse } from "@/lib/api";
+import { useReadingHistory } from "@/hooks/useReadingHistory";
 import type { Chapter } from "@/lib/types";
 import ReaderSidebar from "@/components/ReaderSidebar";
 import ReaderControls from "@/components/ReaderControls";
@@ -17,6 +18,7 @@ export default function ChapterReaderContent({
   chapterId,
 }: ChapterReaderContentProps) {
   const router = useRouter();
+  const { markAsRead } = useReadingHistory();
   const [chapter, setChapter] = useState<Chapter | null>(null);
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [loading, setLoading] = useState(true);
@@ -25,6 +27,7 @@ export default function ChapterReaderContent({
   const [currentPage, setCurrentPage] = useState(1);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarPinned, setSidebarPinned] = useState(false);
+  const [mangaTitle, setMangaTitle] = useState("");
 
   useEffect(() => {
     let cancelled = false;
@@ -37,9 +40,18 @@ export default function ChapterReaderContent({
 
       if (cancelled) return;
 
-      if (result.success) {
+      if (result.success && result.data) {
         setChapter(result.data);
         setCurrentPage(1);
+        const mangaId = result.data.manga?.id ?? propMangaId ?? "";
+        if (mangaId) {
+          markAsRead({
+            mangaId,
+            mangaTitle: mangaTitle,
+            chapterId: result.data.id,
+            chapterNumber: result.data.chapterNumber,
+          });
+        }
       } else {
         setError(result.error);
       }
@@ -50,7 +62,35 @@ export default function ChapterReaderContent({
     return () => {
       cancelled = true;
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chapterId, retryCount]);
+
+  useEffect(() => {
+    const mangaId = chapter?.manga.id ?? propMangaId;
+    if (!mangaId) return;
+    let cancelled = false;
+
+    async function fetchMangaTitle() {
+      const result = await handleResponse(mangaApi.get(mangaId));
+      if (cancelled) return;
+      if (result.success) {
+        const title = result.data.title;
+        setMangaTitle(title);
+        markAsRead({
+          mangaId,
+          mangaTitle: title,
+          chapterId: chapterId,
+          chapterNumber: chapter?.chapterNumber ?? "",
+        });
+      }
+    }
+
+    fetchMangaTitle();
+    return () => {
+      cancelled = true;
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chapter?.manga.id, propMangaId]);
 
   useEffect(() => {
     if (!chapter && !propMangaId) return;
@@ -193,6 +233,7 @@ export default function ChapterReaderContent({
       <ReaderSidebar
         open={sidebarOpen}
         pinned={sidebarPinned}
+        mangaId={mangaId}
         onClose={() => {
           setSidebarOpen(false);
           setSidebarPinned(false);

@@ -684,4 +684,17 @@ describe("ChapterList", () => {
     const rows = document.querySelectorAll("tbody tr.animate-pulse");
     expect(rows.length).toBe(5);
   });
+
+  it("default onFilterChange does not throw when filters are used", () => {
+    render(
+      <ChapterList
+        {...defaultProps}
+        chapters={[buildChapter({ id: "ch-1" })]}
+        totalItems={1}
+      />,
+    );
+
+    const fromInput = screen.getByLabelText("Filter from chapter");
+    expect(() => fireEvent.change(fromInput, { target: { value: "3" } })).not.toThrow();
+  });
 });

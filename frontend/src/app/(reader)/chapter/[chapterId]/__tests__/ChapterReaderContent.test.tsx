@@ -6,6 +6,16 @@ import api from "@/lib/api";
 import ChapterReaderContent from "../ChapterReaderContent";
 import type { Chapter } from "@/lib/types";
 
+// ── Mock useReadingHistory ───────────────────────────────────────────────────
+
+vi.mock("@/hooks/useReadingHistory", () => ({
+  useReadingHistory: () => ({
+    history: [],
+    markAsRead: vi.fn(),
+    clearHistory: vi.fn(),
+  }),
+}));
+
 // ── Mock useRouter ──────────────────────────────────────────────────────────
 
 const mockPush = vi.fn();
@@ -597,19 +607,116 @@ describe("ChapterReaderContent", () => {
   });
 
   it("handles cancelled fetch on unmount", async () => {
-    let resolveChapter: (value: unknown) => void;
+    let resolveChapter: ((value: [number, Chapter]) => void) | undefined;
+
+    const fetchPromise = new Promise<[number, Chapter]>((resolve) => {
+      resolveChapter = resolve;
+    });
+
     mockApi
       .onGet(new RegExp(`/chapters/${CHAPTER_ID}$`))
-      .reply(() => new Promise((resolve) => { resolveChapter = resolve; }));
+      .reply(() => fetchPromise);
+    mockApi
+      .onGet(new RegExp(`/mangas/manga-1/feed`))
+      .reply(200, { member: [], totalItems: 0 });
 
     const { unmount } = render(
       <ChapterReaderContent chapterId={CHAPTER_ID} />,
     );
 
+    expect(resolveChapter).toBeDefined();
     unmount();
 
     await act(async () => {
-      resolveChapter([200, buildChapter()]);
+      resolveChapter!([200, buildChapter()]);
     });
+  });
+
+  it("toggles sidebar with uppercase M key", async () => {
+    mockApi
+      .onGet(new RegExp(`/chapters/${CHAPTER_ID}$`))
+      .reply(200, buildChapter());
+    mockApi
+      .onGet(new RegExp(`/mangas/manga-1/feed`))
+      .reply(200, { member: [], totalItems: 0 });
+
+    render(<ChapterReaderContent chapterId={CHAPTER_ID} />);
+
+    await waitFor(() => {
+      expect(screen.getByText("1 / 3")).toBeInTheDocument();
+    });
+
+    expect(screen.queryByText("Menu")).not.toBeInTheDocument();
+
+    fireEvent.keyDown(window, { key: "M" });
+    await waitFor(() => {
+      expect(screen.getByText("Menu")).toBeInTheDocument();
+    });
+  });
+
+  it("does nothing on ArrowRight at last page without next chapter", async () => {
+    mockApi
+      .onGet(new RegExp(`/chapters/${CHAPTER_ID}$`))
+      .reply(200, buildChapter());
+    mockApi
+      .onGet(new RegExp(`/mangas/manga-1/feed`))
+      .reply(200, { member: [], totalItems: 0 });
+
+    render(<ChapterReaderContent chapterId={CHAPTER_ID} />);
+
+    await waitFor(() => {
+      expect(screen.getByText("1 / 3")).toBeInTheDocument();
+    });
+
+    // Navigate to last page
+    fireEvent.keyDown(window, { key: "ArrowRight" });
+    await waitFor(() => {
+      expect(screen.getByText("2 / 3")).toBeInTheDocument();
+    });
+    fireEvent.keyDown(window, { key: "ArrowRight" });
+    await waitFor(() => {
+      expect(screen.getByText("3 / 3")).toBeInTheDocument();
+    });
+
+    // No next chapter — pressing ArrowRight should do nothing
+    fireEvent.keyDown(window, { key: "ArrowRight" });
+    expect(screen.getByText("3 / 3")).toBeInTheDocument();
+  });
+
+  it("does nothing on ArrowLeft at first page without prev chapter", async () => {
+    mockApi
+      .onGet(new RegExp(`/chapters/${CHAPTER_ID}$`))
+      .reply(200, buildChapter());
+    mockApi
+      .onGet(new RegExp(`/mangas/manga-1/feed`))
+      .reply(200, { member: [], totalItems: 0 });
+
+    render(<ChapterReaderContent chapterId={CHAPTER_ID} />);
+
+    await waitFor(() => {
+      expect(screen.getByText("1 / 3")).toBeInTheDocument();
+    });
+
+    // Already at page 1, no prev chapter — pressing ArrowLeft should do nothing
+    fireEvent.keyDown(window, { key: "ArrowLeft" });
+    expect(screen.getByText("1 / 3")).toBeInTheDocument();
+  });
+
+  it("handles feed fetch failure silently", async () => {
+    mockApi
+      .onGet(new RegExp(`/chapters/${CHAPTER_ID}$`))
+      .reply(200, buildChapter());
+    mockApi
+      .onGet(new RegExp(`/mangas/manga-1/feed`))
+      .reply(500, { detail: "Feed error" });
+
+    render(<ChapterReaderContent chapterId={CHAPTER_ID} />);
+
+    await waitFor(() => {
+      expect(screen.getByText("1 / 3")).toBeInTheDocument();
+    });
+
+    // Feed failure is silent — no error shown, chapter still renders
+    expect(mockPush).not.toHaveBeenCalled();
   });
 });

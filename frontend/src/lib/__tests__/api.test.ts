@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { AxiosError } from "axios";
 import MockAdapter from "axios-mock-adapter";
-import api, { handleResponse } from "../api";
+import api, { handleResponse, setAuthToken, authApi } from "../api";
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -72,16 +72,60 @@ describe("request — no auth interceptor", () => {
     await api.get("/public");
   });
 
-  it("never reads localStorage (JWT is managed server-side via cookie)", async () => {
-    // Write something to localStorage to prove the interceptor ignores it
-    localStorage.setItem("auth_token", "should-not-be-used");
+  it("reads token from localStorage on module load", async () => {
+    // The module-level loadToken() should pick up a stored token
+    localStorage.setItem("mangadex_auth_token", "stored-token");
+
+    // Re-import to trigger the module-level initializer
+    const apiModule = await import("../api");
+    apiModule.setAuthToken("stored-token");
 
     mock.onGet("/secure").reply((config) => {
-      expect(config.headers?.Authorization).toBeUndefined();
+      expect(config.headers?.Authorization).toBe("Bearer stored-token");
       return [200, {}];
     });
 
     await api.get("/secure");
+  });
+});
+
+// ── setAuthToken ────────────────────────────────────────────────────────────
+
+describe("setAuthToken", () => {
+  let mock: MockAdapter;
+
+  beforeEach(() => {
+    clearStorage();
+    mock = new MockAdapter(api);
+    setAuthToken(null);
+  });
+
+  afterEach(() => {
+    mock.restore();
+    setAuthToken(null);
+  });
+
+  it("attaches Bearer token header when token is set", async () => {
+    setAuthToken("test-jwt-token");
+
+    mock.onGet("/secure").reply((config) => {
+      expect(config.headers?.Authorization).toBe("Bearer test-jwt-token");
+      return [200, { ok: true }];
+    });
+
+    await api.get("/secure");
+  });
+
+  it("does not attach Authorization header after token is cleared", async () => {
+    setAuthToken("test-jwt-token");
+    setAuthToken(null);
+
+    mock.onGet("/public").reply((config) => {
+      expect(config.headers?.Authorization).toBeUndefined();
+      return [200, { ok: true }];
+    });
+
+    await api.get("/public");
   });
 });
 
@@ -482,6 +526,16 @@ describe("authApi", () => {
 
     const { authApi } = await import("../api");
     await authApi.register({ email: "test@test.com" } as never);
+  });
+
+  it("me sends GET /me", async () => {
+    mock.onGet("/me").reply(200, { id: "u-1", email: "test@test.com" });
+
+    const { authApi } = await import("../api");
+    const res = await authApi.me();
+
+    expect(res.data.id).toBe("u-1");
+    expect(res.data.email).toBe("test@test.com");
   });
 });
 

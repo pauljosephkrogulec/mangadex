@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import ReaderSidebar from "../ReaderSidebar";
 
@@ -7,6 +7,7 @@ describe("ReaderSidebar", () => {
   const baseProps = {
     open: true,
     pinned: false,
+    mangaId: "manga-1",
     onClose: vi.fn(),
     onPinToggle: vi.fn(),
     onPageChange: vi.fn(),
@@ -25,6 +26,12 @@ describe("ReaderSidebar", () => {
     expect(screen.getByTestId("progress-current-page")).toHaveTextContent("3");
   });
 
+  it("shows 0% progress when totalPages is 0", () => {
+    render(<ReaderSidebar {...baseProps} totalPages={0} currentPage={0} />);
+
+    expect(screen.getByTestId("progress-current-page")).toHaveTextContent("0");
+  });
+
   it("does not render content when closed", () => {
     render(<ReaderSidebar {...baseProps} open={false} />);
     expect(screen.queryByText("Menu")).not.toBeInTheDocument();
@@ -39,6 +46,12 @@ describe("ReaderSidebar", () => {
       />,
     );
     expect(screen.getByText("Ch. 5 - The Battle")).toBeInTheDocument();
+  });
+
+  it("renders chapter number alone when chapterTitle is absent", () => {
+    render(<ReaderSidebar {...baseProps} chapterNumber="5" />);
+
+    expect(screen.getByText("Chapter 5")).toBeInTheDocument();
   });
 
   it("renders language and group in subheader", () => {
@@ -79,6 +92,33 @@ describe("ReaderSidebar", () => {
   it("renders chapter selector when multiple chapters", () => {
     render(<ReaderSidebar {...baseProps} />);
     expect(screen.getByLabelText("Chapter")).toBeInTheDocument();
+  });
+
+  it("shows volume prefix in chapter selector options", () => {
+    render(<ReaderSidebar {...baseProps} />);
+
+    const select = screen.getByLabelText("Chapter") as HTMLSelectElement;
+    const options = Array.from(select.options);
+    const volumeOption = options.find((o) => o.textContent?.startsWith("Vol."));
+    expect(volumeOption).toBeTruthy();
+    expect(volumeOption?.textContent).toContain("Vol.1");
+  });
+
+  it("renders chapter option without volume prefix", () => {
+    render(
+      <ReaderSidebar
+        {...baseProps}
+        currentChapterId="ch-2"
+        chapters={[
+          { id: "ch-2", chapterNumber: "2", title: "Revelation", volume: "1" },
+          { id: "ch-3", chapterNumber: "3", title: null, volume: null },
+        ] as any[]}
+      />,
+    );
+
+    const select = screen.getByLabelText("Chapter") as HTMLSelectElement;
+    const option = select.options[1];
+    expect(option.textContent).toBe("Ch. 3");
   });
 
   it("renders page selector", () => {
@@ -150,6 +190,13 @@ describe("ReaderSidebar", () => {
     const toggle = screen.getByRole("switch", { name: "Show Header" });
     await user.click(toggle);
     expect(toggle).toHaveAttribute("aria-checked", "true");
+  });
+
+  it("renders link to manga details page", () => {
+    render(<ReaderSidebar {...baseProps} />);
+    const link = screen.getByText("Manga Details");
+    expect(link).toBeInTheDocument();
+    expect(link.closest("a")).toHaveAttribute("href", "/manga/manga-1");
   });
 
   it("calls onPageChange when progress bar clicked", async () => {

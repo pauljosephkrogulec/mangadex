@@ -2,7 +2,9 @@
 
 import { useEffect, useState, useCallback, useMemo } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { mangaApi, handleResponse } from "@/lib/api";
+import { useAuth } from "@/contexts/AuthContext";
 import type { Manga, Chapter } from "@/lib/types";
 import ChapterList from "@/components/ChapterList";
 import type { SortField } from "@/components/ChapterList";
@@ -140,12 +142,19 @@ interface MangaDetailsContentProps {
 }
 
 export default function MangaDetailsContent({ id }: MangaDetailsContentProps) {
+  const { user } = useAuth();
+
   // ── Manga state ──
   const [manga, setManga] = useState<Manga | null>(null);
   const [mangaLoading, setMangaLoading] = useState(true);
   const [mangaError, setMangaError] = useState<string | null>(null);
   const [mangaRetryCount, setMangaRetryCount] = useState(0);
   const [imgError, setImgError] = useState(false);
+
+  // ── Follow state ──
+  const [followed, setFollowed] = useState(false);
+  const [followActionLoading, setFollowActionLoading] = useState(false);
+  const [followError, setFollowError] = useState<string | null>(null);
 
   // ── Chapters state ──
   const [chapters, setChapters] = useState<Chapter[]>([]);
@@ -212,6 +221,49 @@ export default function MangaDetailsContent({ id }: MangaDetailsContentProps) {
       cancelled = true;
     };
   }, [id, mangaRetryCount]);
+
+  // ── Fetch follow status ──
+  useEffect(() => {
+    if (!user) return;
+
+    let cancelled = false;
+
+    async function fetchFollowStatus() {
+      setFollowError(null);
+
+      const result = await handleResponse(mangaApi.followStatus(id));
+
+      if (cancelled) return;
+
+      if (result.success) {
+        setFollowed(result.data.following);
+      } else {
+        setFollowError(result.error);
+      }
+    }
+
+    fetchFollowStatus();
+    return () => {
+      cancelled = true;
+    };
+  }, [id, user]);
+
+  // ── Handle follow/unfollow ──
+  const handleFollowToggle = useCallback(async () => {
+    setFollowActionLoading(true);
+    setFollowError(null);
+
+    const result = followed
+      ? await handleResponse(mangaApi.unfollow(id))
+      : await handleResponse(mangaApi.follow(id));
+
+    if (result.success) {
+      setFollowed(!followed);
+    } else {
+      setFollowError(result.error);
+    }
+    setFollowActionLoading(false);
+  }, [id, followed]);
 
   // ── Update document title ──
   useEffect(() => {
@@ -436,6 +488,53 @@ export default function MangaDetailsContent({ id }: MangaDetailsContentProps) {
                   >
                     {CONTENT_RATING_BADGE[manga.contentRating].label}
                   </span>
+                )}
+
+                {/* Follow button */}
+                {user ? (
+                  <button
+                    onClick={handleFollowToggle}
+                    disabled={followActionLoading}
+                    className={`group inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full leading-tight border transition-all ${
+                      followed
+                        ? "bg-red-600/20 text-red-400 border-red-600/30 hover:bg-red-600/30 hover:text-red-300"
+                        : "bg-md-accent/10 text-md-accent border-md-accent/20 hover:bg-md-accent/20"
+                    } disabled:opacity-50 disabled:cursor-not-allowed`}
+                  >
+                    {followActionLoading ? (
+                      <span className="w-3 h-3 border border-current border-t-transparent rounded-full animate-spin" />
+                    ) : followed ? (
+                      <>
+                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                        </svg>
+                        <span className="group-hover:hidden">Following</span>
+                        <span className="hidden group-hover:inline">Unfollow</span>
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                        </svg>
+                        Follow
+                      </>
+                    )}
+                  </button>
+                ) : (
+                  <Link
+                    href="/login"
+                    className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full leading-tight border border-md-border bg-md-surface text-md-text-secondary hover:text-md-text-primary hover:bg-md-surface-hover transition-colors"
+                  >
+                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                    </svg>
+                    Sign in to Follow
+                  </Link>
+                )}
+
+                {/* Follow error */}
+                {followError && (
+                  <span className="text-xs text-red-400 ml-1">{followError}</span>
                 )}
               </div>
 

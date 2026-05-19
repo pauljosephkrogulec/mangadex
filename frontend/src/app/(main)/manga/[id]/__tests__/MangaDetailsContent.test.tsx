@@ -6,6 +6,24 @@ import api from "@/lib/api";
 import MangaDetailsContent from "../MangaDetailsContent";
 import type { Manga, Chapter } from "@/lib/types";
 
+// ── Mock AuthContext ─────────────────────────────────────────────────────────
+
+const mockAuthUser = vi.hoisted(() => ({ current: null as any }));
+
+vi.mock("@/contexts/AuthContext", () => ({
+  useAuth: () => ({
+    user: mockAuthUser.current,
+    loading: false,
+    error: null,
+    login: vi.fn(),
+    register: vi.fn(),
+    logout: vi.fn(),
+    clearError: vi.fn(),
+  }),
+}));
+
+const TEST_USER = { id: "u-1", email: "test@example.com", username: "testuser" };
+
 // ── Mock ChapterList ────────────────────────────────────────────────────────
 
 vi.mock("@/components/ChapterList", () => ({
@@ -151,6 +169,7 @@ describe("MangaDetailsContent", () => {
 
   afterEach(() => {
     mockApi.reset();
+    mockAuthUser.current = null;
   });
 
   // ── Loading state ─────────────────────────────────────────────────────────
@@ -1382,6 +1401,147 @@ describe("MangaDetailsContent", () => {
 
     await vi.waitFor(() => {
       expect(true).toBe(true);
+    });
+  });
+
+  // ── Follow / Unfollow ─────────────────────────────────────────────────
+
+  it("shows follow button when user is authenticated", async () => {
+    mockAuthUser.current = TEST_USER;
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}$`)).reply(200, buildManga());
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/feed`)).reply(200, {
+      member: [],
+      totalItems: 0,
+    });
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/follow$`)).reply(200, { following: false });
+
+    render(<MangaDetailsContent id={MANGA_ID} />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Follow")).toBeInTheDocument();
+    });
+  });
+
+  it("shows Following button when already followed", async () => {
+    mockAuthUser.current = TEST_USER;
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}$`)).reply(200, buildManga());
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/feed`)).reply(200, {
+      member: [],
+      totalItems: 0,
+    });
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/follow$`)).reply(200, { following: true });
+
+    render(<MangaDetailsContent id={MANGA_ID} />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Following")).toBeInTheDocument();
+    });
+  });
+
+  it("shows sign in to follow when user is not authenticated", async () => {
+    mockAuthUser.current = null;
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}$`)).reply(200, buildManga());
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/feed`)).reply(200, {
+      member: [],
+      totalItems: 0,
+    });
+
+    render(<MangaDetailsContent id={MANGA_ID} />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Sign in to Follow")).toBeInTheDocument();
+    });
+  });
+
+  it("shows follow error when follow status fetch fails", async () => {
+    mockAuthUser.current = TEST_USER;
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}$`)).reply(200, buildManga());
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/feed`)).reply(200, {
+      member: [],
+      totalItems: 0,
+    });
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/follow$`)).reply(500, {
+      detail: "Failed to fetch follow status",
+    });
+
+    render(<MangaDetailsContent id={MANGA_ID} />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Failed to fetch follow status")).toBeInTheDocument();
+    });
+  });
+
+  it("toggles from Follow to Following on successful follow", async () => {
+    mockAuthUser.current = TEST_USER;
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}$`)).reply(200, buildManga());
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/feed`)).reply(200, {
+      member: [],
+      totalItems: 0,
+    });
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/follow$`)).reply(200, { following: false });
+    mockApi.onPost(new RegExp(`/mangas/${MANGA_ID}/follow$`)).reply(200);
+
+    render(<MangaDetailsContent id={MANGA_ID} />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Follow")).toBeInTheDocument();
+    });
+
+    const user = userEvent.setup();
+    await user.click(screen.getByText("Follow"));
+
+    await waitFor(() => {
+      expect(screen.getByText("Following")).toBeInTheDocument();
+    });
+  });
+
+  it("toggles from Following to Follow on successful unfollow", async () => {
+    mockAuthUser.current = TEST_USER;
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}$`)).reply(200, buildManga());
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/feed`)).reply(200, {
+      member: [],
+      totalItems: 0,
+    });
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/follow$`)).reply(200, { following: true });
+    mockApi.onDelete(new RegExp(`/mangas/${MANGA_ID}/follow$`)).reply(204);
+
+    render(<MangaDetailsContent id={MANGA_ID} />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Following")).toBeInTheDocument();
+    });
+
+    const user = userEvent.setup();
+    await user.click(screen.getByText("Following"));
+
+    await waitFor(() => {
+      expect(screen.getByText("Follow")).toBeInTheDocument();
+    });
+  });
+
+  it("shows error when unfollow API fails", async () => {
+    mockAuthUser.current = TEST_USER;
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}$`)).reply(200, buildManga());
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/feed`)).reply(200, {
+      member: [],
+      totalItems: 0,
+    });
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/follow$`)).reply(200, { following: true });
+    mockApi.onDelete(new RegExp(`/mangas/${MANGA_ID}/follow$`)).reply(500, {
+      detail: "Unfollow failed",
+    });
+
+    render(<MangaDetailsContent id={MANGA_ID} />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Following")).toBeInTheDocument();
+    });
+
+    const user = userEvent.setup();
+    await user.click(screen.getByText("Following"));
+
+    await waitFor(() => {
+      expect(screen.getByText("Unfollow failed")).toBeInTheDocument();
     });
   });
 });
