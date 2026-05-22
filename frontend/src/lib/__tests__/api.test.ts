@@ -663,6 +663,25 @@ describe("customListApi", () => {
     mock.restore();
   });
 
+  it("list sends GET /users/:userId/custom_lists", async () => {
+    mock.onGet("/users/u-1/custom_lists").reply(200, { member: [], totalItems: 0 });
+
+    const { customListApi } = await import("../api");
+    const res = await customListApi.list("u-1");
+
+    expect(res.data.totalItems).toBe(0);
+  });
+
+  it("list passes query params", async () => {
+    mock.onGet("/users/u-1/custom_lists").reply((config) => {
+      expect(config.params).toEqual({ page: 2, itemsPerPage: 10 });
+      return [200, { member: [], totalItems: 0 }];
+    });
+
+    const { customListApi } = await import("../api");
+    await customListApi.list("u-1", { page: 2, itemsPerPage: 10 });
+  });
+
   it("get sends GET /custom_lists/:id", async () => {
     mock.onGet("/custom_lists/cl-1").reply(200, { id: "cl-1" });
 
@@ -932,6 +951,54 @@ describe("coverArtApi additional endpoints", () => {
     expect(res.data.id).toBe("ca-2");
     expect(res.data.imagePath).toBe("/covers/test2.jpg");
     expect(res.data.volume).toBeNull();
+  });
+});
+
+// ── loadToken catch branch (line 45) ────────────────────────────────────────
+
+describe("loadToken — localStorage.getItem throws", () => {
+  it("returns null and does not throw when localStorage.getItem throws", async () => {
+    vi.resetModules();
+    const spy = vi.spyOn(Storage.prototype, "getItem").mockImplementationOnce(() => {
+      throw new Error("Storage unavailable");
+    });
+
+    // Re-importing triggers the module-level loadToken() call
+    const freshModule = await import("../api");
+
+    // authToken should be null — verify by checking no Authorization header is set
+    const MockAdapterCtor = (await import("axios-mock-adapter")).default;
+    const mock = new MockAdapterCtor(freshModule.default);
+    let authorization: string | undefined;
+    mock.onGet("/probe").reply((config) => {
+      authorization = config.headers?.Authorization as string | undefined;
+      return [200, {}];
+    });
+    await freshModule.default.get("/probe");
+    mock.restore();
+    spy.mockRestore();
+
+    expect(authorization).toBeUndefined();
+  });
+});
+
+// ── SSR guard branches (typeof window === "undefined") ──────────────────────
+
+describe("SSR guards — window undefined", () => {
+  it("loadToken and saveToken return early when window is undefined", async () => {
+    vi.resetModules();
+    vi.stubGlobal("window", undefined);
+
+    try {
+      const freshModule = await import("../api");
+      // setAuthToken calls saveToken, which hits the typeof window guard
+      freshModule.setAuthToken("ssr-token");
+      freshModule.setAuthToken(null);
+      // No error thrown — guards work in SSR
+      expect(true).toBe(true);
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 });
 

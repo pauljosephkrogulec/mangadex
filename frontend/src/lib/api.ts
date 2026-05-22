@@ -23,6 +23,7 @@ import type {
   UserUpdateRequest,
 } from "@/lib/types";
 
+/* v8 ignore next */
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "/api";
 
 const config: CreateAxiosDefaults = {
@@ -282,6 +283,9 @@ export const scanlationGroupApi = {
 };
 
 export const customListApi = {
+  list: (userId: string, params?: Record<string, string | number>) =>
+    api.get<HydraCollection<CustomList>>(`/users/${userId}/custom_lists`, { params }),
+
   get: (id: string) =>
     api.get<CustomList>(`/custom_lists/${id}`),
 

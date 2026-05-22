@@ -7,6 +7,7 @@ namespace App\Tests\EventSubscriber;
 use App\Entity\User;
 use App\EventSubscriber\JwtCookieSubscriber;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -129,6 +130,7 @@ class JwtCookieSubscriberTest extends TestCase
         $this->assertArrayHasKey('createdAt', $data['user']);
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testOnAuthenticationSuccessNoUserDataWhenUserNotInstanceOfUser(): void
     {
         $subscriber = new JwtCookieSubscriber('dev');

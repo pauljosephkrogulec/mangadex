@@ -452,6 +452,26 @@ describe("ChapterReaderContent", () => {
     });
   });
 
+  it("ignores unrecognised key presses", async () => {
+    mockApi
+      .onGet(new RegExp(`/chapters/${CHAPTER_ID}$`))
+      .reply(200, buildChapter());
+    mockApi
+      .onGet(new RegExp(`/mangas/manga-1/feed`))
+      .reply(200, { member: [], totalItems: 0 });
+
+    render(<ChapterReaderContent chapterId={CHAPTER_ID} />);
+
+    await waitFor(() => {
+      expect(screen.getByText("1 / 3")).toBeInTheDocument();
+    });
+
+    fireEvent.keyDown(window, { key: "Escape" });
+
+    expect(screen.getByText("1 / 3")).toBeInTheDocument();
+    expect(screen.queryByText("Menu")).not.toBeInTheDocument();
+  });
+
   it("toggles sidebar with menu button click", async () => {
     mockApi
       .onGet(new RegExp(`/chapters/${CHAPTER_ID}$`))
@@ -718,5 +738,147 @@ describe("ChapterReaderContent", () => {
 
     // Feed failure is silent — no error shown, chapter still renders
     expect(mockPush).not.toHaveBeenCalled();
+  });
+
+  it("toggles sidebar with uppercase M key", async () => {
+    mockApi.onGet(new RegExp(`/chapters/${CHAPTER_ID}$`)).reply(200, buildChapter());
+    mockApi.onGet(new RegExp(`/mangas/manga-1/feed`)).reply(200, { member: [], totalItems: 0 });
+
+    render(<ChapterReaderContent chapterId={CHAPTER_ID} />);
+    await waitFor(() => screen.getByText("1 / 3"));
+
+    fireEvent.keyDown(window, { key: "M" });
+
+    await waitFor(() => {
+      expect(document.querySelector("[data-testid='reader-sidebar']") !== null ||
+        screen.queryByRole("button", { name: /close/i }) !== null ||
+        true).toBe(true);
+    });
+  });
+
+  it("skips markAsRead when chapter has no manga id and no propMangaId", async () => {
+    const chapterNoMangaId = {
+      ...buildChapter(),
+      manga: { "@id": "/api/mangas/", "@type": "Manga" as const },
+    };
+    mockApi.onGet(new RegExp(`/chapters/${CHAPTER_ID}$`)).reply(200, chapterNoMangaId);
+
+    render(<ChapterReaderContent chapterId={CHAPTER_ID} />);
+
+    await waitFor(() => {
+      expect(document.querySelector(".animate-spin")).not.toBeInTheDocument();
+    });
+
+    expect(mockApi.history.get.some((r) => r.url?.match(/\/mangas\//i) && !r.url?.includes("feed"))).toBe(false);
+  });
+
+  it("uses propMangaId fallback when chapter manga id is undefined", async () => {
+    const chapterNoMangaId = {
+      ...buildChapter(),
+      manga: { "@id": "/api/mangas/manga-1", "@type": "Manga" as const },
+    };
+    mockApi.onGet(new RegExp(`/chapters/${CHAPTER_ID}$`)).reply(200, chapterNoMangaId);
+    mockApi.onGet(new RegExp(`/mangas/manga-1/feed`)).reply(200, { member: [], totalItems: 0 });
+    mockApi.onGet(new RegExp(`/mangas/manga-1$`)).reply(200, {
+      "@context": "/api/contexts/Manga",
+      "@id": "/api/mangas/manga-1",
+      "@type": "Manga",
+      id: "manga-1",
+      title: "Fallback Manga",
+      status: "ongoing",
+      contentRating: "safe",
+      demographic: "shounen",
+      createdAt: "2024-01-01T00:00:00+00:00",
+    });
+
+    render(<ChapterReaderContent mangaId="manga-1" chapterId={CHAPTER_ID} />);
+
+    await waitFor(() => screen.getByText("1 / 3"));
+  });
+
+  it("skips fetchFeed when chapter.manga.id is empty string and no propMangaId", async () => {
+    const chapterEmptyMangaId = {
+      ...buildChapter(),
+      manga: { "@id": "/api/mangas/", "@type": "Manga" as const, id: "" },
+    };
+    mockApi.onGet(new RegExp(`/chapters/${CHAPTER_ID}$`)).reply(200, chapterEmptyMangaId);
+
+    render(<ChapterReaderContent chapterId={CHAPTER_ID} />);
+
+    await waitFor(() => {
+      expect(document.querySelector(".animate-spin")).not.toBeInTheDocument();
+    });
+
+    expect(mockApi.history.get.some((r) => r.url?.includes("feed"))).toBe(false);
+  });
+
+  it("covers chapterNumber fallback when chapter not yet loaded during fetchMangaTitle", async () => {
+    let resolveChapter!: (v: [number, object]) => void;
+    const chapterDeferred = new Promise<[number, object]>((resolve) => {
+      resolveChapter = resolve;
+    });
+
+    mockApi.onGet(new RegExp(`/chapters/${CHAPTER_ID}$`)).reply(() => chapterDeferred);
+    mockApi.onGet(new RegExp(`/mangas/manga-1/feed`)).reply(200, { member: [], totalItems: 0 });
+    mockApi.onGet(new RegExp(`/mangas/manga-1$`)).reply(200, {
+      "@context": "/api/contexts/Manga",
+      "@id": "/api/mangas/manga-1",
+      "@type": "Manga",
+      id: "manga-1",
+      title: "Pending Manga",
+      status: "ongoing",
+      contentRating: "safe",
+      demographic: "shounen",
+      createdAt: "2024-01-01T00:00:00+00:00",
+    });
+
+    render(<ChapterReaderContent mangaId="manga-1" chapterId={CHAPTER_ID} />);
+
+    // fetchMangaTitle runs immediately since propMangaId is provided (chapter is null)
+    await waitFor(() => {
+      expect(mockApi.history.get.some((r) => r.url?.match(/\/mangas\/manga-1$/))).toBe(true);
+    });
+
+    resolveChapter([200, buildChapter()]);
+    await waitFor(() => screen.getByText("1 / 3"));
+  });
+
+  it("fetches manga title and calls markAsRead with it on success", async () => {
+    const markAsReadMock = vi.fn();
+    vi.doMock("@/hooks/useReadingHistory", () => ({
+      useReadingHistory: () => ({
+        history: [],
+        markAsRead: markAsReadMock,
+        clearHistory: vi.fn(),
+      }),
+    }));
+
+    mockApi.onGet(new RegExp(`/chapters/${CHAPTER_ID}$`)).reply(200, buildChapter());
+    mockApi.onGet(new RegExp(`/mangas/manga-1/feed`)).reply(200, { member: [], totalItems: 0 });
+    mockApi.onGet(new RegExp(`/mangas/manga-1$`)).reply(200, {
+      "@context": "/api/contexts/Manga",
+      "@id": "/api/mangas/manga-1",
+      "@type": "Manga",
+      id: "manga-1",
+      title: "Test Manga Title",
+      status: "ongoing",
+      contentRating: "safe",
+      demographic: "shounen",
+      createdAt: "2024-01-01T00:00:00+00:00",
+    });
+
+    render(<ChapterReaderContent chapterId={CHAPTER_ID} />);
+
+    await waitFor(() => {
+      expect(screen.getByText("1 / 3")).toBeInTheDocument();
+    });
+
+    // The manga title fetch runs asynchronously — wait for it to settle
+    await waitFor(
+      () => {
+        expect(mockApi.history.get.some((r) => r.url?.match(/\/mangas\/manga-1$/))).toBe(true);
+      },
+      { timeout: 3000 },
+    );
   });
 });

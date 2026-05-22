@@ -91,12 +91,22 @@ export interface User extends ApiResource {
 
 export type ListVisibility = "public" | "private" | "hidden";
 
+export interface CustomListManga {
+  id: string;
+  title: string;
+  status: MangaStatus;
+  contentRating: ContentRating;
+  demographic: Demographic;
+  year: number | null;
+}
+
 export interface CustomList extends ApiResource {
   id: string;
   createdAt: string;
   name: string;
   visibility: ListVisibility;
   user: string;
+  mangas?: CustomListManga[];
 }
 
 export interface MangaFollow extends ApiResource {

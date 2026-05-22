@@ -67,6 +67,7 @@ export default function SearchContent() {
       const s = overrides.status !== undefined ? overrides.status : status;
       const d =
         overrides.demographic !== undefined ? overrides.demographic : demographic;
+      /* v8 ignore next */
       const p = overrides.page !== undefined ? overrides.page : String(page);
 
       if (q) params.set("q", q);

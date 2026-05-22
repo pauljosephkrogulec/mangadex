@@ -4,6 +4,9 @@
 /backend/.env.local
 /backend/.php-cs-fixer.cache
 
+# Claude
+.claude/
+
 # IDE
 .idea/
 .vscode/

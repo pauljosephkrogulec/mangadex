@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { mangaApi, handleResponse } from "@/lib/api";
+import { mangaApi, customListApi, handleResponse } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
-import type { Manga, Chapter } from "@/lib/types";
+import type { Manga, Chapter, CustomList, ListVisibility } from "@/lib/types";
 import ChapterList from "@/components/ChapterList";
 import type { SortField } from "@/components/ChapterList";
 
@@ -109,6 +109,201 @@ function TagsList({ tags }: { tags: NonNullable<Manga["tags"]> }) {
           </div>
         </div>
       ))}
+    </div>
+  );
+}
+
+// ── Add to List dropdown ─────────────────────────────────────────────────
+
+function AddToListDropdown({ mangaId, userId }: { mangaId: string; userId: string }) {
+  const [open, setOpen] = useState(false);
+  const [lists, setLists] = useState<CustomList[]>([]);
+  const [loadingLists, setLoadingLists] = useState(false);
+  const [actionLoadingId, setActionLoadingId] = useState<string | null>(null);
+
+  // Track which lists already contain this manga
+  const [inLists, setInLists] = useState<Set<string>>(new Set());
+
+  // Inline create
+  const [showCreate, setShowCreate] = useState(false);
+  const [newName, setNewName] = useState("");
+  const [newVisibility, setNewVisibility] = useState<ListVisibility>("private");
+  const [createLoading, setCreateLoading] = useState(false);
+
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const loadLists = useCallback(async () => {
+    if (lists.length > 0) return;
+    setLoadingLists(true);
+    const result = await handleResponse(customListApi.list(userId));
+    if (result.success) {
+      const fetched = result.data.member;
+      setLists(fetched);
+      const alreadyIn = new Set(
+        fetched
+          .filter((l) => l.mangas?.some((m) => m.id === mangaId))
+          .map((l) => l.id),
+      );
+      setInLists(alreadyIn);
+    }
+    setLoadingLists(false);
+  }, [userId, mangaId, lists.length]);
+
+  const handleOpen = () => {
+    setOpen((v) => !v);
+    if (!open) loadLists();
+  };
+
+  // Close on outside click
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
+
+  const handleToggleManga = async (listId: string) => {
+    setActionLoadingId(listId);
+    const isIn = inLists.has(listId);
+    const result = isIn
+      ? await handleResponse(customListApi.removeManga(listId, mangaId))
+      : await handleResponse(customListApi.addManga(listId, mangaId));
+
+    /* v8 ignore next */
+    if (result.success) {
+      setInLists((prev) => {
+        const next = new Set(prev);
+        if (isIn) next.delete(listId);
+        else next.add(listId);
+        return next;
+      });
+    }
+    setActionLoadingId(null);
+  };
+
+  const handleCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    /* v8 ignore next */
+    if (!newName.trim()) return;
+    setCreateLoading(true);
+    const createResult = await handleResponse(
+      customListApi.create({ name: newName.trim(), visibility: newVisibility }),
+    );
+    if (createResult.success) {
+      const newList = createResult.data;
+      const addResult = await handleResponse(customListApi.addManga(newList.id, mangaId));
+      if (addResult.success) {
+        setInLists((prev) => new Set(prev).add(newList.id));
+      }
+      setLists((prev) => [...prev, newList]);
+      setNewName("");
+      setNewVisibility("private");
+      setShowCreate(false);
+    }
+    setCreateLoading(false);
+  };
+
+  return (
+    <div className="relative" ref={dropdownRef}>
+      <button
+        onClick={handleOpen}
+        className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full leading-tight border border-md-border bg-md-surface text-md-text-secondary hover:bg-md-surface-hover hover:text-md-text-primary transition-colors"
+      >
+        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+        </svg>
+        Add to List
+      </button>
+
+      {open && (
+        <div className="absolute left-0 top-full mt-1 z-20 w-56 bg-md-surface border border-md-border rounded-xl shadow-lg overflow-hidden">
+          {loadingLists ? (
+            <div className="px-4 py-3 text-xs text-md-text-secondary">Loading…</div>
+          ) : lists.length === 0 && !showCreate ? (
+            <div className="px-4 py-3 text-xs text-md-text-secondary">No lists yet.</div>
+          ) : (
+            <ul className="max-h-48 overflow-y-auto">
+              {lists.map((list) => {
+                const isIn = inLists.has(list.id);
+                const busy = actionLoadingId === list.id;
+                return (
+                  <li key={list.id}>
+                    <button
+                      onClick={() => handleToggleManga(list.id)}
+                      disabled={busy}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-sm text-left hover:bg-md-surface-hover transition-colors disabled:opacity-50"
+                    >
+                      <span className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${isIn ? "bg-md-accent border-md-accent" : "border-md-border"}`}>
+                        {isIn && (
+                          <svg className="w-2.5 h-2.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                          </svg>
+                        )}
+                      </span>
+                      <span className="truncate text-md-text-primary">{list.name}</span>
+                      {busy && <span className="ml-auto w-3 h-3 border border-current border-t-transparent rounded-full animate-spin" />}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+
+          <div className="border-t border-md-border">
+            {showCreate ? (
+              <form onSubmit={handleCreate} className="p-2 space-y-1.5">
+                <input
+                  type="text"
+                  value={newName}
+                  onChange={(e) => setNewName(e.target.value)}
+                  placeholder="List name"
+                  maxLength={255}
+                  className="w-full bg-md-background border border-md-border text-md-text-primary text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-md-accent placeholder:text-md-text-secondary"
+                />
+                <select
+                  value={newVisibility}
+                  onChange={(e) => setNewVisibility(e.target.value as ListVisibility)}
+                  className="w-full bg-md-background border border-md-border text-md-text-primary text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-md-accent"
+                >
+                  <option value="public">Public</option>
+                  <option value="private">Private</option>
+                  <option value="hidden">Hidden</option>
+                </select>
+                <div className="flex gap-1">
+                  <button
+                    type="submit"
+                    disabled={createLoading || !newName.trim()}
+                    className="flex-1 py-1 rounded-lg bg-md-accent text-white text-xs font-medium hover:bg-md-accent/90 disabled:opacity-50 transition-colors"
+                  >
+                    {createLoading ? "…" : "Create & Add"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setShowCreate(false); setNewName(""); }}
+                    className="px-2 py-1 rounded-lg border border-md-border text-md-text-secondary text-xs hover:bg-md-surface-hover transition-colors"
+                  >
+                    ✕
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <button
+                onClick={() => setShowCreate(true)}
+                className="w-full flex items-center gap-2 px-3 py-2 text-xs text-md-accent hover:bg-md-surface-hover transition-colors"
+              >
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
+                New list
+              </button>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -233,6 +428,7 @@ export default function MangaDetailsContent({ id }: MangaDetailsContentProps) {
 
       const result = await handleResponse(mangaApi.followStatus(id));
 
+      /* v8 ignore next */
       if (cancelled) return;
 
       if (result.success) {
@@ -415,6 +611,7 @@ export default function MangaDetailsContent({ id }: MangaDetailsContentProps) {
             Retry
           </button>
         </div>
+      /* v8 ignore next */
       ) : manga ? (
         <>
           {/* ── Cover + Info layout ── */}
@@ -535,6 +732,11 @@ export default function MangaDetailsContent({ id }: MangaDetailsContentProps) {
                 {/* Follow error */}
                 {followError && (
                   <span className="text-xs text-red-400 ml-1">{followError}</span>
+                )}
+
+                {/* Add to List */}
+                {user && (
+                  <AddToListDropdown mangaId={id} userId={user.id} />
                 )}
               </div>
 

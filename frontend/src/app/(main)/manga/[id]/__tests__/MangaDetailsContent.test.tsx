@@ -1366,6 +1366,328 @@ describe("MangaDetailsContent", () => {
     });
   });
 
+  // ── AddToListDropdown ─────────────────────────────────────────────────────
+
+  it("shows Add to List button when user is authenticated", async () => {
+    mockAuthUser.current = TEST_USER;
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}$`)).reply(200, buildManga());
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/feed`)).reply(200, { member: [], totalItems: 0 });
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/follow$`)).reply(200, { following: false });
+
+    render(<MangaDetailsContent id={MANGA_ID} />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Add to List")).toBeInTheDocument();
+    });
+  });
+
+  it("opens dropdown and shows No lists yet when user has no lists", async () => {
+    const ue = userEvent.setup();
+    mockAuthUser.current = TEST_USER;
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}$`)).reply(200, buildManga());
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/feed`)).reply(200, { member: [], totalItems: 0 });
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/follow$`)).reply(200, { following: false });
+    mockApi.onGet("/users/u-1/custom_lists").reply(200, { member: [], totalItems: 0 });
+
+    render(<MangaDetailsContent id={MANGA_ID} />);
+    await waitFor(() => screen.getByText("Add to List"));
+
+    await ue.click(screen.getByText("Add to List"));
+
+    await waitFor(() => {
+      expect(screen.getByText("No lists yet.")).toBeInTheDocument();
+    });
+  });
+
+  it("shows list items in the dropdown with checkmark for lists containing the manga", async () => {
+    const ue = userEvent.setup();
+    mockAuthUser.current = TEST_USER;
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}$`)).reply(200, buildManga());
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/feed`)).reply(200, { member: [], totalItems: 0 });
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/follow$`)).reply(200, { following: false });
+    mockApi.onGet("/users/u-1/custom_lists").reply(200, {
+      member: [
+        {
+          "@context": "/api/contexts/CustomList",
+          "@id": "/api/custom_lists/cl-1",
+          "@type": "CustomList",
+          id: "cl-1",
+          name: "Reading List",
+          visibility: "private",
+          user: "/api/users/u-1",
+          mangas: [{ id: MANGA_ID, title: "Test Manga" }],
+          createdAt: "2024-01-01T00:00:00+00:00",
+        },
+        {
+          "@context": "/api/contexts/CustomList",
+          "@id": "/api/custom_lists/cl-2",
+          "@type": "CustomList",
+          id: "cl-2",
+          name: "Want to Read",
+          visibility: "public",
+          user: "/api/users/u-1",
+          mangas: [],
+          createdAt: "2024-01-01T00:00:00+00:00",
+        },
+      ],
+      totalItems: 2,
+    });
+
+    render(<MangaDetailsContent id={MANGA_ID} />);
+    await waitFor(() => screen.getByText("Add to List"));
+
+    await ue.click(screen.getByText("Add to List"));
+
+    await waitFor(() => {
+      expect(screen.getByText("Reading List")).toBeInTheDocument();
+      expect(screen.getByText("Want to Read")).toBeInTheDocument();
+    });
+  });
+
+  it("adds manga to a list when toggled", async () => {
+    const ue = userEvent.setup();
+    mockAuthUser.current = TEST_USER;
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}$`)).reply(200, buildManga());
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/feed`)).reply(200, { member: [], totalItems: 0 });
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/follow$`)).reply(200, { following: false });
+    mockApi.onGet("/users/u-1/custom_lists").reply(200, {
+      member: [{
+        "@context": "/api/contexts/CustomList",
+        "@id": "/api/custom_lists/cl-1",
+        "@type": "CustomList",
+        id: "cl-1",
+        name: "Favourites",
+        visibility: "private",
+        user: "/api/users/u-1",
+        mangas: [],
+        createdAt: "2024-01-01T00:00:00+00:00",
+      }],
+      totalItems: 1,
+    });
+    mockApi.onPost(`/custom_lists/cl-1/mangas/${MANGA_ID}`).reply(200);
+
+    render(<MangaDetailsContent id={MANGA_ID} />);
+    await waitFor(() => screen.getByText("Add to List"));
+
+    await ue.click(screen.getByText("Add to List"));
+    await waitFor(() => screen.getByText("Favourites"));
+
+    await ue.click(screen.getByText("Favourites"));
+
+    await waitFor(() => {
+      expect(mockApi.history.post.length).toBeGreaterThan(0);
+    });
+  });
+
+  it("removes manga from a list when toggled off", async () => {
+    const ue = userEvent.setup();
+    mockAuthUser.current = TEST_USER;
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}$`)).reply(200, buildManga());
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/feed`)).reply(200, { member: [], totalItems: 0 });
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/follow$`)).reply(200, { following: false });
+    mockApi.onGet("/users/u-1/custom_lists").reply(200, {
+      member: [{
+        "@context": "/api/contexts/CustomList",
+        "@id": "/api/custom_lists/cl-1",
+        "@type": "CustomList",
+        id: "cl-1",
+        name: "Already In",
+        visibility: "private",
+        user: "/api/users/u-1",
+        mangas: [{ id: MANGA_ID, title: "Test Manga" }],
+        createdAt: "2024-01-01T00:00:00+00:00",
+      }],
+      totalItems: 1,
+    });
+    mockApi.onDelete(`/custom_lists/cl-1/mangas/${MANGA_ID}`).reply(204);
+
+    render(<MangaDetailsContent id={MANGA_ID} />);
+    await waitFor(() => screen.getByText("Add to List"));
+
+    await ue.click(screen.getByText("Add to List"));
+    await waitFor(() => screen.getByText("Already In"));
+
+    await ue.click(screen.getByText("Already In"));
+
+    await waitFor(() => {
+      expect(mockApi.history.delete.some((r) => r.url?.includes("mangas"))).toBe(true);
+    });
+  });
+
+  it("shows create form inside dropdown when New list is clicked", async () => {
+    const ue = userEvent.setup();
+    mockAuthUser.current = TEST_USER;
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}$`)).reply(200, buildManga());
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/feed`)).reply(200, { member: [], totalItems: 0 });
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/follow$`)).reply(200, { following: false });
+    mockApi.onGet("/users/u-1/custom_lists").reply(200, { member: [], totalItems: 0 });
+
+    render(<MangaDetailsContent id={MANGA_ID} />);
+    await waitFor(() => screen.getByText("Add to List"));
+
+    await ue.click(screen.getByText("Add to List"));
+    await waitFor(() => screen.getByText("No lists yet."));
+
+    await ue.click(screen.getByText("New list"));
+
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText("List name")).toBeInTheDocument();
+    });
+  });
+
+  it("closes dropdown on outside click", async () => {
+    const ue = userEvent.setup();
+    mockAuthUser.current = TEST_USER;
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}$`)).reply(200, buildManga());
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/feed`)).reply(200, { member: [], totalItems: 0 });
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/follow$`)).reply(200, { following: false });
+    mockApi.onGet("/users/u-1/custom_lists").reply(200, { member: [], totalItems: 0 });
+
+    render(<MangaDetailsContent id={MANGA_ID} />);
+    await waitFor(() => screen.getByText("Add to List"));
+
+    await ue.click(screen.getByText("Add to List"));
+    await waitFor(() => screen.getByText("No lists yet."));
+
+    fireEvent.mouseDown(document.body);
+
+    await waitFor(() => {
+      expect(screen.queryByText("No lists yet.")).not.toBeInTheDocument();
+    });
+  });
+
+  it("cancels create form inside dropdown with cancel button", async () => {
+    const ue = userEvent.setup();
+    mockAuthUser.current = TEST_USER;
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}$`)).reply(200, buildManga());
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/feed`)).reply(200, { member: [], totalItems: 0 });
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/follow$`)).reply(200, { following: false });
+    mockApi.onGet("/users/u-1/custom_lists").reply(200, { member: [], totalItems: 0 });
+
+    render(<MangaDetailsContent id={MANGA_ID} />);
+    await waitFor(() => screen.getByText("Add to List"));
+
+    await ue.click(screen.getByText("Add to List"));
+    await waitFor(() => screen.getByText("No lists yet."));
+
+    await ue.click(screen.getByText("New list"));
+    await screen.findByPlaceholderText("List name");
+
+    await ue.click(screen.getByText("✕"));
+
+    await waitFor(() => {
+      expect(screen.queryByPlaceholderText("List name")).not.toBeInTheDocument();
+    });
+    expect(screen.getByText("New list")).toBeInTheDocument();
+  });
+
+  it("changes visibility via select in the create-list form inside dropdown", async () => {
+    const ue = userEvent.setup();
+    mockAuthUser.current = TEST_USER;
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}$`)).reply(200, buildManga());
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/feed`)).reply(200, { member: [], totalItems: 0 });
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/follow$`)).reply(200, { following: false });
+    mockApi.onGet("/users/u-1/custom_lists").reply(200, { member: [], totalItems: 0 });
+    mockApi.onPost("/custom_lists").reply(201, {
+      "@context": "/api/contexts/CustomList",
+      "@id": "/api/custom_lists/cl-vis",
+      "@type": "CustomList",
+      id: "cl-vis",
+      name: "Public List",
+      visibility: "public",
+      user: "/api/users/u-1",
+      mangas: [],
+      createdAt: "2024-01-01T00:00:00+00:00",
+    });
+    mockApi.onPost(`/custom_lists/cl-vis/mangas/${MANGA_ID}`).reply(200);
+
+    render(<MangaDetailsContent id={MANGA_ID} />);
+    await waitFor(() => screen.getByText("Add to List"));
+
+    await ue.click(screen.getByText("Add to List"));
+    await waitFor(() => screen.getByText("No lists yet."));
+
+    await ue.click(screen.getByText("New list"));
+    await screen.findByPlaceholderText("List name");
+
+    const select = screen.getByRole("combobox");
+    await ue.selectOptions(select, "public");
+
+    expect((select as HTMLSelectElement).value).toBe("public");
+  });
+
+  it("creates a new list and adds manga from the dropdown", async () => {
+    const ue = userEvent.setup();
+    mockAuthUser.current = TEST_USER;
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}$`)).reply(200, buildManga());
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/feed`)).reply(200, { member: [], totalItems: 0 });
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/follow$`)).reply(200, { following: false });
+    mockApi.onGet("/users/u-1/custom_lists").reply(200, { member: [], totalItems: 0 });
+    mockApi.onPost("/custom_lists").reply(201, {
+      "@context": "/api/contexts/CustomList",
+      "@id": "/api/custom_lists/cl-new",
+      "@type": "CustomList",
+      id: "cl-new",
+      name: "New List",
+      visibility: "private",
+      user: "/api/users/u-1",
+      mangas: [],
+      createdAt: "2024-01-01T00:00:00+00:00",
+    });
+    mockApi.onPost(`/custom_lists/cl-new/mangas/${MANGA_ID}`).reply(200);
+
+    render(<MangaDetailsContent id={MANGA_ID} />);
+    await waitFor(() => screen.getByText("Add to List"));
+
+    await ue.click(screen.getByText("Add to List"));
+    await waitFor(() => screen.getByText("No lists yet."));
+
+    await ue.click(screen.getByText("New list"));
+    const input = await screen.findByPlaceholderText("List name");
+    await ue.type(input, "New List");
+    await ue.click(screen.getByText("Create & Add"));
+
+    await waitFor(() => {
+      expect(mockApi.history.post.some((r) => r.url === "/custom_lists")).toBe(true);
+    });
+  });
+
+  it("creates list but does not mark manga as in-list when addManga fails", async () => {
+    const ue = userEvent.setup();
+    mockAuthUser.current = TEST_USER;
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}$`)).reply(200, buildManga());
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/feed`)).reply(200, { member: [], totalItems: 0 });
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/follow$`)).reply(200, { following: false });
+    mockApi.onGet("/users/u-1/custom_lists").reply(200, { member: [], totalItems: 0 });
+    mockApi.onPost("/custom_lists").reply(201, {
+      "@context": "/api/contexts/CustomList",
+      "@id": "/api/custom_lists/cl-fail",
+      "@type": "CustomList",
+      id: "cl-fail",
+      name: "Fail List",
+      visibility: "private",
+      user: "/api/users/u-1",
+      mangas: [],
+      createdAt: "2024-01-01T00:00:00+00:00",
+    });
+    mockApi.onPost(`/custom_lists/cl-fail/mangas/${MANGA_ID}`).reply(500, { detail: "Add failed" });
+
+    render(<MangaDetailsContent id={MANGA_ID} />);
+    await waitFor(() => screen.getByText("Add to List"));
+
+    await ue.click(screen.getByText("Add to List"));
+    await waitFor(() => screen.getByText("No lists yet."));
+
+    await ue.click(screen.getByText("New list"));
+    const input = await screen.findByPlaceholderText("List name");
+    await ue.type(input, "Fail List");
+    await ue.click(screen.getByText("Create & Add"));
+
+    await waitFor(() => {
+      expect(mockApi.history.post.some((r) => r.url === "/custom_lists")).toBe(true);
+    });
+  });
+
   it("uses fallback style for unknown manga status", async () => {
     mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}$`)).reply(
       200,
@@ -1542,6 +1864,173 @@ describe("MangaDetailsContent", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Unfollow failed")).toBeInTheDocument();
+    });
+  });
+
+  it("skips reloading lists when dropdown reopened with lists already loaded", async () => {
+    const ue = userEvent.setup();
+    mockAuthUser.current = TEST_USER;
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}$`)).reply(200, buildManga());
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/feed`)).reply(200, { member: [], totalItems: 0 });
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/follow$`)).reply(200, { following: false });
+    mockApi.onGet("/users/u-1/custom_lists").reply(200, {
+      member: [{
+        "@context": "/api/contexts/CustomList",
+        "@id": "/api/custom_lists/cl-1",
+        "@type": "CustomList",
+        id: "cl-1",
+        name: "Cached List",
+        visibility: "private",
+        user: "/api/users/u-1",
+        mangas: [],
+        createdAt: "2024-01-01T00:00:00+00:00",
+      }],
+      totalItems: 1,
+    });
+
+    render(<MangaDetailsContent id={MANGA_ID} />);
+    await waitFor(() => screen.getByText("Add to List"));
+
+    // First open — loads lists
+    await ue.click(screen.getByText("Add to List"));
+    await waitFor(() => screen.getByText("Cached List"));
+
+    // Close with outside click
+    fireEvent.mouseDown(document.body);
+    await waitFor(() => {
+      expect(screen.queryByText("Cached List")).not.toBeInTheDocument();
+    });
+
+    const callsBefore = mockApi.history.get.filter((r) => r.url?.includes("custom_lists")).length;
+
+    // Re-open — lists already cached, no new request
+    await ue.click(screen.getByText("Add to List"));
+    await waitFor(() => screen.getByText("Cached List"));
+
+    const callsAfter = mockApi.history.get.filter((r) => r.url?.includes("custom_lists")).length;
+    expect(callsAfter).toBe(callsBefore);
+  });
+
+  it("shows loading indicator and then empty dropdown when custom lists API fails", async () => {
+    const ue = userEvent.setup();
+    mockAuthUser.current = TEST_USER;
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}$`)).reply(200, buildManga());
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/feed`)).reply(200, { member: [], totalItems: 0 });
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/follow$`)).reply(200, { following: false });
+    mockApi.onGet("/users/u-1/custom_lists").reply(500, { detail: "Lists failed" });
+
+    render(<MangaDetailsContent id={MANGA_ID} />);
+    await waitFor(() => screen.getByText("Add to List"));
+
+    await ue.click(screen.getByText("Add to List"));
+
+    await waitFor(() => {
+      expect(mockApi.history.get.some((r) => r.url?.includes("custom_lists"))).toBe(true);
+    });
+  });
+
+  it("does not call loadLists when closing already-open dropdown", async () => {
+    const ue = userEvent.setup();
+    mockAuthUser.current = TEST_USER;
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}$`)).reply(200, buildManga());
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/feed`)).reply(200, { member: [], totalItems: 0 });
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/follow$`)).reply(200, { following: false });
+    mockApi.onGet("/users/u-1/custom_lists").reply(200, { member: [], totalItems: 0 });
+
+    render(<MangaDetailsContent id={MANGA_ID} />);
+    await waitFor(() => screen.getByText("Add to List"));
+
+    // Open dropdown
+    await ue.click(screen.getByText("Add to List"));
+    await waitFor(() => screen.getByText("No lists yet."));
+
+    const callsBefore = mockApi.history.get.filter((r) => r.url?.includes("custom_lists")).length;
+
+    // Close dropdown by clicking again
+    await ue.click(screen.getByText("Add to List"));
+    await waitFor(() => {
+      expect(screen.queryByText("No lists yet.")).not.toBeInTheDocument();
+    });
+
+    // No extra custom_lists request was made when closing
+    const callsAfter = mockApi.history.get.filter((r) => r.url?.includes("custom_lists")).length;
+    expect(callsAfter).toBe(callsBefore);
+  });
+
+  it("keeps list state unchanged when toggle manga API fails", async () => {
+    const ue = userEvent.setup();
+    mockAuthUser.current = TEST_USER;
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}$`)).reply(200, buildManga());
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/feed`)).reply(200, { member: [], totalItems: 0 });
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/follow$`)).reply(200, { following: false });
+    mockApi.onGet("/users/u-1/custom_lists").reply(200, {
+      member: [{
+        "@context": "/api/contexts/CustomList",
+        "@id": "/api/custom_lists/cl-1",
+        "@type": "CustomList",
+        id: "cl-1",
+        name: "Fail Toggle",
+        visibility: "private",
+        user: "/api/users/u-1",
+        mangas: [],
+        createdAt: "2024-01-01T00:00:00+00:00",
+      }],
+      totalItems: 1,
+    });
+    mockApi.onPost(new RegExp(`/custom_lists/cl-1/mangas/${MANGA_ID}`)).reply(500, { detail: "Toggle failed" });
+
+    render(<MangaDetailsContent id={MANGA_ID} />);
+    await waitFor(() => screen.getByText("Add to List"));
+
+    await ue.click(screen.getByText("Add to List"));
+    await waitFor(() => screen.getByText("Fail Toggle"));
+
+    await ue.click(screen.getByText("Fail Toggle"));
+
+    // Wait for action to complete: loading spinner gone and list button re-enabled
+    await waitFor(() => {
+      const btn = screen.getByRole("button", { name: /Fail Toggle/ });
+      expect(btn).not.toBeDisabled();
+    });
+
+    // List unchanged — manga not marked as in the list
+    expect(screen.getByText("Fail Toggle")).toBeInTheDocument();
+  });
+
+  it("shows no list added when create list API fails", async () => {
+    const ue = userEvent.setup();
+    mockAuthUser.current = TEST_USER;
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}$`)).reply(200, buildManga());
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/feed`)).reply(200, { member: [], totalItems: 0 });
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/follow$`)).reply(200, { following: false });
+    mockApi.onGet("/users/u-1/custom_lists").reply(200, { member: [], totalItems: 0 });
+    mockApi.onPost("/custom_lists").reply(500, { detail: "Create failed" });
+
+    render(<MangaDetailsContent id={MANGA_ID} />);
+    await waitFor(() => screen.getByText("Add to List"));
+
+    await ue.click(screen.getByText("Add to List"));
+    await waitFor(() => screen.getByText("No lists yet."));
+
+    await ue.click(screen.getByText("New list"));
+    const input = await screen.findByPlaceholderText("List name");
+    await ue.type(input, "Bad List");
+    await ue.click(screen.getByText("Create & Add"));
+
+    await waitFor(() => {
+      expect(mockApi.history.post.some((r) => r.url === "/custom_lists")).toBe(true);
+    });
+    expect(screen.queryByText("Bad List")).not.toBeInTheDocument();
+  });
+
+  it("renders null when manga data is null after load", async () => {
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}$`)).reply(200, null);
+    mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/feed`)).reply(200, { member: [], totalItems: 0 });
+
+    const { container } = render(<MangaDetailsContent id={MANGA_ID} />);
+
+    await waitFor(() => {
+      expect(container.querySelector(".animate-pulse")).not.toBeInTheDocument();
     });
   });
 });

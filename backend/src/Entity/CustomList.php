@@ -15,6 +15,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Controller\CustomListMangaController;
+use App\State\Provider\UserCustomListsProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -27,6 +28,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new GetCollection(security: "is_granted('ROLE_ADMIN')"),
+        new GetCollection(
+            uriTemplate: '/users/{id}/custom_lists',
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            provider: UserCustomListsProvider::class,
+        ),
         new Get(security: "object.getUser() == user or is_granted('ROLE_ADMIN')"),
         new Put(security: "object.getUser() == user or is_granted('ROLE_ADMIN')"),
         new Delete(security: "object.getUser() == user or is_granted('ROLE_ADMIN')"),

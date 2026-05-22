@@ -52,6 +52,7 @@ function SidebarInner({ open, onClose }: { open: boolean; onClose: () => void })
         { href: "/follows", label: "Follows", icon: "H" },
         { href: "/library", label: "Library", icon: "L" },
         { href: "/history", label: "History", icon: "H" },
+        { href: "/lists", label: "My Lists", icon: "L" },
       ],
     },
     {
