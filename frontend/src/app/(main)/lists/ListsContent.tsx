@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
@@ -59,17 +59,7 @@ export default function ListsContent() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
-  const fetchLists = useCallback(async (userId: string) => {
-    setLoading(true);
-    setError(null);
-    const result = await handleResponse(customListApi.list(userId));
-    if (result.success) {
-      setLists(result.data.member);
-    } else {
-      setError(result.error);
-    }
-    setLoading(false);
-  }, []);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     /* v8 ignore next */
@@ -78,8 +68,24 @@ export default function ListsContent() {
       router.replace("/login");
       return;
     }
-    fetchLists(user.id);
-  }, [authLoading, user, router, fetchLists]);
+
+    let cancelled = false;
+    async function doFetch() {
+      setLoading(true);
+      setError(null);
+      const result = await handleResponse(customListApi.list(user!.id));
+      /* v8 ignore next */
+      if (cancelled) return;
+      if (result.success) {
+        setLists(result.data.member);
+      } else {
+        setError(result.error);
+      }
+      setLoading(false);
+    }
+    void doFetch();
+    return () => { cancelled = true; };
+  }, [authLoading, user, router, refreshKey]);
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -219,7 +225,7 @@ export default function ListsContent() {
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <p className="text-md-text-secondary mb-4">{error}</p>
           <button
-            onClick={() => user && fetchLists(user.id)}
+            onClick={() => setRefreshKey(k => k + 1)}
             className="px-4 py-2 rounded-lg bg-md-accent text-white text-sm font-medium hover:bg-md-accent/90 transition-colors"
           >
             Try again

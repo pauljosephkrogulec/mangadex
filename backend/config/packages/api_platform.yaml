@@ -31,3 +31,8 @@ api_platform:
     # Enable fetch join collection to prevent N+1 queries
     eager_loading:
         enabled: true
+
+    # Only accept and return application/ld+json
+    formats:
+        jsonld:
+            mime_types: ['application/ld+json']

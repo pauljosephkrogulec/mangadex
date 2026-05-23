@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen, within } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import type { Chapter } from "@/lib/types";
 import userEvent from "@testing-library/user-event";
 import ReaderSidebar from "../ReaderSidebar";
 
@@ -15,7 +16,7 @@ describe("ReaderSidebar", () => {
     chapters: [
       { id: "ch-1", chapterNumber: "1", title: null, volume: "1" },
       { id: "ch-2", chapterNumber: "2", title: "Revelation", volume: "1" },
-    ] as any[],
+    ] as unknown as Chapter[],
     currentChapterId: "ch-1",
     currentPage: 3,
     totalPages: 10,
@@ -112,7 +113,7 @@ describe("ReaderSidebar", () => {
         chapters={[
           { id: "ch-2", chapterNumber: "2", title: "Revelation", volume: "1" },
           { id: "ch-3", chapterNumber: "3", title: null, volume: null },
-        ] as any[]}
+        ] as unknown as Chapter[]}
       />,
     );
 

@@ -2,6 +2,8 @@ import axios, { AxiosError, type AxiosInstance, type CreateAxiosDefaults } from 
 import type {
   Chapter,
   ChapterWrite,
+  Comment,
+  CommentWrite,
   CoverArt,
   CoverArtWrite,
   Creator,
@@ -30,7 +32,7 @@ const config: CreateAxiosDefaults = {
   baseURL: BASE_URL,
   timeout: 15_000,
   headers: {
-    "Content-Type": "application/json",
+    "Content-Type": "application/ld+json",
     Accept: "application/ld+json",
   },
   withCredentials: true,
@@ -61,10 +63,15 @@ function saveToken(token: string | null): void {
 }
 
 let authToken: string | null = loadToken();
+let logoutCallback: (() => void) | null = null;
 
 export function setAuthToken(token: string | null): void {
   authToken = token;
   saveToken(token);
+}
+
+export function registerLogoutCallback(fn: () => void): void {
+  logoutCallback = fn;
 }
 
 const api: AxiosInstance = axios.create(config);
@@ -85,6 +92,10 @@ api.interceptors.response.use(
         error.response.data?.message ||
         error.response.statusText ||
         "An unexpected error occurred";
+
+      if (error.response.status === 401 && message.includes("Expired JWT")) {
+        logoutCallback?.();
+      }
 
       return Promise.reject(new Error(message));
     }
@@ -303,6 +314,17 @@ export const customListApi = {
 
   removeManga: (listId: string, mangaId: string) =>
     api.delete(`/custom_lists/${listId}/mangas/${mangaId}`),
+};
+
+export const commentApi = {
+  list: (mangaId: string, params?: Record<string, string | number>) =>
+    api.get<HydraCollection<Comment>>(`/mangas/${mangaId}/comments`, { params }),
+
+  create: (data: CommentWrite) =>
+    api.post<Comment>("/comments", data),
+
+  delete: (id: string) =>
+    api.delete(`/comments/${id}`),
 };
 
 export const followApi = {

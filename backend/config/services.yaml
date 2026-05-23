@@ -40,6 +40,13 @@ services:
             $decorated: '@App\State\Processor\CustomListProcessor.inner'
         autowire: true
 
+    # Comment processor to set author from security context
+    App\State\Processor\CommentProcessor:
+        decorates: 'api_platform.doctrine.orm.state.persist_processor'
+        arguments:
+            $decorated: '@App\State\Processor\CommentProcessor.inner'
+        autowire: true
+
     # Include parameter handler for eager loading relationships
     App\Serializer\IncludeContextBuilder:
         decorates: 'api_platform.serializer.context_builder.filter'

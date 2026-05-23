@@ -1,4 +1,4 @@
-.PHONY: up down build restart logs logs-backend logs-frontend shell-backend shell-frontend shell-db lint lint-backend lint-frontend fix-backend fix-frontend migrate migrate-diff migrate-rollback install-backend install-frontend test-backend test-backend-coverage test-frontend test-frontend-coverage clear-cache cleanup-files cleanup-files-dry-run fresh setup fixtures fixtures-users generate-fixtures-data
+.PHONY: up down build restart logs logs-backend logs-frontend shell-backend shell-frontend shell-db lint lint-backend lint-frontend fix-backend fix-frontend migrate migrate-diff migrate-rollback install-backend install-frontend test-backend test-backend-coverage test-frontend test-frontend-coverage clear-cache cleanup-files cleanup-files-dry-run fresh setup fixtures fixtures-users generate-fixtures-data fix
 
 up:
 	docker compose up -d
@@ -49,7 +49,6 @@ fresh:
 	docker compose up -d --build
 	docker compose exec backend php bin/console doctrine:migrations:migrate --no-interaction
 	$(MAKE) fixtures
-	$(MAKE) generate-covers
 
 setup: fresh
 	@echo "Setup complete! Visit http://localhost:8080"

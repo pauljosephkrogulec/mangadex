@@ -29,13 +29,14 @@ export default function ProfileContent() {
       return;
     }
 
+    const currentUser = user;
     let cancelled = false;
 
     async function fetchProfile() {
       setLoading(true);
       setError(null);
 
-      const followsResult = await handleResponse(userApi.follows(user.id));
+      const followsResult = await handleResponse(userApi.follows(currentUser.id));
 
       if (cancelled) return;
 

@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { chapterApi, mangaApi, handleResponse } from "@/lib/api";
 import { useReadingHistory } from "@/hooks/useReadingHistory";
 import type { Chapter } from "@/lib/types";
@@ -40,7 +41,9 @@ export default function ChapterReaderContent({
 
       if (cancelled) return;
 
-      if (result.success && result.data) {
+      if (!result.success) {
+        setError(result.error);
+      } else if (result.data) {
         setChapter(result.data);
         setCurrentPage(1);
         const mangaId = result.data.manga?.id ?? propMangaId ?? "";
@@ -52,8 +55,6 @@ export default function ChapterReaderContent({
             chapterNumber: result.data.chapterNumber,
           });
         }
-      } else {
-        setError(result.error);
       }
       setLoading(false);
     }
@@ -68,16 +69,17 @@ export default function ChapterReaderContent({
   useEffect(() => {
     const mangaId = chapter?.manga.id ?? propMangaId;
     if (!mangaId) return;
+    const currentMangaId = mangaId;
     let cancelled = false;
 
     async function fetchMangaTitle() {
-      const result = await handleResponse(mangaApi.get(mangaId));
+      const result = await handleResponse(mangaApi.get(currentMangaId));
       if (cancelled) return;
       if (result.success) {
         const title = result.data.title;
         setMangaTitle(title);
         markAsRead({
-          mangaId,
+          mangaId: currentMangaId,
           mangaTitle: title,
           chapterId: chapterId,
           chapterNumber: chapter?.chapterNumber ?? "",
@@ -97,11 +99,12 @@ export default function ChapterReaderContent({
 
     const mangaId = propMangaId || chapter?.manga.id;
     if (!mangaId) return;
+    const currentMangaId = mangaId;
     let cancelled = false;
 
     async function fetchFeed() {
       const result = await handleResponse(
-        mangaApi.feed(mangaId, {
+        mangaApi.feed(currentMangaId, {
           itemsPerPage: 500,
           "order[chapterNumber]": "asc",
         }),
@@ -118,7 +121,7 @@ export default function ChapterReaderContent({
     return () => {
       cancelled = true;
     };
-  }, [propMangaId, chapter?.manga.id]);
+  }, [propMangaId, chapter, chapter?.manga.id]);
 
   const currentIndex = chapters.findIndex((ch) => ch.id === chapterId);
   const prevChapter =
@@ -266,18 +269,26 @@ export default function ChapterReaderContent({
         className="flex-1 flex items-start justify-center"
         onClick={() => setSidebarOpen((v) => !v)}
       >
-        <img
+        <Image
           src={chapter.pageUrls[currentPage - 1]}
           alt={`Page ${currentPage}`}
+          width={0}
+          height={0}
+          sizes="100vw"
           className="w-full max-w-4xl h-auto block select-none"
           draggable={false}
+          unoptimized
         />
         {currentPage < totalPages && (
-          <img
+          <Image
             src={chapter.pageUrls[currentPage]}
             alt=""
             aria-hidden
+            width={0}
+            height={0}
+            sizes="100vw"
             className="hidden"
+            unoptimized
           />
         )}
       </div>

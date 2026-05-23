@@ -761,7 +761,9 @@ class GenerateFixturesDataCommand extends Command
         $downloaded = 0;
         foreach ($apiCovers as $cover) {
             preg_match('#^/covers/([^/]+)/(.+)$#', $cover['imagePath'], $m);
-            if (count($m) < 3) continue;
+            if (count($m) < 3) {
+                continue;
+            }
             $localPath = $this->coversDir.'/'.$m[1].'/'.$m[2];
             if (file_exists($localPath)) {
                 ++$downloaded;

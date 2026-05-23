@@ -473,7 +473,6 @@ describe("ChapterList", () => {
 
   it("calls onFilterChange when to input changes", async () => {
     const onFilterChange = vi.fn();
-    const user = userEvent.setup();
 
     render(
       <ChapterList

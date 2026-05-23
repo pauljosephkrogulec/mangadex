@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
-import api, { authApi, setAuthToken } from "@/lib/api";
+import api, { authApi, setAuthToken, registerLogoutCallback } from "@/lib/api";
 import type { LoginRequest, LoginResponse, User, UserRegistrationRequest } from "@/lib/types";
 
 interface AuthContextType {
@@ -21,6 +21,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const initialCheckDone = useRef(false);
+
+  useEffect(() => {
+    registerLogoutCallback(() => {
+      setAuthToken(null);
+      setUser(null);
+      window.location.href = "/login";
+    });
+  }, []);
 
   useEffect(() => {
     if (initialCheckDone.current) return;

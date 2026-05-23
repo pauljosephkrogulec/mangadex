@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { AxiosError } from "axios";
 import MockAdapter from "axios-mock-adapter";
-import api, { handleResponse, setAuthToken, authApi } from "../api";
+import api, { handleResponse, setAuthToken, commentApi, registerLogoutCallback } from "../api";
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -38,7 +38,7 @@ describe("api instance", () => {
     // Read the actual headers the client sends through MockAdapter rather than
     // inspecting defaults (Axios internally enriches them at send time).
     mock.onGet("/check-headers").reply((config) => {
-      expect(config.headers).toHaveProperty("Content-Type", "application/json");
+      expect(config.headers).toHaveProperty("Content-Type", "application/ld+json");
       // Axios adds extra Accept values at the adapter level, so we check
       // that at least application/ld+json is present.
       expect(config.headers?.Accept).toMatch(/application\/ld\+json/);
@@ -209,6 +209,36 @@ describe("response interceptor — error normalisation", () => {
     await expect(api.get("/timeout")).rejects.toThrow(
       "Network error. Please check your connection.",
     );
+  });
+
+  it("calls the logout callback on 401 Expired JWT and still rejects", async () => {
+    const logoutFn = vi.fn();
+    registerLogoutCallback(logoutFn);
+
+    mock.onGet("/protected").reply(401, { message: "Expired JWT Token" });
+
+    await expect(api.get("/protected")).rejects.toThrow("Expired JWT Token");
+    expect(logoutFn).toHaveBeenCalledOnce();
+  });
+
+  it("does not call the logout callback on non-expired 401 errors", async () => {
+    const logoutFn = vi.fn();
+    registerLogoutCallback(logoutFn);
+
+    mock.onGet("/protected").reply(401, { message: "JWT Token not found" });
+
+    await expect(api.get("/protected")).rejects.toThrow("JWT Token not found");
+    expect(logoutFn).not.toHaveBeenCalled();
+  });
+
+  it("does not call the logout callback on other 4xx errors", async () => {
+    const logoutFn = vi.fn();
+    registerLogoutCallback(logoutFn);
+
+    mock.onGet("/protected").reply(403, { message: "Forbidden" });
+
+    await expect(api.get("/protected")).rejects.toThrow("Forbidden");
+    expect(logoutFn).not.toHaveBeenCalled();
   });
 });
 
@@ -1022,5 +1052,46 @@ describe("NEXT_PUBLIC_API_URL env var", () => {
     vi.resetModules();
     const { default: freshApi } = await import("../api");
     expect(freshApi.defaults.baseURL).toBe("https://custom-api.example.com");
+  });
+});
+
+// ── commentApi ───────────────────────────────────────────────────────────────
+
+describe("commentApi", () => {
+  let mock: MockAdapter;
+
+  beforeEach(() => {
+    mock = new MockAdapter(api);
+  });
+
+  afterEach(() => {
+    mock.restore();
+  });
+
+  it("list sends GET /mangas/:mangaId/comments", async () => {
+    const payload = { member: [], totalItems: 0 };
+    mock.onGet("/mangas/m-1/comments").reply(200, payload);
+    const res = await commentApi.list("m-1");
+    expect(res.data).toEqual(payload);
+  });
+
+  it("list forwards query params", async () => {
+    mock.onGet("/mangas/m-1/comments", { params: { page: 2 } }).reply(200, { member: [], totalItems: 0 });
+    const res = await commentApi.list("m-1", { page: 2 });
+    expect(res.status).toBe(200);
+  });
+
+  it("create sends POST /comments", async () => {
+    const body = { content: "Great manga!", manga: "/api/mangas/m-1" };
+    const response = { id: "c-1", content: "Great manga!", createdAt: "2026-01-01T00:00:00Z", user: { id: "u-1", username: "alice" } };
+    mock.onPost("/comments", body).reply(201, response);
+    const res = await commentApi.create(body);
+    expect(res.data).toEqual(response);
+  });
+
+  it("delete sends DELETE /comments/:id", async () => {
+    mock.onDelete("/comments/c-1").reply(204);
+    const res = await commentApi.delete("c-1");
+    expect(res.status).toBe(204);
   });
 });

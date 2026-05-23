@@ -4,11 +4,11 @@ import userEvent from "@testing-library/user-event";
 import MockAdapter from "axios-mock-adapter";
 import api from "@/lib/api";
 import MangaDetailsContent from "../MangaDetailsContent";
-import type { Manga, Chapter } from "@/lib/types";
+import type { Manga, Chapter, User } from "@/lib/types";
 
 // ── Mock AuthContext ─────────────────────────────────────────────────────────
 
-const mockAuthUser = vi.hoisted(() => ({ current: null as any }));
+const mockAuthUser = vi.hoisted(() => ({ current: null as User | null }));
 
 vi.mock("@/contexts/AuthContext", () => ({
   useAuth: () => ({
@@ -652,8 +652,6 @@ describe("MangaDetailsContent", () => {
   });
 
   it("shows inline retry when manga re-fetch fails after successful load", async () => {
-    const user = userEvent.setup();
-
     mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}$`)).reply(200, buildManga({ title: "First Load" }));
     mockApi.onGet(new RegExp(`/mangas/${MANGA_ID}/feed`)).reply(200, {
       member: [],
@@ -1158,15 +1156,11 @@ describe("MangaDetailsContent", () => {
       ];
     });
 
-    const { container } = render(<MangaDetailsContent id={MANGA_ID} />);
+    render(<MangaDetailsContent id={MANGA_ID} />);
 
     await waitFor(() => {
       expect(screen.getByTestId("chapter-list-mock")).toBeInTheDocument();
     });
-
-    const getTitles = () =>
-      Array.from(container.querySelectorAll('[data-testid^="chapter-ch-"]'))
-        .map((el) => el.textContent);
 
     // Initially shows page 1
     expect(screen.getByTestId("chapter-count")).toHaveTextContent("100");

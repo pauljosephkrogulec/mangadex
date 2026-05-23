@@ -77,7 +77,7 @@ class MeControllerTest extends TestCase
         $tokenStorage->method('getToken')->willReturn($token);
 
         $container = $this->createMock(\Symfony\Component\DependencyInjection\ContainerInterface::class);
-        $container->method('has')->willReturnCallback(fn(string $id) => match ($id) {
+        $container->method('has')->willReturnCallback(fn (string $id) => match ($id) {
             'security.token_storage' => true,
             default => false,
         });
@@ -98,7 +98,7 @@ class MeControllerTest extends TestCase
         $tokenStorage->method('getToken')->willReturn(null);
 
         $container = $this->createMock(\Symfony\Component\DependencyInjection\ContainerInterface::class);
-        $container->method('has')->willReturnCallback(fn(string $id) => match ($id) {
+        $container->method('has')->willReturnCallback(fn (string $id) => match ($id) {
             'security.token_storage' => true,
             default => false,
         });

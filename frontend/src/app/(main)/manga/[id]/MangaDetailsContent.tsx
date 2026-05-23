@@ -8,6 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import type { Manga, Chapter, CustomList, ListVisibility } from "@/lib/types";
 import ChapterList from "@/components/ChapterList";
 import type { SortField } from "@/components/ChapterList";
+import CommentSection from "@/components/CommentSection";
 
 const ITEMS_PER_PAGE = 100;
 
@@ -820,6 +821,9 @@ export default function MangaDetailsContent({ id }: MangaDetailsContentProps) {
             onRetry={handleChaptersRetry}
             onFilterChange={handleFilterChange}
           />
+
+          <hr className="my-8 border-md-border" />
+          <CommentSection mangaId={id} />
         </>
       ) : null}
     </div>

@@ -56,7 +56,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\Column(type: 'string', length: 36)]
-    #[Groups(['user:read'])]
+    #[Groups(['user:read', 'comment:read'])]
     private ?string $id = null;
 
     #[ORM\Column(type: 'datetime')]
@@ -72,7 +72,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, unique: true)]
     #[Assert\NotBlank]
     #[Assert\Length(min: 3, max: 255)]
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups(['user:read', 'user:write', 'comment:read'])]
     private string $username;
 
     /** @var array<string> */

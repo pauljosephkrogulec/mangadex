@@ -109,6 +109,18 @@ export interface CustomList extends ApiResource {
   mangas?: CustomListManga[];
 }
 
+export interface Comment extends ApiResource {
+  id: string;
+  createdAt: string;
+  content: string;
+  user: { id: string; username: string };
+}
+
+export interface CommentWrite {
+  content: string;
+  manga: string;
+}
+
 export interface MangaFollow extends ApiResource {
   id: string;
   manga: string;
