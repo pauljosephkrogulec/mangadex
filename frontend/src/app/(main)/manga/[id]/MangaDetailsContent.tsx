@@ -9,6 +9,7 @@ import type { Manga, Chapter, CustomList, ListVisibility } from "@/lib/types";
 import ChapterList from "@/components/ChapterList";
 import type { SortField } from "@/components/ChapterList";
 import CommentSection from "@/components/CommentSection";
+import RatingStars from "@/components/RatingStars";
 
 const ITEMS_PER_PAGE = 100;
 
@@ -761,6 +762,9 @@ export default function MangaDetailsContent({ id }: MangaDetailsContentProps) {
                   })}
                 </div>
               )}
+
+              {/* Rating */}
+              <RatingStars mangaId={id} />
 
               {/* Description */}
               {manga.description ? (

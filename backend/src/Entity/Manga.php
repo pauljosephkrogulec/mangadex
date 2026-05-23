@@ -16,6 +16,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Controller\MangaFollowController;
+use App\Controller\MangaRatingController;
 use App\State\MangaFeedProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -64,6 +65,17 @@ use Symfony\Component\Validator\Constraints as Assert;
             controller: MangaFollowController::class,
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             name: 'follow_status'
+        ),
+        new Get(
+            uriTemplate: '/mangas/{id}/rating',
+            controller: MangaRatingController::class,
+            name: 'rating'
+        ),
+        new Post(
+            uriTemplate: '/mangas/{id}/rate',
+            controller: MangaRatingController::class,
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            name: 'rate'
         ),
         new Put(security: "is_granted('ROLE_ADMIN')"),
         new Delete(security: "is_granted('ROLE_ADMIN')"),
@@ -156,6 +168,10 @@ class Manga
     /** @var Collection<int, MangaFollow> */
     private Collection $followers;
 
+    #[ORM\OneToMany(targetEntity: Rating::class, mappedBy: 'manga', cascade: ['persist', 'remove'])]
+    /** @var Collection<int, Rating> */
+    private Collection $ratings;
+
     #[ORM\ManyToMany(targetEntity: CustomList::class, mappedBy: 'mangas')]
     /** @var Collection<int, CustomList> */
     private Collection $customLists;
@@ -169,6 +185,7 @@ class Manga
         $this->chapters = new ArrayCollection();
         $this->coverArts = new ArrayCollection();
         $this->followers = new ArrayCollection();
+        $this->ratings = new ArrayCollection();
         $this->customLists = new ArrayCollection();
     }
 

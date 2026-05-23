@@ -16,6 +16,7 @@ import type {
   Manga,
   MangaFollow,
   MangaWrite,
+  RatingResponse,
   ScanlationGroup,
   ScanlationGroupWrite,
   Tag,
@@ -164,6 +165,12 @@ export const mangaApi = {
 
   followStatus: (id: string) =>
     api.get<{ following: boolean }>(`/mangas/${id}/follow`),
+
+  getRating: (id: string) =>
+    api.get<RatingResponse>(`/mangas/${id}/rating`),
+
+  rate: (id: string, score: number) =>
+    api.post<RatingResponse>(`/mangas/${id}/rate`, { score }),
 };
 
 export const chapterApi = {

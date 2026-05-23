@@ -44,6 +44,12 @@ export type MangaStatus = "ongoing" | "completed" | "hiatus" | "cancelled";
 export type ContentRating = "safe" | "suggestive" | "erotica" | "pornographic";
 export type Demographic = "shounen" | "shoujo" | "josei" | "seinen" | "none";
 
+export interface RatingResponse {
+  averageRating: number | null;
+  ratingCount: number;
+  userRating: number | null;
+}
+
 export interface Manga extends ApiResource {
   id: string;
   createdAt: string;
