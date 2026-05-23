@@ -270,6 +270,9 @@ export const tagApi = {
 };
 
 export const userApi = {
+  list: (page = 1) =>
+    api.get<HydraCollection<User>>("/users", { params: { page } }),
+
   get: (id: string) =>
     api.get<User>(`/users/${id}`),
 
@@ -281,6 +284,21 @@ export const userApi = {
 
   follows: (id: string) =>
     api.get<HydraCollection<MangaFollow>>(`/users/${id}/follows`),
+};
+
+export const adminApi = {
+  stats: async () => {
+    const [mangas, users, chapters] = await Promise.all([
+      api.get<HydraCollection<Manga>>("/mangas", { params: { page: 1, itemsPerPage: 1 } }),
+      api.get<HydraCollection<User>>("/users", { params: { page: 1, itemsPerPage: 1 } }),
+      api.get<HydraCollection<Chapter>>("/chapters", { params: { page: 1, itemsPerPage: 1 } }),
+    ]);
+    return {
+      mangaCount: mangas.data.totalItems,
+      userCount: users.data.totalItems,
+      chapterCount: chapters.data.totalItems,
+    };
+  },
 };
 
 export const scanlationGroupApi = {

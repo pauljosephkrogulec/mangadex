@@ -72,7 +72,7 @@ class MangaRatingControllerTest extends TestCase
 
     private function createRequest(string $method, mixed $body = null): Request
     {
-        $content = $body !== null ? json_encode($body) : '';
+        $content = null !== $body ? json_encode($body) : '';
 
         return new Request([], [], [], [], [], ['REQUEST_METHOD' => $method], $content);
     }

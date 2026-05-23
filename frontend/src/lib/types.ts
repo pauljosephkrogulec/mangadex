@@ -93,6 +93,7 @@ export interface User extends ApiResource {
   createdAt: string;
   email: string;
   username: string;
+  roles: string[];
 }
 
 export type ListVisibility = "public" | "private" | "hidden";

@@ -128,6 +128,7 @@ class JwtCookieSubscriberTest extends TestCase
         $this->assertSame('testuser', $data['user']['username']);
         $this->assertArrayHasKey('id', $data['user']);
         $this->assertArrayHasKey('createdAt', $data['user']);
+        $this->assertContains('ROLE_USER', $data['user']['roles']);
     }
 
     #[AllowMockObjectsWithoutExpectations]

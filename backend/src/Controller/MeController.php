@@ -26,6 +26,7 @@ class MeController extends AbstractController
             'email' => $user->getEmail(),
             'username' => $user->getUsername(),
             'createdAt' => $user->getCreatedAt()->format(\DateTime::ATOM),
+            'roles' => $user->getRoles(),
         ]);
     }
 }

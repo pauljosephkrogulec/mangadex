@@ -48,7 +48,7 @@ class MangaRatingController extends AbstractController
         }
 
         return new JsonResponse([
-            'averageRating' => $stats['avg'] !== null ? round((float) $stats['avg'], 2) : null,
+            'averageRating' => null !== $stats['avg'] ? round((float) $stats['avg'], 2) : null,
             'ratingCount' => (int) $stats['cnt'],
             'userRating' => $userRating,
         ]);
@@ -88,7 +88,7 @@ class MangaRatingController extends AbstractController
         $stats = $this->queryStats($manga);
 
         return new JsonResponse([
-            'averageRating' => $stats['avg'] !== null ? round((float) $stats['avg'], 2) : null,
+            'averageRating' => null !== $stats['avg'] ? round((float) $stats['avg'], 2) : null,
             'ratingCount' => (int) $stats['cnt'],
             'userRating' => $score,
         ], $existing ? 200 : 201);

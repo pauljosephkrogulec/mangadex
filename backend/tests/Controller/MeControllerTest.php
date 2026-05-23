@@ -38,6 +38,7 @@ class MeControllerTest extends TestCase
         $this->assertSame('user@example.com', $data['email']);
         $this->assertSame('testuser', $data['username']);
         $this->assertSame('2024-01-01T00:00:00+00:00', $data['createdAt']);
+        $this->assertContains('ROLE_USER', $data['roles']);
     }
 
     public function testMeWithoutAuthReturns401(): void

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { AxiosError } from "axios";
 import MockAdapter from "axios-mock-adapter";
-import api, { handleResponse, setAuthToken, commentApi, registerLogoutCallback } from "../api";
+import api, { handleResponse, setAuthToken, commentApi, userApi, adminApi, registerLogoutCallback } from "../api";
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -1093,5 +1093,61 @@ describe("commentApi", () => {
     mock.onDelete("/comments/c-1").reply(204);
     const res = await commentApi.delete("c-1");
     expect(res.status).toBe(204);
+  });
+});
+
+// ── userApi.list ─────────────────────────────────────────────────────────────
+
+describe("userApi.list", () => {
+  let mock: MockAdapter;
+
+  beforeEach(() => {
+    mock = new MockAdapter(api);
+  });
+
+  afterEach(() => {
+    mock.restore();
+  });
+
+  it("sends GET /users with page 1 by default", async () => {
+    const payload = { member: [], totalItems: 0 };
+    mock.onGet("/users").reply(200, payload);
+
+    const res = await userApi.list();
+    expect(res.data).toEqual(payload);
+  });
+
+  it("sends GET /users with a custom page", async () => {
+    const payload = { member: [], totalItems: 0 };
+    mock.onGet("/users").reply(200, payload);
+
+    const res = await userApi.list(3);
+    expect(res.data).toEqual(payload);
+  });
+});
+
+// ── adminApi.stats ────────────────────────────────────────────────────────────
+
+describe("adminApi.stats", () => {
+  let mock: MockAdapter;
+
+  beforeEach(() => {
+    mock = new MockAdapter(api);
+  });
+
+  afterEach(() => {
+    mock.restore();
+  });
+
+  it("fetches manga, user, and chapter counts in parallel and returns totals", async () => {
+    mock.onGet("/mangas").reply(200, { totalItems: 42, member: [] });
+    mock.onGet("/users").reply(200, { totalItems: 7, member: [] });
+    mock.onGet("/chapters").reply(200, { totalItems: 100, member: [] });
+
+    const stats = await adminApi.stats();
+
+    expect(stats.mangaCount).toBe(42);
+    expect(stats.userCount).toBe(7);
+    expect(stats.chapterCount).toBe(100);
   });
 });

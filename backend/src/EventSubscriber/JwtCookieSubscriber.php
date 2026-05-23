@@ -32,6 +32,7 @@ class JwtCookieSubscriber
                 'email' => $user->getEmail(),
                 'username' => $user->getUsername(),
                 'createdAt' => $user->getCreatedAt()->format(\DateTime::ATOM),
+                'roles' => $user->getRoles(),
             ];
             $event->setData($data);
         }

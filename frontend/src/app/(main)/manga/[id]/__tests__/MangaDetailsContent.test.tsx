@@ -22,7 +22,16 @@ vi.mock("@/contexts/AuthContext", () => ({
   }),
 }));
 
-const TEST_USER = { id: "u-1", email: "test@example.com", username: "testuser" };
+const TEST_USER: User = {
+  "@context": "/api/contexts/User",
+  "@id": "/api/users/u-1",
+  "@type": "User",
+  id: "u-1",
+  email: "test@example.com",
+  username: "testuser",
+  createdAt: "2024-01-01T00:00:00+00:00",
+  roles: ["ROLE_USER"],
+};
 
 // ── Mock ChapterList ────────────────────────────────────────────────────────
 
@@ -1114,8 +1123,8 @@ describe("MangaDetailsContent", () => {
   // ── Chapter fetch cancellation ──────────────────────────────────────────
 
   it("does not update chapter state after unmount while chapters are loading", async () => {
-    let resolveChapters!: (value: unknown) => void;
-    const chaptersDeferred = new Promise((r) => {
+    let resolveChapters!: (value: [number, unknown]) => void;
+    const chaptersDeferred = new Promise<[number, unknown]>((r) => {
       resolveChapters = r;
     });
 
@@ -1702,8 +1711,8 @@ describe("MangaDetailsContent", () => {
   // ── Edge cases ────────────────────────────────────────────────────────────
 
   it("does not update state after unmount", async () => {
-    let resolveManga!: (value: unknown) => void;
-    const mangaDeferred = new Promise((r) => {
+    let resolveManga!: (value: [number, unknown]) => void;
+    const mangaDeferred = new Promise<[number, unknown]>((r) => {
       resolveManga = r;
     });
 
