@@ -91,7 +91,7 @@ export default function Navbar({ onToggleSidebar }: { onToggleSidebar: () => voi
                 className="w-8 h-8 rounded-full bg-md-accent flex items-center justify-center text-sm font-bold text-white hover:opacity-90 transition-opacity"
                 aria-label="User profile"
               >
-                {user.username.charAt(0).toUpperCase()}
+                {(user.username ?? "?").charAt(0).toUpperCase()}
               </button>
 
               {dropdownOpen && (

@@ -376,6 +376,11 @@ Visit `http://localhost:8080` in your browser.
 | `make test-frontend` | Run Vitest tests |
 | `make test-frontend-coverage` | Run Vitest with coverage |
 
+### Lighthouse
+| Command | Description |
+|---------|-------------|
+| `make lighthouse` | Build production bundle, run Lighthouse audit, restore dev server |
+
 ### Utilities
 | Command | Description |
 |---------|-------------|
@@ -414,11 +419,23 @@ Test suites cover:
 - **MangaCardSkeleton**: Rendering, CSS class presence
 
 ### Test Coverage
-| Component | Branches | Lines |
-|-----------|----------|-------|
-| Backend | Full | 100% |
-| Frontend API layer | 93.75% | 100% |
-| Frontend components | 87.5% | 100% |
+| Component | Tests | Lines |
+|-----------|-------|-------|
+| Backend (PHPUnit) | 233 tests / 580 assertions | 100% |
+| Frontend (Vitest) | 704 tests across 25 suites | 100% |
+
+## Performance
+
+Lighthouse audit scores (production build against `http://localhost:8080`):
+
+| Category | Score |
+|----------|-------|
+| Performance | 99 |
+| Accessibility | 90 |
+| Best Practices | 96 |
+| SEO | 100 |
+
+Run `make lighthouse` to reproduce the audit. It builds a production bundle, starts the production server temporarily, runs the audit, and restores the dev server.
 
 ## JWT Authentication
 

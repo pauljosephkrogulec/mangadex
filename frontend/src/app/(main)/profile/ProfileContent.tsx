@@ -124,7 +124,7 @@ export default function ProfileContent() {
       {/* User info */}
       <div className="flex items-center gap-4 mb-8 pb-6 border-b border-md-border">
         <div className="w-16 h-16 rounded-full bg-md-accent flex items-center justify-center text-2xl font-bold text-white shrink-0">
-          {user.username.charAt(0).toUpperCase()}
+          {(user.username ?? "?").charAt(0).toUpperCase()}
         </div>
         <div className="min-w-0">
           <h1 className="text-2xl font-bold text-md-text-primary">{user.username}</h1>

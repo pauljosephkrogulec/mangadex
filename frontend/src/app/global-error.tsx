@@ -9,8 +9,11 @@ export default function GlobalError({
 }) {
   return (
     <html lang="en">
+      <head>
+        <title>Something went wrong</title>
+      </head>
       <body>
-        <div
+        <main
           style={{
             display: "flex",
             alignItems: "center",
@@ -47,6 +50,7 @@ export default function GlobalError({
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
+                aria-hidden="true"
               >
                 <path
                   strokeLinecap="round"
@@ -66,7 +70,7 @@ export default function GlobalError({
               onClick={reset}
               style={{
                 padding: "8px 16px",
-                backgroundColor: "#e53e3e",
+                backgroundColor: "#b91c1c",
                 color: "#ffffff",
                 border: "none",
                 borderRadius: "8px",
@@ -78,7 +82,7 @@ export default function GlobalError({
               Try again
             </button>
           </div>
-        </div>
+        </main>
       </body>
     </html>
   );

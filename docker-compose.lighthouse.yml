@@ -1,0 +1,11 @@
+services:
+  frontend:
+    command: sh -c "NODE_ENV=production npm run start"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=/api
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+    user: "0:0"

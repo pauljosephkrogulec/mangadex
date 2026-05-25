@@ -209,7 +209,7 @@ function SidebarInner({ open, onClose }: { open: boolean; onClose: () => void })
             <div className="space-y-0.5">
               <div className="flex items-center gap-3 px-3 py-2">
                 <span className="size-7 shrink-0 rounded-full bg-md-accent flex items-center justify-center text-xs font-bold text-white">
-                  {user.username.charAt(0).toUpperCase()}
+                  {(user.username ?? "?").charAt(0).toUpperCase()}
                 </span>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-md-text-primary truncate">{user.username}</p>

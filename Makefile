@@ -1,4 +1,4 @@
-.PHONY: up down build restart logs logs-backend logs-frontend shell-backend shell-frontend shell-db lint lint-backend lint-frontend fix-backend fix-frontend migrate migrate-diff migrate-rollback install-backend install-frontend test-backend test-backend-coverage test-frontend test-frontend-coverage clear-cache cleanup-files cleanup-files-dry-run fresh setup fixtures fixtures-users generate-fixtures-data fix
+.PHONY: up down build restart logs logs-backend logs-frontend shell-backend shell-frontend shell-db lint lint-backend lint-frontend fix-backend fix-frontend migrate migrate-diff migrate-rollback install-backend install-frontend test-backend test-backend-coverage test-frontend test-frontend-coverage clear-cache cleanup-files cleanup-files-dry-run fresh setup fixtures fixtures-users generate-fixtures-data fix lighthouse
 
 up:
 	docker compose up -d
@@ -104,3 +104,29 @@ cleanup-files:
 
 cleanup-files-dry-run:
 	docker compose exec backend php bin/console app:cleanup-orphaned-files --dry-run
+
+lighthouse:
+	@echo "Building production frontend bundle..."
+	docker compose exec -e NODE_ENV=production frontend npm run build
+	@echo "Temporarily switching frontend to production mode..."
+	python3 -c "\
+import re; f=open('docker-compose.override.yml','r+'); c=f.read();\
+c=c.replace('npm install && npm run dev','npm run start');\
+c=c.replace('NODE_ENV=development','NODE_ENV=production');\
+f.seek(0); f.write(c); f.truncate(); f.close()"
+	docker compose up -d frontend
+	@sleep 10
+	@echo "Running Lighthouse audit against http://localhost:8080 ..."
+	@npx --yes lighthouse http://localhost:8080 \
+		--chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" \
+		--only-categories=performance,accessibility,best-practices,seo \
+		--output=json --quiet 2>/dev/null | python3 -c "\
+import json,sys; d=json.load(sys.stdin); cats=d['categories'];\
+[print(f'{k}: {round(v[\"score\"]*100)}') for k,v in cats.items()]"
+	@echo "Restoring dev server..."
+	python3 -c "\
+import re; f=open('docker-compose.override.yml','r+'); c=f.read();\
+c=c.replace('npm run start','npm install && npm run dev');\
+c=c.replace('NODE_ENV=production','NODE_ENV=development');\
+f.seek(0); f.write(c); f.truncate(); f.close()"
+	docker compose up -d frontend
