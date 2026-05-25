@@ -15,7 +15,8 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-jpeg --with-freetype \
     && docker-php-ext-install zip intl pcntl mbstring gd pdo pdo_pgsql pgsql \
     && pecl install apcu && docker-php-ext-enable apcu \
-    && pecl install pcov && docker-php-ext-enable pcov
+    && pecl install pcov && docker-php-ext-enable pcov \
+    && pecl install redis && docker-php-ext-enable redis
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
@@ -45,6 +46,7 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install zip intl pcntl mbstring gd pdo pdo_pgsql pgsql \
     && pecl install apcu && docker-php-ext-enable apcu \
     && pecl install pcov && docker-php-ext-enable pcov \
+    && pecl install redis && docker-php-ext-enable redis \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /app /app
@@ -52,6 +54,10 @@ COPY --from=builder /usr/local/bin/composer /usr/local/bin/composer
 
 WORKDIR /app
 
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 EXPOSE 9000
 
+ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["php-fpm"]

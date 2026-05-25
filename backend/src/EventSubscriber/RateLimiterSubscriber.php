@@ -22,6 +22,8 @@ final class RateLimiterSubscriber
         private readonly RateLimiterFactoryInterface $registration,
         #[Autowire(service: 'limiter.api')]
         private readonly RateLimiterFactoryInterface $api,
+        #[Autowire(service: 'limiter.upload')]
+        private readonly RateLimiterFactoryInterface $upload,
         private readonly KernelInterface $kernel,
     ) {
     }
@@ -48,6 +50,18 @@ final class RateLimiterSubscriber
             }
 
             return;
+        }
+
+        // Upload rate limit: 10 uploads/hour per IP (chapters and cover arts)
+        if ('POST' === $request->getMethod() && (
+            '/api/chapters' === $request->getPathInfo() ||
+            '/api/cover_arts' === $request->getPathInfo()
+        )) {
+            $limiter = $this->upload->create($request->getClientIp());
+            $consume = $limiter->consume();
+            if (!$consume->isAccepted()) {
+                throw new TooManyRequestsHttpException(3600);
+            }
         }
 
         // Rate limit registration: token bucket 3 burst, 1 per 3 min

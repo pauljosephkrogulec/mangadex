@@ -37,7 +37,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     order: ['title' => 'ASC'],
     operations: [
         new GetCollection(
-            normalizationContext: ['groups' => ['manga:list']]
+            normalizationContext: ['groups' => ['manga:list']],
+            cacheHeaders: ['max_age' => 60, 'shared_max_age' => 300, 'vary' => ['Accept', 'Authorization']]
         ),
         new Get(
             normalizationContext: ['groups' => ['manga:read']]
@@ -46,7 +47,8 @@ use Symfony\Component\Validator\Constraints as Assert;
             uriTemplate: '/mangas/{id}/feed',
             provider: MangaFeedProvider::class,
             normalizationContext: ['groups' => ['chapter:read']],
-            name: 'feed'
+            name: 'feed',
+            cacheHeaders: ['max_age' => 60, 'shared_max_age' => 300, 'vary' => ['Accept', 'Authorization']]
         ),
         new Post(
             uriTemplate: '/mangas/{id}/follow',

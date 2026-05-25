@@ -2,8 +2,15 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import MockAdapter from "axios-mock-adapter";
+import { SWRConfig } from "swr";
 import api from "@/lib/api";
 import SearchContent from "../SearchContent";
+
+function renderWithSWR(ui: React.ReactElement) {
+  return render(
+    <SWRConfig value={{ provider: () => new Map() }}>{ui}</SWRConfig>,
+  );
+}
 
 // ── Mock next/navigation ────────────────────────────────────────────────────
 
@@ -85,7 +92,7 @@ describe("SearchContent", () => {
   it("renders the search input and submit button", () => {
     mockApi.onGet(/\/mangas/).reply(() => new Promise(() => {}));
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     expect(screen.getByLabelText("Search manga by title")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Search" })).toBeInTheDocument();
@@ -94,7 +101,7 @@ describe("SearchContent", () => {
   it("renders the page heading", () => {
     mockApi.onGet(/\/mangas/).reply(() => new Promise(() => {}));
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     expect(screen.getByText("Search Manga")).toBeInTheDocument();
   });
@@ -102,7 +109,7 @@ describe("SearchContent", () => {
   it("shows loading state initially", () => {
     mockApi.onGet(/\/mangas/).reply(() => new Promise(() => {}));
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     expect(screen.getByText("Searching...")).toBeInTheDocument();
   });
@@ -117,7 +124,7 @@ describe("SearchContent", () => {
       totalItems: 1,
     });
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     await waitFor(() => {
       expect(screen.getByText("Berserk")).toBeInTheDocument();
@@ -132,7 +139,7 @@ describe("SearchContent", () => {
       totalItems: 1,
     });
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     await waitFor(() => {
       expect(screen.getByText("1 result")).toBeInTheDocument();
@@ -151,7 +158,7 @@ describe("SearchContent", () => {
       totalItems: 3,
     });
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     await waitFor(() => {
       expect(screen.getByText("Manga 1")).toBeInTheDocument();
@@ -170,7 +177,7 @@ describe("SearchContent", () => {
       totalItems: 0,
     });
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     await waitFor(() => {
       expect(screen.getByText("No manga found")).toBeInTheDocument();
@@ -189,7 +196,7 @@ describe("SearchContent", () => {
       totalItems: 0,
     });
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     await waitFor(() => {
       expect(screen.getByText("No manga found")).toBeInTheDocument();
@@ -208,7 +215,7 @@ describe("SearchContent", () => {
       totalItems: 0,
     });
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     await waitFor(() => {
       expect(screen.getByText("No manga found")).toBeInTheDocument();
@@ -224,7 +231,7 @@ describe("SearchContent", () => {
   it("shows error state with retry button on API failure", async () => {
     mockApi.onGet(/\/mangas/).reply(500, { detail: "Server error" });
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     await waitFor(() => {
       expect(screen.getByText("Try again")).toBeInTheDocument();
@@ -236,7 +243,7 @@ describe("SearchContent", () => {
   it("hides results grid when in error state", async () => {
     mockApi.onGet(/\/mangas/).reply(500, { detail: "Server error" });
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     await waitFor(() => {
       expect(screen.getByText("Try again")).toBeInTheDocument();
@@ -265,7 +272,7 @@ describe("SearchContent", () => {
 
     const user = userEvent.setup();
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     await waitFor(() => {
       expect(screen.getByText("Try again")).toBeInTheDocument();
@@ -284,7 +291,7 @@ describe("SearchContent", () => {
     mockSearchParams.mockReturnValue(new URLSearchParams("q=naruto"));
     mockApi.onGet(/\/mangas/).reply(() => new Promise(() => {}));
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     const input = screen.getByLabelText(
       "Search manga by title",
@@ -300,7 +307,7 @@ describe("SearchContent", () => {
       totalItems: 1,
     });
 
-    const { container } = render(<SearchContent />);
+    const { container } = renderWithSWR(<SearchContent />);
     const sidebar = container.querySelector("aside")!;
 
     // Status "Ongoing" button should show as selected (accent style)
@@ -320,7 +327,7 @@ describe("SearchContent", () => {
       totalItems: 1,
     });
 
-    const { container } = render(<SearchContent />);
+    const { container } = renderWithSWR(<SearchContent />);
     const sidebar = container.querySelector("aside")!;
 
     await waitFor(() => {
@@ -337,7 +344,7 @@ describe("SearchContent", () => {
       totalItems: 21,
     });
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     await waitFor(() => {
       expect(screen.getByText("Page 2 Manga")).toBeInTheDocument();
@@ -352,7 +359,7 @@ describe("SearchContent", () => {
       totalItems: 1,
     });
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     // TagFilter should receive the selected tags
     await waitFor(() => {
@@ -367,7 +374,7 @@ describe("SearchContent", () => {
 
     mockApi.onGet(/\/mangas/).reply(() => new Promise(() => {}));
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     const input = screen.getByLabelText("Search manga by title");
     await user.type(input, "naruto");
@@ -385,7 +392,7 @@ describe("SearchContent", () => {
 
     mockApi.onGet(/\/mangas/).reply(() => new Promise(() => {}));
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     const input = screen.getByLabelText("Search manga by title");
     await user.type(input, "new search");
@@ -407,7 +414,7 @@ describe("SearchContent", () => {
       totalItems: 1,
     });
 
-    const { container } = render(<SearchContent />);
+    const { container } = renderWithSWR(<SearchContent />);
     const sidebar = container.querySelector("aside")!;
 
     await waitFor(() => {
@@ -429,7 +436,7 @@ describe("SearchContent", () => {
       totalItems: 1,
     });
 
-    const { container } = render(<SearchContent />);
+    const { container } = renderWithSWR(<SearchContent />);
     const sidebar = container.querySelector("aside")!;
 
     await waitFor(() => {
@@ -451,7 +458,7 @@ describe("SearchContent", () => {
       totalItems: 1,
     });
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     const tagBtn = await screen.findByTestId("select-tag-btn");
     await user.click(tagBtn);
@@ -470,7 +477,7 @@ describe("SearchContent", () => {
       totalItems: 1,
     });
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     await waitFor(() => {
       expect(screen.getByTestId("tag-filter-mock")).toBeInTheDocument();
@@ -483,7 +490,7 @@ describe("SearchContent", () => {
       totalItems: 1,
     });
 
-    const { container } = render(<SearchContent />);
+    const { container } = renderWithSWR(<SearchContent />);
 
     const sidebar = container.querySelector("aside")!;
     await waitFor(() => {
@@ -507,7 +514,7 @@ describe("SearchContent", () => {
       totalItems: 1,
     });
 
-    const { container } = render(<SearchContent />);
+    const { container } = renderWithSWR(<SearchContent />);
 
     const sidebar = container.querySelector("aside")!;
     await waitFor(() => {
@@ -531,7 +538,7 @@ describe("SearchContent", () => {
       totalItems: 21,
     });
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     await waitFor(() => {
       expect(screen.getByTestId("pagination-mock")).toBeInTheDocument();
@@ -546,7 +553,7 @@ describe("SearchContent", () => {
       totalItems: 1,
     });
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     await waitFor(() => {
       expect(screen.getByText("1 result")).toBeInTheDocument();
@@ -567,7 +574,7 @@ describe("SearchContent", () => {
       totalItems: 21,
     });
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     const nextBtn = await screen.findByTestId("next-page-btn");
     await user.click(nextBtn);
@@ -587,7 +594,7 @@ describe("SearchContent", () => {
       totalItems: 1,
     });
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     await waitFor(() => {
       expect(screen.getByText(/1 filter active/)).toBeInTheDocument();
@@ -602,7 +609,7 @@ describe("SearchContent", () => {
       totalItems: 1,
     });
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     await waitFor(() => {
       expect(screen.getByText("Clear all filters")).toBeInTheDocument();
@@ -618,7 +625,7 @@ describe("SearchContent", () => {
       totalItems: 1,
     });
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     await waitFor(() => {
       expect(screen.getByText("Clear all filters")).toBeInTheDocument();
@@ -632,7 +639,7 @@ describe("SearchContent", () => {
   it("shows mobile filter bar with status and demographic selects", () => {
     mockApi.onGet(/\/mangas/).reply(() => new Promise(() => {}));
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     expect(screen.getByLabelText("Filter by status")).toBeInTheDocument();
     expect(
@@ -644,7 +651,7 @@ describe("SearchContent", () => {
     const user = userEvent.setup();
     mockApi.onGet(/\/mangas/).reply(() => new Promise(() => {}));
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     const statusSelect = screen.getByLabelText("Filter by status");
     await user.selectOptions(statusSelect, "completed");
@@ -658,7 +665,7 @@ describe("SearchContent", () => {
     const user = userEvent.setup();
     mockApi.onGet(/\/mangas/).reply(() => new Promise(() => {}));
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     const demographicSelect = screen.getByLabelText("Filter by demographic");
     await user.selectOptions(demographicSelect, "josei");
@@ -676,7 +683,7 @@ describe("SearchContent", () => {
       totalItems: 1,
     });
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     // TagFilter is in sidebar (desktop), but mobile Tags button toggles display
     const tagsBtn = screen.getByText("Tags");
@@ -697,7 +704,7 @@ describe("SearchContent", () => {
       totalItems: 1,
     });
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     await waitFor(() => {
       // Mobile clear button (visible on lg:hidden)
@@ -711,7 +718,7 @@ describe("SearchContent", () => {
   it("does not show empty state during loading", () => {
     mockApi.onGet(/\/mangas/).reply(() => new Promise(() => {}));
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     expect(screen.queryByText("No manga found")).not.toBeInTheDocument();
     expect(screen.getByText("Searching...")).toBeInTheDocument();
@@ -721,7 +728,7 @@ describe("SearchContent", () => {
     mockSearchParams.mockReturnValue(new URLSearchParams("page=invalid"));
     mockApi.onGet(/\/mangas/).reply(() => new Promise(() => {}));
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     // Should not crash; page defaults to 1
     expect(screen.getByText("Search Manga")).toBeInTheDocument();
@@ -731,7 +738,7 @@ describe("SearchContent", () => {
     mockSearchParams.mockReturnValue(new URLSearchParams("page=-5"));
     mockApi.onGet(/\/mangas/).reply(() => new Promise(() => {}));
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     // Should not crash; page defaults to 1
     expect(screen.getByText("Search Manga")).toBeInTheDocument();
@@ -741,7 +748,7 @@ describe("SearchContent", () => {
     const user = userEvent.setup();
     mockApi.onGet(/\/mangas/).reply(() => new Promise(() => {}));
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     // Submit the form with empty input (already empty by default)
     await user.click(screen.getByRole("button", { name: "Search" }));
@@ -758,7 +765,7 @@ describe("SearchContent", () => {
 
     mockApi.onGet(/\/mangas/).reply(() => deferred);
 
-    const { unmount } = render(<SearchContent />);
+    const { unmount } = renderWithSWR(<SearchContent />);
 
     // Unmount while fetch is in-flight
     unmount();
@@ -776,7 +783,7 @@ describe("SearchContent", () => {
     const user = userEvent.setup();
     mockApi.onGet(/\/mangas/).reply(() => new Promise(() => {}));
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     // First select a status
     const statusSelect = screen.getByLabelText("Filter by status");
@@ -794,7 +801,7 @@ describe("SearchContent", () => {
     const user = userEvent.setup();
     mockApi.onGet(/\/mangas/).reply(() => new Promise(() => {}));
 
-    render(<SearchContent />);
+    renderWithSWR(<SearchContent />);
 
     const demographicSelect = screen.getByLabelText("Filter by demographic");
     await user.selectOptions(demographicSelect, "josei");

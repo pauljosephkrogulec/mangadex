@@ -303,7 +303,7 @@ describe("ScanlationGroupSection", () => {
     expect(screen.queryByDisplayValue("MangaScans Pro")).not.toBeInTheDocument();
   });
 
-  it("Save with blank website sends website: null", async () => {
+  it("Save with blank website omits website from payload", async () => {
     mock.onGet("/scanlation_groups").reply(200, hydra([GROUP_1], 1));
 
     const UPDATED: ScanlationGroup = {
@@ -331,7 +331,7 @@ describe("ScanlationGroupSection", () => {
       expect(screen.queryByDisplayValue("MangaScans")).not.toBeInTheDocument(),
     );
 
-    expect(capturedPayload).toEqual({ name: "MangaScans", website: null });
+    expect(capturedPayload).toEqual({ name: "MangaScans" });
     // display row shows "—"
     expect(screen.getByText("—")).toBeInTheDocument();
   });

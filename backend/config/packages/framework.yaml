@@ -25,6 +25,10 @@ framework:
                 policy: 'fixed_window'
                 limit: 60
                 interval: '1 minute'
+            upload:
+                policy: 'fixed_window'
+                limit: 10
+                interval: '1 hour'
 
     #esi: true
     #fragments: true

@@ -75,7 +75,7 @@ export default function ScanlationGroupSection() {
     setEditError(null);
     const payload: ScanlationGroupWrite = {
       name: editForm.name,
-      ...(editForm.website?.trim() ? { website: editForm.website.trim() } : { website: null }),
+      ...(editForm.website?.trim() ? { website: editForm.website.trim() } : {}),
     };
     const result = await handleResponse(scanlationGroupApi.update(id, payload));
     if (result.success) {

@@ -1,9 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import api, { handleResponse } from "@/lib/api";
-import type { HydraCollection, Manga } from "@/lib/types";
+import { useMangaList } from "@/lib/hooks";
 import MangaCard from "@/components/MangaCard";
 import MangaCardSkeleton from "@/components/MangaCardSkeleton";
 import TagFilter from "@/components/TagFilter";
@@ -45,12 +44,18 @@ export default function SearchContent() {
   // Input field state (local, committed on submit)
   const [inputValue, setInputValue] = useState(query);
 
-  // ── Data fetching state ──
-  const [mangas, setMangas] = useState<Manga[]>([]);
-  const [totalItems, setTotalItems] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [retryCount, setRetryCount] = useState(0);
+  // ── Data fetching via SWR ──
+  const fetchParams: Record<string, string | string[]> = {
+    itemsPerPage: String(ITEMS_PER_PAGE),
+    page: String(page),
+    "order[createdAt]": "desc",
+  };
+  if (query) fetchParams.title = query;
+  if (status) fetchParams.status = status;
+  if (demographic) fetchParams.demographic = demographic;
+  if (selectedTags.length) fetchParams["tags.id"] = selectedTags;
+
+  const { mangas, totalItems, isLoading: loading, error, refresh } = useMangaList(fetchParams);
 
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
@@ -84,49 +89,6 @@ export default function SearchContent() {
     },
     [pathname, query, selectedTags, status, demographic, page],
   );
-
-  // ── Fetch manga ──
-  useEffect(() => {
-    let cancelled = false;
-
-    async function fetchMangas() {
-      setLoading(true);
-      setError(null);
-
-      const params = new URLSearchParams();
-      params.set("include", "coverArt");
-      params.set("itemsPerPage", String(ITEMS_PER_PAGE));
-      params.set("page", String(page));
-      params.set("order[createdAt]", "desc");
-
-      if (query) params.set("title", query);
-      if (status) params.set("status", status);
-      if (demographic) params.set("demographic", demographic);
-      selectedTags.forEach((tagId) => params.append("tags.id", tagId));
-
-      const result = await handleResponse(
-        api.get<HydraCollection<Manga>>(`/mangas?${params.toString()}`),
-      );
-
-      if (cancelled) return;
-
-      if (result.success) {
-        setMangas(result.data.member);
-        setTotalItems(result.data.totalItems);
-      } else {
-        setError(result.error);
-        setMangas([]);
-        setTotalItems(0);
-      }
-      setLoading(false);
-    }
-
-    fetchMangas();
-    return () => {
-      cancelled = true;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, selectedTags.join(","), status, demographic, page, retryCount]);
 
   // ── Event handlers ──
 
@@ -164,9 +126,7 @@ export default function SearchContent() {
     router.replace(pathname, { scroll: false });
   };
 
-  const handleRetry = () => {
-    setRetryCount((c) => c + 1);
-  };
+  const handleRetry = () => refresh();
 
   // ── Mobile filter toggle ──
 

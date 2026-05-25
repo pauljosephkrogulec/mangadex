@@ -21,6 +21,7 @@ class RateLimiterSubscriberTest extends TestCase
     private RateLimiterFactoryInterface $loginFactory;
     private RateLimiterFactoryInterface $registrationFactory;
     private RateLimiterFactoryInterface $apiFactory;
+    private RateLimiterFactoryInterface $uploadFactory;
     private KernelInterface $kernel;
     private RateLimiterSubscriber $subscriber;
 
@@ -29,12 +30,14 @@ class RateLimiterSubscriberTest extends TestCase
         $this->loginFactory = $this->createMock(RateLimiterFactoryInterface::class);
         $this->registrationFactory = $this->createMock(RateLimiterFactoryInterface::class);
         $this->apiFactory = $this->createMock(RateLimiterFactoryInterface::class);
+        $this->uploadFactory = $this->createMock(RateLimiterFactoryInterface::class);
         $this->kernel = $this->createMock(KernelInterface::class);
 
         $this->subscriber = new RateLimiterSubscriber(
             $this->loginFactory,
             $this->registrationFactory,
             $this->apiFactory,
+            $this->uploadFactory,
             $this->kernel,
         );
     }
@@ -349,5 +352,121 @@ class RateLimiterSubscriberTest extends TestCase
 
         $this->subscriber->onKernelRequest($event);
         $this->assertTrue(true);
+    }
+
+    public function testUploadRateLimitingAppliedToChaptersEndpoint(): void
+    {
+        $this->kernel->method('getEnvironment')->willReturn('prod');
+
+        $request = $this->createMock(Request::class);
+        $request->method('getPathInfo')->willReturn('/api/chapters');
+        $request->method('getMethod')->willReturn('POST');
+        $request->method('getClientIp')->willReturn('10.0.0.1');
+
+        $uploadLimit = $this->createMock(RateLimit::class);
+        $uploadLimit->method('isAccepted')->willReturn(true);
+
+        $uploadLimiter = $this->createMock(LimiterInterface::class);
+        $uploadLimiter->method('consume')->willReturn($uploadLimit);
+
+        $this->uploadFactory->method('create')->willReturn($uploadLimiter);
+
+        $apiLimit = $this->createMock(RateLimit::class);
+        $apiLimit->method('isAccepted')->willReturn(true);
+
+        $apiLimiter = $this->createMock(LimiterInterface::class);
+        $apiLimiter->method('consume')->willReturn($apiLimit);
+
+        $this->apiFactory->method('create')->willReturn($apiLimiter);
+
+        $event = $this->createMock(RequestEvent::class);
+        $event->method('getRequest')->willReturn($request);
+
+        $this->subscriber->onKernelRequest($event);
+        $this->assertTrue(true);
+    }
+
+    public function testThrowsWhenUploadRateLimitExceededForChapters(): void
+    {
+        $this->kernel->method('getEnvironment')->willReturn('prod');
+
+        $request = $this->createMock(Request::class);
+        $request->method('getPathInfo')->willReturn('/api/chapters');
+        $request->method('getMethod')->willReturn('POST');
+        $request->method('getClientIp')->willReturn('10.0.0.1');
+
+        $uploadLimit = $this->createMock(RateLimit::class);
+        $uploadLimit->method('isAccepted')->willReturn(false);
+
+        $uploadLimiter = $this->createMock(LimiterInterface::class);
+        $uploadLimiter->method('consume')->willReturn($uploadLimit);
+
+        $this->uploadFactory->method('create')->willReturn($uploadLimiter);
+        $this->apiFactory->expects($this->never())->method('create');
+
+        $event = $this->createMock(RequestEvent::class);
+        $event->method('getRequest')->willReturn($request);
+
+        $this->expectException(TooManyRequestsHttpException::class);
+
+        $this->subscriber->onKernelRequest($event);
+    }
+
+    public function testUploadRateLimitingAppliedToCoverArtsEndpoint(): void
+    {
+        $this->kernel->method('getEnvironment')->willReturn('prod');
+
+        $request = $this->createMock(Request::class);
+        $request->method('getPathInfo')->willReturn('/api/cover_arts');
+        $request->method('getMethod')->willReturn('POST');
+        $request->method('getClientIp')->willReturn('10.0.0.1');
+
+        $uploadLimit = $this->createMock(RateLimit::class);
+        $uploadLimit->method('isAccepted')->willReturn(true);
+
+        $uploadLimiter = $this->createMock(LimiterInterface::class);
+        $uploadLimiter->method('consume')->willReturn($uploadLimit);
+
+        $this->uploadFactory->method('create')->willReturn($uploadLimiter);
+
+        $apiLimit = $this->createMock(RateLimit::class);
+        $apiLimit->method('isAccepted')->willReturn(true);
+
+        $apiLimiter = $this->createMock(LimiterInterface::class);
+        $apiLimiter->method('consume')->willReturn($apiLimit);
+
+        $this->apiFactory->method('create')->willReturn($apiLimiter);
+
+        $event = $this->createMock(RequestEvent::class);
+        $event->method('getRequest')->willReturn($request);
+
+        $this->subscriber->onKernelRequest($event);
+        $this->assertTrue(true);
+    }
+
+    public function testThrowsWhenUploadRateLimitExceededForCoverArts(): void
+    {
+        $this->kernel->method('getEnvironment')->willReturn('prod');
+
+        $request = $this->createMock(Request::class);
+        $request->method('getPathInfo')->willReturn('/api/cover_arts');
+        $request->method('getMethod')->willReturn('POST');
+        $request->method('getClientIp')->willReturn('10.0.0.1');
+
+        $uploadLimit = $this->createMock(RateLimit::class);
+        $uploadLimit->method('isAccepted')->willReturn(false);
+
+        $uploadLimiter = $this->createMock(LimiterInterface::class);
+        $uploadLimiter->method('consume')->willReturn($uploadLimit);
+
+        $this->uploadFactory->method('create')->willReturn($uploadLimiter);
+        $this->apiFactory->expects($this->never())->method('create');
+
+        $event = $this->createMock(RequestEvent::class);
+        $event->method('getRequest')->willReturn($request);
+
+        $this->expectException(TooManyRequestsHttpException::class);
+
+        $this->subscriber->onKernelRequest($event);
     }
 }

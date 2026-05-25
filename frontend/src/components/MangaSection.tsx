@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import api, { handleResponse } from "@/lib/api";
-import type { HydraCollection, Manga } from "@/lib/types";
+import { useMangaList } from "@/lib/hooks";
 import MangaCard from "./MangaCard";
 import MangaCardSkeleton from "./MangaCardSkeleton";
 
@@ -39,44 +38,15 @@ export default function MangaSection({
   limit = 10,
   variant = "grid",
 }: MangaSectionProps) {
-  const [mangas, setMangas] = useState<Manga[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const params = Object.fromEntries(
+    Object.entries(apiParams).map(([k, v]) => [k, String(v)]),
+  );
+  const { mangas: allMangas, isLoading: loading, error } = useMangaList(params);
+  const mangas = allMangas.slice(0, limit);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
   const [, setHasOverflow] = useState(false);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function fetchMangas() {
-      setLoading(true);
-      setError(null);
-
-      const query = new URLSearchParams();
-      query.set("include", "coverArt");
-      for (const [key, value] of Object.entries(apiParams)) {
-        query.set(key, String(value));
-      }
-
-      const result = await handleResponse(
-        api.get<HydraCollection<Manga>>(`/mangas?${query.toString()}`),
-      );
-
-      if (cancelled) return;
-
-      if (result.success) {
-        setMangas(result.data.member.slice(0, limit));
-      } else {
-        setError(result.error);
-      }
-      setLoading(false);
-    }
-
-    fetchMangas();
-    return () => { cancelled = true; };
-  }, [apiParams, limit]);
 
   // ── Scroll arrow visibility ──
   const updateScrollButtons = () => {
@@ -109,6 +79,7 @@ export default function MangaSection({
 
   const scrollBy = (direction: "left" | "right") => {
     const el = scrollRef.current;
+    /* v8 ignore next */
     if (!el) return;
     const amount = el.clientWidth * 0.75;
     el.scrollBy({ left: direction === "left" ? -amount : amount, behavior: "smooth" });
@@ -185,6 +156,7 @@ export default function MangaSection({
 
           <div
             ref={scrollRef}
+            data-testid="scroll-container"
             className="flex gap-3 md:gap-4 overflow-x-auto px-6 md:px-8 pb-2 -mb-2 scroll-smooth snap-x snap-mandatory scrollbar-hide"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
