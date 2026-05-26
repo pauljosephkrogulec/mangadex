@@ -39,50 +39,13 @@ const config: CreateAxiosDefaults = {
   withCredentials: true,
 };
 
-const STORAGE_KEY = "mangadex_auth_token";
-
-function loadToken(): string | null {
-  if (typeof window === "undefined") return null;
-  try {
-    return localStorage.getItem(STORAGE_KEY);
-  } catch {
-    return null;
-  }
-}
-
-function saveToken(token: string | null): void {
-  if (typeof window === "undefined") return;
-  try {
-    if (token) {
-      localStorage.setItem(STORAGE_KEY, token);
-    } else {
-      localStorage.removeItem(STORAGE_KEY);
-    }
-  } catch {
-    // localStorage unavailable
-  }
-}
-
-let authToken: string | null = loadToken();
 let logoutCallback: (() => void) | null = null;
-
-export function setAuthToken(token: string | null): void {
-  authToken = token;
-  saveToken(token);
-}
 
 export function registerLogoutCallback(fn: () => void): void {
   logoutCallback = fn;
 }
 
 const api: AxiosInstance = axios.create(config);
-
-api.interceptors.request.use((config) => {
-  if (authToken) {
-    config.headers.Authorization = `Bearer ${authToken}`;
-  }
-  return config;
-});
 
 api.interceptors.response.use(
   (response) => response,

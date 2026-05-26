@@ -6,8 +6,8 @@
         "user": "mangareader1",
         "mangas": [
             "mairimashita-iruma-kun",
-            "maou-no-ore-ga-dorei-elf-wo-yome-ni-shitanda-ga-dou-medereba-ii",
-            "boku-no-kokoro-no-yabai-yatsu"
+            "kage-no-jitsuryokusha-ni-naritakute",
+            "chiyu-mahou-no-machigatta-tsukaikata-senjou-wo-kakeru-kaifuku-youin"
         ]
     },
     {
@@ -16,9 +16,9 @@
         "visibility": "public",
         "user": "mangareader1",
         "mangas": [
-            "mairimashita-iruma-kun",
-            "jujutsu-kaisen",
-            "akuyaku-reijou-level-99-watashi-wa-ura-boss-desuga-maou-de-wa-arimasen"
+            "arifureta-shokugyou-de-sekai-saikyou",
+            "jeonjijeok-dokja-sijeom",
+            "mushoku-tensei-isekai-ittara-honki-dasu"
         ]
     },
     {
@@ -27,8 +27,8 @@
         "visibility": "private",
         "user": "mangareader1",
         "mangas": [
-            "hazure-waku-no-joutai-ijou-skill-de-saikyou-ni-natta-ore-ga-subete-o-juurin-suru-made",
-            "shuumatsu-no-valkyrie"
+            "jeonjijeok-dokja-sijeom",
+            "horimiya"
         ]
     },
     {
@@ -37,8 +37,8 @@
         "visibility": "public",
         "user": "mangareader2",
         "mangas": [
-            "tokidoki-bosotto-russia-go-de-dereru-tonari-no-alya-san",
-            "chiyu-mahou-no-machigatta-tsukaikata-senjou-wo-kakeru-kaifuku-youin"
+            "chainsaw-man",
+            "tensei-kizoku-no-isekai-boukenroku-jichou-wo-shiranai-kamigami-no-shito"
         ]
     },
     {
@@ -47,9 +47,9 @@
         "visibility": "public",
         "user": "mangareader2",
         "mangas": [
-            "sousou-no-frieren",
-            "lv2-kara-cheat-datta-moto-yuusha-kouho-no-mattari-isekai-life",
-            "mairimashita-iruma-kun"
+            "yofukashi-no-uta",
+            "dungeon-meshi",
+            "jujutsu-kaisen"
         ]
     },
     {
@@ -58,8 +58,8 @@
         "visibility": "hidden",
         "user": "mangareader2",
         "mangas": [
-            "akuyaku-reijou-level-99-watashi-wa-ura-boss-desuga-maou-de-wa-arimasen",
-            "kage-no-jitsuryokusha-ni-naritakute"
+            "anta-to-osananajimi-tte-dake-demo-iya-nanoni-zekkou-kara-hajimaru-s-kyuu-bishoujo-to-no-gakuen-naria",
+            "isekai-mokushiroku-mynoghra-hametsu-no-bunmei-de-hajimeru-sekai-seifuku"
         ]
     },
     {
@@ -68,10 +68,10 @@
         "visibility": "public",
         "user": "admin",
         "mangas": [
-            "one-punch-man",
+            "sousou-no-frieren",
+            "jujutsu-kaisen",
             "lv2-kara-cheat-datta-moto-yuusha-kouho-no-mattari-isekai-life",
-            "horimiya",
-            "mieruko-chan"
+            "mushoku-tensei-isekai-ittara-honki-dasu"
         ]
     }
 ]

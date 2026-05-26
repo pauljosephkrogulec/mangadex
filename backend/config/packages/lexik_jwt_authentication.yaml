@@ -7,3 +7,12 @@ lexik_jwt_authentication:
     token_extractors:
         authorization_header: { enabled: true }
         cookie: { enabled: true, name: mangadex_jwt_token }
+    set_cookies:
+        mangadex_jwt_token:
+            lifetime: null
+            samesite: lax
+            path: /
+            domain: null
+            secure: false
+            httpOnly: true
+    remove_token_from_body_when_cookies_used: false

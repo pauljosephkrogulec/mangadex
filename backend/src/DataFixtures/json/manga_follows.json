@@ -2,12 +2,12 @@
     {
         "ref": "follow-1",
         "user": "admin",
-        "manga": "chiyu-mahou-no-machigatta-tsukaikata-senjou-wo-kakeru-kaifuku-youin"
+        "manga": "yofukashi-no-uta"
     },
     {
         "ref": "follow-2",
         "user": "admin",
-        "manga": "mieruko-chan"
+        "manga": "tondemo-skill-de-isekai-hourou-meshi"
     },
     {
         "ref": "follow-3",
@@ -16,72 +16,47 @@
     },
     {
         "ref": "follow-4",
-        "user": "mangareader1",
-        "manga": "boku-no-kokoro-no-yabai-yatsu"
+        "user": "admin",
+        "manga": "tokidoki-bosotto-russia-go-de-dereru-tonari-no-alya-san"
     },
     {
         "ref": "follow-5",
         "user": "mangareader1",
-        "manga": "dungeon-ni-hisomu-yandere-na-kanojo-ni-ore-wa-nandomo-korosareru"
+        "manga": "oshi-no-ko"
     },
     {
         "ref": "follow-6",
         "user": "mangareader1",
-        "manga": "oshi-no-ko"
+        "manga": "tondemo-skill-de-isekai-hourou-meshi"
     },
     {
         "ref": "follow-7",
         "user": "mangareader2",
-        "manga": "sono-bisque-doll-wa-koi-o-suru"
+        "manga": "anta-to-osananajimi-tte-dake-demo-iya-nanoni-zekkou-kara-hajimaru-s-kyuu-bishoujo-to-no-gakuen-naria"
     },
     {
         "ref": "follow-8",
         "user": "mangareader2",
-        "manga": "tsuihou-sareru-tabi-ni-skill-o-te-ni-ireta-ore-ga-100-no-isekai-de-2-shuume-musou"
+        "manga": "taida-na-akujoku-kizoku-ni-tensei-shita-ore-scenario-wo-bukkowashitara-kikakugai-no-maryoku-de-saiky"
     },
     {
         "ref": "follow-9",
-        "user": "mangareader2",
-        "manga": "dungeon-ni-hisomu-yandere-na-kanojo-ni-ore-wa-nandomo-korosareru"
+        "user": "animefan",
+        "manga": "kusuriya-no-hitorigoto"
     },
     {
         "ref": "follow-10",
         "user": "animefan",
-        "manga": "osoraku-kanojo-wa-ore-no-aniki-wo-neratteru"
+        "manga": "horimiya"
     },
     {
         "ref": "follow-11",
-        "user": "animefan",
-        "manga": "oshi-no-ko"
+        "user": "scanlator",
+        "manga": "hazure-waku-no-joutai-ijou-skill-de-saikyou-ni-natta-ore-ga-subete-o-juurin-suru-made"
     },
     {
         "ref": "follow-12",
-        "user": "animefan",
-        "manga": "maou-ni-natta-node-dungeon-tsukutte-jingai-musume-to-honobono-suru"
-    },
-    {
-        "ref": "follow-13",
-        "user": "animefan",
-        "manga": "lv2-kara-cheat-datta-moto-yuusha-kouho-no-mattari-isekai-life"
-    },
-    {
-        "ref": "follow-14",
         "user": "scanlator",
-        "manga": "kumo-desu-ga-nani-ka"
-    },
-    {
-        "ref": "follow-15",
-        "user": "scanlator",
-        "manga": "shuumatsu-no-valkyrie"
-    },
-    {
-        "ref": "follow-16",
-        "user": "scanlator",
-        "manga": "jujutsu-kaisen"
-    },
-    {
-        "ref": "follow-17",
-        "user": "scanlator",
-        "manga": "isekai-mokushiroku-mynoghra-hametsu-no-bunmei-de-hajimeru-sekai-seifuku"
+        "manga": "mieruko-chan"
     }
 ]

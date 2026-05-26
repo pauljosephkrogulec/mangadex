@@ -6,24 +6,15 @@ namespace App\EventSubscriber;
 
 use App\Entity\User;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
-use Symfony\Component\HttpFoundation\Cookie;
 
 class JwtCookieSubscriber
 {
-    public function __construct(
-        #[Autowire('%kernel.environment%')]
-        private string $appEnv,
-    ) {
-    }
-
-    #[AsEventListener(event: AuthenticationSuccessEvent::class)]
+    #[AsEventListener(event: Events::AUTHENTICATION_SUCCESS)]
     public function onAuthenticationSuccess(AuthenticationSuccessEvent $event): void
     {
-        $response = $event->getResponse();
         $data = $event->getData();
-        $jwt = $data['token'] ?? null;
         $user = $event->getUser();
 
         if ($user instanceof User) {
@@ -35,21 +26,6 @@ class JwtCookieSubscriber
                 'roles' => $user->getRoles(),
             ];
             $event->setData($data);
-        }
-
-        if (is_string($jwt)) {
-            $cookie = new Cookie(
-                'mangadex_jwt_token',
-                $jwt,
-                0,
-                '/',
-                null,
-                'prod' === $this->appEnv,
-                true,
-                false,
-                'lax'
-            );
-            $response->headers->setCookie($cookie);
         }
     }
 }

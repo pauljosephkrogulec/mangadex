@@ -255,6 +255,13 @@ describe("Sidebar", () => {
 
   // ── Logged in (regular user) ──────────────────────────────────────────────
 
+  it("shows '?' avatar initial when user has no username", () => {
+    mockAuth.user = { ...REGULAR_USER, username: undefined as unknown as string };
+    renderSidebar(true);
+
+    expect(screen.getByText("?")).toBeInTheDocument();
+  });
+
   it("shows username, email, and first-letter avatar for a logged-in regular user", () => {
     mockAuth.user = REGULAR_USER;
     renderSidebar(true);

@@ -13,7 +13,6 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 #[AllowMockObjectsWithoutExpectations]
@@ -237,7 +236,7 @@ class ChapterPageControllerTest extends TestCase
         }
     }
 
-    public function testServePageWithExternalUrlReturnsRedirect(): void
+    public function testServePageWithExternalHttpsUrlReturnsNotFound(): void
     {
         $chapter = $this->createMock(Chapter::class);
         $chapter
@@ -250,14 +249,11 @@ class ChapterPageControllerTest extends TestCase
             ->with('chapter-1')
             ->willReturn($chapter);
 
-        $response = $this->controller->servePage('chapter-1', 1, $this->entityManager);
-
-        $this->assertInstanceOf(RedirectResponse::class, $response);
-        $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals('https://cdn.example.com/images/page1.jpg', $response->getTargetUrl());
+        $this->expectException(NotFoundHttpException::class);
+        $this->controller->servePage('chapter-1', 1, $this->entityManager);
     }
 
-    public function testServePageWithExternalHttpUrlReturnsRedirect(): void
+    public function testServePageWithExternalHttpUrlReturnsNotFound(): void
     {
         $chapter = $this->createMock(Chapter::class);
         $chapter
@@ -270,11 +266,8 @@ class ChapterPageControllerTest extends TestCase
             ->with('chapter-1')
             ->willReturn($chapter);
 
-        $response = $this->controller->servePage('chapter-1', 1, $this->entityManager);
-
-        $this->assertInstanceOf(RedirectResponse::class, $response);
-        $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals('http://cdn.example.com/images/page1.jpg', $response->getTargetUrl());
+        $this->expectException(NotFoundHttpException::class);
+        $this->controller->servePage('chapter-1', 1, $this->entityManager);
     }
 
     public function testResolveUploadPathBlocksDirectoryTraversal(): void

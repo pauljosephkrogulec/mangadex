@@ -1,16 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { AxiosError } from "axios";
 import MockAdapter from "axios-mock-adapter";
-import api, { handleResponse, setAuthToken, commentApi, userApi, adminApi, registerLogoutCallback } from "../api";
-
-// ── Helpers ─────────────────────────────────────────────────────────────────
-
-/** Clears localStorage between tests */
-function clearStorage() {
-  localStorage.clear();
-  const keys = Object.keys(localStorage);
-  for (const k of keys) localStorage.removeItem(k);
-}
+import api, { handleResponse, commentApi, userApi, adminApi, registerLogoutCallback } from "../api";
 
 // ── api instance config ─────────────────────────────────────────────────────
 
@@ -18,7 +9,6 @@ describe("api instance", () => {
   let mock: MockAdapter;
 
   beforeEach(() => {
-    clearStorage();
     mock = new MockAdapter(api);
   });
 
@@ -49,13 +39,12 @@ describe("api instance", () => {
   });
 });
 
-// ── Request: no auth interceptor ────────────────────────────────────────────
+// ── Request: no auth header (cookie-based auth) ─────────────────────────────
 
-describe("request — no auth interceptor", () => {
+describe("request — cookie-based auth (no Authorization header)", () => {
   let mock: MockAdapter;
 
   beforeEach(() => {
-    clearStorage();
     mock = new MockAdapter(api);
   });
 
@@ -72,60 +61,8 @@ describe("request — no auth interceptor", () => {
     await api.get("/public");
   });
 
-  it("reads token from localStorage on module load", async () => {
-    // The module-level loadToken() should pick up a stored token
-    localStorage.setItem("mangadex_auth_token", "stored-token");
-
-    // Re-import to trigger the module-level initializer
-    const apiModule = await import("../api");
-    apiModule.setAuthToken("stored-token");
-
-    mock.onGet("/secure").reply((config) => {
-      expect(config.headers?.Authorization).toBe("Bearer stored-token");
-      return [200, {}];
-    });
-
-    await api.get("/secure");
-  });
-});
-
-// ── setAuthToken ────────────────────────────────────────────────────────────
-
-describe("setAuthToken", () => {
-  let mock: MockAdapter;
-
-  beforeEach(() => {
-    clearStorage();
-    mock = new MockAdapter(api);
-    setAuthToken(null);
-  });
-
-  afterEach(() => {
-    mock.restore();
-    setAuthToken(null);
-  });
-
-  it("attaches Bearer token header when token is set", async () => {
-    setAuthToken("test-jwt-token");
-
-    mock.onGet("/secure").reply((config) => {
-      expect(config.headers?.Authorization).toBe("Bearer test-jwt-token");
-      return [200, { ok: true }];
-    });
-
-    await api.get("/secure");
-  });
-
-  it("does not attach Authorization header after token is cleared", async () => {
-    setAuthToken("test-jwt-token");
-    setAuthToken(null);
-
-    mock.onGet("/public").reply((config) => {
-      expect(config.headers?.Authorization).toBeUndefined();
-      return [200, { ok: true }];
-    });
-
-    await api.get("/public");
+  it("sends withCredentials true so cookies are included in cross-origin requests", () => {
+    expect(api.defaults.withCredentials).toBe(true);
   });
 });
 
@@ -135,7 +72,6 @@ describe("response interceptor — error normalisation", () => {
   let mock: MockAdapter;
 
   beforeEach(() => {
-    clearStorage();
     mock = new MockAdapter(api);
   });
 
@@ -311,7 +247,6 @@ describe("integration — api.get + handleResponse", () => {
   let mock: MockAdapter;
 
   beforeEach(() => {
-    clearStorage();
     mock = new MockAdapter(api);
   });
 
@@ -981,54 +916,6 @@ describe("coverArtApi additional endpoints", () => {
     expect(res.data.id).toBe("ca-2");
     expect(res.data.imagePath).toBe("/covers/test2.jpg");
     expect(res.data.volume).toBeNull();
-  });
-});
-
-// ── loadToken catch branch (line 45) ────────────────────────────────────────
-
-describe("loadToken — localStorage.getItem throws", () => {
-  it("returns null and does not throw when localStorage.getItem throws", async () => {
-    vi.resetModules();
-    const spy = vi.spyOn(Storage.prototype, "getItem").mockImplementationOnce(() => {
-      throw new Error("Storage unavailable");
-    });
-
-    // Re-importing triggers the module-level loadToken() call
-    const freshModule = await import("../api");
-
-    // authToken should be null — verify by checking no Authorization header is set
-    const MockAdapterCtor = (await import("axios-mock-adapter")).default;
-    const mock = new MockAdapterCtor(freshModule.default);
-    let authorization: string | undefined;
-    mock.onGet("/probe").reply((config) => {
-      authorization = config.headers?.Authorization as string | undefined;
-      return [200, {}];
-    });
-    await freshModule.default.get("/probe");
-    mock.restore();
-    spy.mockRestore();
-
-    expect(authorization).toBeUndefined();
-  });
-});
-
-// ── SSR guard branches (typeof window === "undefined") ──────────────────────
-
-describe("SSR guards — window undefined", () => {
-  it("loadToken and saveToken return early when window is undefined", async () => {
-    vi.resetModules();
-    vi.stubGlobal("window", undefined);
-
-    try {
-      const freshModule = await import("../api");
-      // setAuthToken calls saveToken, which hits the typeof window guard
-      freshModule.setAuthToken("ssr-token");
-      freshModule.setAuthToken(null);
-      // No error thrown — guards work in SSR
-      expect(true).toBe(true);
-    } finally {
-      vi.unstubAllGlobals();
-    }
   });
 });
 

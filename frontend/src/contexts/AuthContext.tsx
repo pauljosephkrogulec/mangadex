@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
-import api, { authApi, setAuthToken, registerLogoutCallback } from "@/lib/api";
+import api, { authApi, registerLogoutCallback } from "@/lib/api";
 import type { LoginRequest, LoginResponse, User, UserRegistrationRequest } from "@/lib/types";
 
 interface AuthContextType {
@@ -24,7 +24,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     registerLogoutCallback(() => {
-      setAuthToken(null);
       setUser(null);
       window.location.href = "/login";
     });
@@ -53,9 +52,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = useCallback(async (data: LoginRequest) => {
     const response = await authApi.login(data);
-    if (response.data.token) {
-      setAuthToken(response.data.token);
-    }
     if (response.data.user) {
       setUser(response.data.user);
     } else {
@@ -77,7 +73,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch {
       // ignore
     }
-    setAuthToken(null);
     setUser(null);
   }, []);
 

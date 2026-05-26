@@ -48,17 +48,17 @@
         "fromApi": true
     },
     {
-        "ref": "otome-game-sekai-wa-mob-ni-kibishii-sekai-desu-cover-primary",
-        "manga": "otome-game-sekai-wa-mob-ni-kibishii-sekai-desu",
-        "imagePath": "\/covers\/28c77530-dfa1-4b05-8ec3-998960ba24d4\/2a87c2b5-83ab-4cfa-96fd-da840f6f0e6f.jpg",
+        "ref": "one-punch-man-cover-primary",
+        "manga": "one-punch-man",
+        "imagePath": "\/covers\/d8a959f7-648e-4c8d-8f23-f1f3f8e129f3\/c46d56c9-f577-42cc-bc61-3fcbb19f8ab7.jpg",
         "volume": null,
         "isPrimary": true,
         "fromApi": true
     },
     {
-        "ref": "one-punch-man-cover-primary",
-        "manga": "one-punch-man",
-        "imagePath": "\/covers\/d8a959f7-648e-4c8d-8f23-f1f3f8e129f3\/c46d56c9-f577-42cc-bc61-3fcbb19f8ab7.jpg",
+        "ref": "otome-game-sekai-wa-mob-ni-kibishii-sekai-desu-cover-primary",
+        "manga": "otome-game-sekai-wa-mob-ni-kibishii-sekai-desu",
+        "imagePath": "\/covers\/28c77530-dfa1-4b05-8ec3-998960ba24d4\/2a87c2b5-83ab-4cfa-96fd-da840f6f0e6f.jpg",
         "volume": null,
         "isPrimary": true,
         "fromApi": true
@@ -96,14 +96,6 @@
         "fromApi": true
     },
     {
-        "ref": "kumo-desu-ga-nani-ka-cover-primary",
-        "manga": "kumo-desu-ga-nani-ka",
-        "imagePath": "\/covers\/eb2d1a45-d4e7-4e32-a171-b5b029c5b0cb\/4ac61d4b-77d6-4946-b24f-0935eafa0305.jpg",
-        "volume": null,
-        "isPrimary": true,
-        "fromApi": true
-    },
-    {
         "ref": "tsuki-ga-michibiku-isekai-douchuu-cover-primary",
         "manga": "tsuki-ga-michibiku-isekai-douchuu",
         "imagePath": "\/covers\/7643e9f6-8455-4a58-b7e8-bf6cd00f5251\/79b51099-ce55-4d19-b755-f94b93375696.jpg",
@@ -112,9 +104,9 @@
         "fromApi": true
     },
     {
-        "ref": "mieruko-chan-cover-primary",
-        "manga": "mieruko-chan",
-        "imagePath": "\/covers\/6670ee28-f26d-4b61-b49c-d71149cd5a6e\/13d41432-d7ec-41cd-a265-5af700989aa6.jpg",
+        "ref": "kumo-desu-ga-nani-ka-cover-primary",
+        "manga": "kumo-desu-ga-nani-ka",
+        "imagePath": "\/covers\/eb2d1a45-d4e7-4e32-a171-b5b029c5b0cb\/4ac61d4b-77d6-4946-b24f-0935eafa0305.jpg",
         "volume": null,
         "isPrimary": true,
         "fromApi": true
@@ -123,6 +115,14 @@
         "ref": "mairimashita-iruma-kun-cover-primary",
         "manga": "mairimashita-iruma-kun",
         "imagePath": "\/covers\/d7037b2a-874a-4360-8a7b-07f2899152fd\/ca391c81-c717-485b-8386-7f8397308a27.jpg",
+        "volume": null,
+        "isPrimary": true,
+        "fromApi": true
+    },
+    {
+        "ref": "mieruko-chan-cover-primary",
+        "manga": "mieruko-chan",
+        "imagePath": "\/covers\/6670ee28-f26d-4b61-b49c-d71149cd5a6e\/13d41432-d7ec-41cd-a265-5af700989aa6.jpg",
         "volume": null,
         "isPrimary": true,
         "fromApi": true
@@ -170,7 +170,7 @@
     {
         "ref": "anta-to-osananajimi-tte-dake-demo-iya-nanoni-zekkou-kara-hajimaru-s-kyuu-bishoujo-to-no-gakuen-naria-cover-primary",
         "manga": "anta-to-osananajimi-tte-dake-demo-iya-nanoni-zekkou-kara-hajimaru-s-kyuu-bishoujo-to-no-gakuen-naria",
-        "imagePath": "\/covers\/202718c6-525e-4cec-a469-c945548cacc3\/524815ed-afbd-49c7-8d31-5aab2b69b0e9.jpg",
+        "imagePath": "\/covers\/202718c6-525e-4cec-a469-c945548cacc3\/04dd5c60-a742-4f42-9de0-80759d0e0ceb.jpg",
         "volume": null,
         "isPrimary": true,
         "fromApi": true
@@ -248,14 +248,6 @@
         "fromApi": true
     },
     {
-        "ref": "arifureta-shokugyou-de-sekai-saikyou-cover-primary",
-        "manga": "arifureta-shokugyou-de-sekai-saikyou",
-        "imagePath": "\/covers\/248525ed-ad1c-4ddc-a834-5d6ce66a3ad2\/637f98a9-721c-4aff-b803-b706ea90f6aa.jpg",
-        "volume": null,
-        "isPrimary": true,
-        "fromApi": true
-    },
-    {
         "ref": "isekai-mokushiroku-mynoghra-hametsu-no-bunmei-de-hajimeru-sekai-seifuku-cover-primary",
         "manga": "isekai-mokushiroku-mynoghra-hametsu-no-bunmei-de-hajimeru-sekai-seifuku",
         "imagePath": "\/covers\/6e156d65-cf65-4d5b-9d04-52f2f8100fbf\/03ff0d8e-8c07-42f8-9db3-49ef13ebf352.jpg",
@@ -264,9 +256,25 @@
         "fromApi": true
     },
     {
+        "ref": "arifureta-shokugyou-de-sekai-saikyou-cover-primary",
+        "manga": "arifureta-shokugyou-de-sekai-saikyou",
+        "imagePath": "\/covers\/248525ed-ad1c-4ddc-a834-5d6ce66a3ad2\/637f98a9-721c-4aff-b803-b706ea90f6aa.jpg",
+        "volume": null,
+        "isPrimary": true,
+        "fromApi": true
+    },
+    {
         "ref": "taida-na-akujoku-kizoku-ni-tensei-shita-ore-scenario-wo-bukkowashitara-kikakugai-no-maryoku-de-saiky-cover-primary",
         "manga": "taida-na-akujoku-kizoku-ni-tensei-shita-ore-scenario-wo-bukkowashitara-kikakugai-no-maryoku-de-saiky",
         "imagePath": "\/covers\/b0dc2f88-4e89-4e30-8d68-20116db788ff\/57d3bbac-efe5-4237-bd17-96d9dbc58562.jpg",
+        "volume": null,
+        "isPrimary": true,
+        "fromApi": true
+    },
+    {
+        "ref": "osoraku-kanojo-wa-ore-no-aniki-wo-neratteru-cover-primary",
+        "manga": "osoraku-kanojo-wa-ore-no-aniki-wo-neratteru",
+        "imagePath": "\/covers\/1fc3d326-c037-43fa-8953-ed52a56caa18\/d3e228a7-2cb1-4808-a08d-b862146717ca.jpg",
         "volume": null,
         "isPrimary": true,
         "fromApi": true
@@ -288,9 +296,9 @@
         "fromApi": true
     },
     {
-        "ref": "osoraku-kanojo-wa-ore-no-aniki-wo-neratteru-cover-primary",
-        "manga": "osoraku-kanojo-wa-ore-no-aniki-wo-neratteru",
-        "imagePath": "\/covers\/1fc3d326-c037-43fa-8953-ed52a56caa18\/d3e228a7-2cb1-4808-a08d-b862146717ca.jpg",
+        "ref": "tsuihou-sareru-tabi-ni-skill-o-te-ni-ireta-ore-ga-100-no-isekai-de-2-shuume-musou-cover-primary",
+        "manga": "tsuihou-sareru-tabi-ni-skill-o-te-ni-ireta-ore-ga-100-no-isekai-de-2-shuume-musou",
+        "imagePath": "\/covers\/5f64d517-c4ea-40c0-a463-fcc069d39d3b\/06627437-c5b3-4d56-9f2d-317d2b750855.jpg",
         "volume": null,
         "isPrimary": true,
         "fromApi": true
@@ -320,14 +328,6 @@
         "fromApi": true
     },
     {
-        "ref": "tsuihou-sareru-tabi-ni-skill-o-te-ni-ireta-ore-ga-100-no-isekai-de-2-shuume-musou-cover-primary",
-        "manga": "tsuihou-sareru-tabi-ni-skill-o-te-ni-ireta-ore-ga-100-no-isekai-de-2-shuume-musou",
-        "imagePath": "\/covers\/5f64d517-c4ea-40c0-a463-fcc069d39d3b\/06627437-c5b3-4d56-9f2d-317d2b750855.jpg",
-        "volume": null,
-        "isPrimary": true,
-        "fromApi": true
-    },
-    {
         "ref": "yancha-gal-no-anjou-san-cover-primary",
         "manga": "yancha-gal-no-anjou-san",
         "imagePath": "\/covers\/5e3a710f-0b0d-482b-9e84-d9c91960c625\/7b6a0ffa-3017-406a-ab9e-1f9923b48095.jpg",
@@ -344,17 +344,17 @@
         "fromApi": true
     },
     {
-        "ref": "yofukashi-no-uta-cover-primary",
-        "manga": "yofukashi-no-uta",
-        "imagePath": "\/covers\/259dfd8a-f06a-4825-8fa6-a2dcd7274230\/dabbfe60-f028-4dc7-9ccb-c38da7393d2f.jpg",
+        "ref": "hitoribocchi-no-isekai-kouryaku-cover-primary",
+        "manga": "hitoribocchi-no-isekai-kouryaku",
+        "imagePath": "\/covers\/ffe69cc2-3f9e-4eab-a7f7-c963cea9ec25\/9f49fdca-445c-4adb-b7ff-314192194ff6.jpg",
         "volume": null,
         "isPrimary": true,
         "fromApi": true
     },
     {
-        "ref": "hitoribocchi-no-isekai-kouryaku-cover-primary",
-        "manga": "hitoribocchi-no-isekai-kouryaku",
-        "imagePath": "\/covers\/ffe69cc2-3f9e-4eab-a7f7-c963cea9ec25\/9f49fdca-445c-4adb-b7ff-314192194ff6.jpg",
+        "ref": "yofukashi-no-uta-cover-primary",
+        "manga": "yofukashi-no-uta",
+        "imagePath": "\/covers\/259dfd8a-f06a-4825-8fa6-a2dcd7274230\/dabbfe60-f028-4dc7-9ccb-c38da7393d2f.jpg",
         "volume": null,
         "isPrimary": true,
         "fromApi": true

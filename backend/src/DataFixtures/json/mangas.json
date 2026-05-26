@@ -3,26 +3,23 @@
         "ref": "na-honjaman-level-up",
         "title": "Na Honjaman Level-Up",
         "altTitles": [
-            "The Legend of The Calamity Reincarnator",
-            "A Sword Saint of the Ruins",
-            "The Limit Breaker",
+            "A Tower of Ascension",
+            "The Legend of Heavenly Grandmaster's Legacy",
             "Tome of na-honjaman-level-up"
         ],
-        "description": "The strongest warrior of the past awakens in a new era to face even greater threats.",
-        "status": "ongoing",
-        "year": 2021,
-        "contentRating": "safe",
-        "demographic": "josei",
+        "description": "Summoned to another world, he uses his modern knowledge to become an unstoppable force.",
+        "status": "cancelled",
+        "year": 2025,
+        "contentRating": "suggestive",
+        "demographic": "shoujo",
         "creators": [
-            "lee-jae-hoon-author",
-            "kang-dong-ho-artist"
+            "ko-jae-won-author",
+            "maeng-ki-soo-artist"
         ],
         "tags": [
-            "sci-fi",
+            "thriller",
             "horror",
-            "adventure",
-            "magic",
-            "dungeons"
+            "comedy"
         ],
         "id": "32d76d19-8a05-4db0-9fc2-e0b0648fe9d0"
     },
@@ -30,28 +27,24 @@
         "ref": "sono-bisque-doll-wa-koi-o-suru",
         "title": "Sono Bisque Doll wa Koi o Suru",
         "altTitles": [
-            "A The Guild's Strongest Mage",
-            "Rebirth of the The Greatest Warrior Reborn",
-            "The Legend of The Unbeatable Swordsman",
+            "The Emperor of the Abyss",
+            "Return of the The Shadow Monarch Reborn",
+            "The Legend of The Greatest Warrior Reborn",
             "Tome of sono-bisque-doll-wa-koi-o-suru"
         ],
-        "description": "Summoned to another world, he uses his modern knowledge to become an unstoppable force.",
-        "status": "cancelled",
-        "year": 2019,
+        "description": "The strongest warrior of the past awakens in a new era to face even greater threats.",
+        "status": "completed",
+        "year": 2016,
         "contentRating": "suggestive",
-        "demographic": "shoujo",
+        "demographic": "shounen",
         "creators": [
-            "woo-geun-tak-author",
-            "maeng-ki-soo-artist"
+            "kwak-dong-soo-author",
+            "choi-min-seo-artist"
         ],
         "tags": [
-            "isekai",
-            "regression",
-            "long-strip",
-            "comedy",
+            "slice-of-life",
             "sci-fi",
-            "web-comic",
-            "drama"
+            "mystery"
         ],
         "id": "aa6c76f7-5f5f-46b6-a800-911145f81b9b"
     },
@@ -59,26 +52,29 @@
         "ref": "kage-no-jitsuryokusha-ni-naritakute",
         "title": "Kage no Jitsuryokusha ni Naritakute!",
         "altTitles": [
-            "The Path of the Divine Warrior",
-            "Rebirth of the The Dark Sorcerer's Legacy",
+            "The Legend of The Calamity Reincarnator",
+            "A Reborn as a Monster Lord",
+            "Rebirth of the The Max Level Hero",
+            "The Legend of Sword Saint of the Ruins",
             "Tome of kage-no-jitsuryokusha-ni-naritakute"
         ],
-        "description": "After being betrayed by his comrades, he returns from the brink of death with newfound powers.",
-        "status": "ongoing",
-        "year": 2016,
+        "description": "A tale of revenge, power, and the relentless pursuit of becoming the strongest.",
+        "status": "completed",
+        "year": 2017,
         "contentRating": "suggestive",
         "demographic": "seinen",
         "creators": [
-            "seo-dong-chul-author",
-            "na-yeon-soo-artist"
+            "hong-jin-woo-author",
+            "ryu-ho-jin-artist"
         ],
         "tags": [
+            "adaptation",
             "mystery",
-            "martial-arts",
-            "monsters",
-            "comedy",
+            "full-color",
+            "drama",
             "horror",
-            "drama"
+            "magic",
+            "academy"
         ],
         "id": "77bee52c-d2d6-44ad-a33a-1734c1fe696a"
     },
@@ -86,22 +82,24 @@
         "ref": "tensei-shitara-slime-datta-ken",
         "title": "Tensei Shitara Slime datta Ken",
         "altTitles": [
-            "Rebirth of the The Legendary Mechanic",
+            "The Legend of Celestial Executioner",
             "Tome of tensei-shitara-slime-datta-ken"
         ],
-        "description": "Reincarnated into a world of magic and monsters, he must find his way back to strength.",
-        "status": "completed",
-        "year": 2019,
-        "contentRating": "suggestive",
-        "demographic": "seinen",
+        "description": "A tale of revenge, power, and the relentless pursuit of becoming the strongest.",
+        "status": "hiatus",
+        "year": 2022,
+        "contentRating": "safe",
+        "demographic": "shoujo",
         "creators": [
-            "bae-yong-joon-author",
-            "maeng-ki-soo-artist"
+            "kwak-dong-soo-author",
+            "min-soo-ah-artist"
         ],
         "tags": [
-            "adventure",
+            "drama",
+            "fantasy",
             "magic",
-            "drama"
+            "academy",
+            "mystery"
         ],
         "id": "e78a489b-6632-4d61-b00b-5206f5b8b22b"
     },
@@ -109,27 +107,28 @@
         "ref": "sousou-no-frieren",
         "title": "Sousou no Frieren",
         "altTitles": [
-            "A The Archmage Returns",
-            "The Legend of Sword King of the Nether",
+            "Return of the The Return of the War God",
+            "Return of the Sage of the Endless World",
+            "Return of the Demon Lord's Reincarnation",
             "Tome of sousou-no-frieren"
         ],
-        "description": "After being betrayed by his comrades, he returns from the brink of death with newfound powers.",
-        "status": "hiatus",
-        "year": 2023,
+        "description": "Summoned to another world, he uses his modern knowledge to become an unstoppable force.",
+        "status": "ongoing",
+        "year": 2020,
         "contentRating": "suggestive",
-        "demographic": "none",
+        "demographic": "shoujo",
         "creators": [
-            "kwak-dong-soo-author",
-            "im-ji-yeon-artist"
+            "ko-jae-won-author",
+            "byun-young-joon-artist"
         ],
         "tags": [
-            "comedy",
-            "drama",
-            "mystery",
-            "thriller",
+            "system",
+            "supernatural",
+            "adventure",
             "slice-of-life",
-            "isekai",
-            "romance"
+            "romance",
+            "monsters",
+            "sci-fi"
         ],
         "id": "b0b721ff-c388-4486-aa0f-c2b0bb321512"
     },
@@ -137,104 +136,102 @@
         "ref": "chainsaw-man",
         "title": "Chainsaw Man",
         "altTitles": [
-            "Rebirth of the Immortal Blade Master",
+            "Return of the The Unstoppable Player",
+            "Rebirth of the The Sole Survivor",
             "Tome of chainsaw-man"
         ],
-        "description": "A tale of revenge, power, and the relentless pursuit of becoming the strongest.",
+        "description": "Reincarnated into a world of magic and monsters, he must find his way back to strength.",
         "status": "cancelled",
-        "year": 2025,
-        "contentRating": "suggestive",
-        "demographic": "seinen",
+        "year": 2023,
+        "contentRating": "safe",
+        "demographic": "josei",
         "creators": [
-            "yoon-tae-ho-author",
-            "ha-jin-sung-artist"
+            "cha-sang-min-author",
+            "do-eun-hye-artist"
         ],
         "tags": [
-            "drama",
-            "horror",
-            "slice-of-life",
-            "magic",
-            "full-color"
+            "martial-arts",
+            "adventure",
+            "web-comic",
+            "regression",
+            "system"
         ],
         "id": "a77742b1-befd-49a4-bff5-1ad4e6b0ef7b"
-    },
-    {
-        "ref": "otome-game-sekai-wa-mob-ni-kibishii-sekai-desu",
-        "title": "Otome Game Sekai wa Mob ni Kibishii Sekai desu",
-        "altTitles": [
-            "The Legend of Arcane Sniper",
-            "The Legend of Heavenly Grandmaster's Legacy",
-            "A Infinite Level Up",
-            "Tome of otome-game-sekai-wa-mob-ni-kibishii-sekai-desu"
-        ],
-        "description": "In a world where dungeons and monsters threaten humanity, one hero rises above all.",
-        "status": "ongoing",
-        "year": 2020,
-        "contentRating": "suggestive",
-        "demographic": "shoujo",
-        "creators": [
-            "jang-hyun-woo-author",
-            "seol-hyun-ju-artist"
-        ],
-        "tags": [
-            "long-strip",
-            "slice-of-life",
-            "action"
-        ],
-        "id": "28c77530-dfa1-4b05-8ec3-998960ba24d4"
     },
     {
         "ref": "one-punch-man",
         "title": "One Punch-Man",
         "altTitles": [
-            "The The Eternal Monarch",
-            "A Heavenly Grandmaster's Legacy",
-            "The The Greatest Warrior Reborn",
+            "A The Demon King's Awakening",
             "Tome of one-punch-man"
         ],
-        "description": "Follow the journey of an ordinary gamer who becomes the strongest player in a fantasy world.",
-        "status": "completed",
-        "year": 2021,
+        "description": "Summoned to another world, he uses his modern knowledge to become an unstoppable force.",
+        "status": "ongoing",
+        "year": 2019,
         "contentRating": "safe",
         "demographic": "none",
         "creators": [
-            "hong-jin-woo-author",
+            "seo-dong-chul-author",
+            "joo-hyun-ah-artist"
+        ],
+        "tags": [
+            "thriller",
+            "magic",
+            "adaptation"
+        ],
+        "id": "d8a959f7-648e-4c8d-8f23-f1f3f8e129f3"
+    },
+    {
+        "ref": "otome-game-sekai-wa-mob-ni-kibishii-sekai-desu",
+        "title": "Otome Game Sekai wa Mob ni Kibishii Sekai desu",
+        "altTitles": [
+            "The Sword King of the Nether",
+            "A Heaven's Soul Hunter",
+            "The Arcane Sniper",
+            "Tome of otome-game-sekai-wa-mob-ni-kibishii-sekai-desu"
+        ],
+        "description": "A tale of revenge, power, and the relentless pursuit of becoming the strongest.",
+        "status": "completed",
+        "year": 2025,
+        "contentRating": "safe",
+        "demographic": "shoujo",
+        "creators": [
+            "bae-yong-joon-author",
             "jeong-ha-na-artist"
         ],
         "tags": [
+            "slice-of-life",
+            "adventure",
+            "drama",
+            "isekai",
             "comedy",
-            "magic",
-            "mystery",
-            "web-comic",
-            "horror",
-            "fantasy",
-            "dungeons"
+            "academy"
         ],
-        "id": "d8a959f7-648e-4c8d-8f23-f1f3f8e129f3"
+        "id": "28c77530-dfa1-4b05-8ec3-998960ba24d4"
     },
     {
         "ref": "mushoku-tensei-isekai-ittara-honki-dasu",
         "title": "Mushoku Tensei: Isekai Ittara Honki Dasu",
         "altTitles": [
-            "The Legend of Heaven's Soul Hunter",
-            "A God of Black Field",
-            "The Legend of Heaven's Soul Hunter",
-            "Rebirth of the The Cursed King",
+            "A The Guild's Strongest Mage",
+            "Rebirth of the God of Black Field",
+            "The Legend of Heavenly Grandmaster's Legacy",
             "Tome of mushoku-tensei-isekai-ittara-honki-dasu"
         ],
-        "description": "Reincarnated into a world of magic and monsters, he must find his way back to strength.",
-        "status": "completed",
-        "year": 2024,
+        "description": "In a world where dungeons and monsters threaten humanity, one hero rises above all.",
+        "status": "cancelled",
+        "year": 2025,
         "contentRating": "safe",
-        "demographic": "shounen",
+        "demographic": "none",
         "creators": [
-            "son-ki-woon-author",
-            "go-bong-hwa-artist"
+            "kwak-dong-soo-author",
+            "im-ji-yeon-artist"
         ],
         "tags": [
-            "horror",
             "romance",
-            "award-winning"
+            "long-strip",
+            "sci-fi",
+            "mystery"
         ],
         "id": "bd6d0982-0091-4945-ad70-c028ed3c0917"
     },
@@ -242,28 +239,25 @@
         "ref": "komi-san-wa-komyushou-desu",
         "title": "Komi-san wa Komyushou Desu.",
         "altTitles": [
-            "Return of the Celestial Executioner",
-            "A The Calamity Reincarnator",
-            "Return of the The Legendary Mechanic",
-            "The Legend of Demon Lord's Reincarnation",
+            "A Immortal Blade Master",
+            "Rebirth of the Genius of the Ancient Arts",
+            "Return of the Overgeared Blacksmith",
             "Tome of komi-san-wa-komyushou-desu"
         ],
-        "description": "When the gates between worlds opened, he was the only one who could save humanity.",
+        "description": "Reincarnated into a world of magic and monsters, he must find his way back to strength.",
         "status": "ongoing",
-        "year": 2023,
+        "year": 2024,
         "contentRating": "suggestive",
-        "demographic": "josei",
+        "demographic": "none",
         "creators": [
-            "cha-sang-min-author",
-            "seol-hyun-ju-artist"
+            "yoon-tae-ho-author",
+            "na-yeon-soo-artist"
         ],
         "tags": [
-            "adventure",
-            "supernatural",
-            "full-color",
-            "comedy",
+            "action",
+            "monsters",
             "romance",
-            "slice-of-life"
+            "magic"
         ],
         "id": "a96676e5-8ae2-425e-b549-7f15dd34a6d8"
     },
@@ -271,26 +265,28 @@
         "ref": "lv2-kara-cheat-datta-moto-yuusha-kouho-no-mattari-isekai-life",
         "title": "Lv2 kara Cheat datta Moto Yuusha Kouho no Mattari Isekai Life",
         "altTitles": [
-            "A The Demon King's Awakening",
-            "Rebirth of the Immortal Blade Master",
-            "Rebirth of the Path of the Divine Warrior",
+            "The Legend of Overgeared Blacksmith",
+            "The Legend of The Calamity Reincarnator",
+            "Return of the The Return of the War God",
             "Tome of lv2-kara-cheat-datta-moto-yuusha-kouho-no-mattari-isekai-life"
         ],
-        "description": "Follow the journey of an ordinary gamer who becomes the strongest player in a fantasy world.",
+        "description": "Reincarnated into a world of magic and monsters, he must find his way back to strength.",
         "status": "completed",
-        "year": 2025,
-        "contentRating": "suggestive",
+        "year": 2017,
+        "contentRating": "safe",
         "demographic": "shoujo",
         "creators": [
-            "shin-woo-jin-author",
-            "joo-hyun-ah-artist"
+            "jung-pil-won-author",
+            "go-bong-hwa-artist"
         ],
         "tags": [
-            "romance",
-            "action",
-            "comedy",
-            "award-winning",
-            "web-comic"
+            "regression",
+            "horror",
+            "full-color",
+            "adaptation",
+            "dungeons",
+            "thriller",
+            "comedy"
         ],
         "id": "58bc83a0-1808-484e-88b9-17e167469e23"
     },
@@ -298,160 +294,157 @@
         "ref": "ijiranaide-nagatoro-san",
         "title": "Ijiranaide, Nagatoro-san",
         "altTitles": [
-            "Return of the The Invincible Mercenary",
-            "Return of the The God of War Online",
-            "Return of the The Greatest Warrior Reborn",
+            "A The Calamity Reincarnator",
+            "The Genius of the Ancient Arts",
+            "Rebirth of the Overgeared Blacksmith",
             "Tome of ijiranaide-nagatoro-san"
         ],
-        "description": "After being betrayed by his comrades, he returns from the brink of death with newfound powers.",
-        "status": "cancelled",
-        "year": 2021,
-        "contentRating": "suggestive",
-        "demographic": "shounen",
-        "creators": [
-            "shin-woo-jin-author",
-            "do-eun-hye-artist"
-        ],
-        "tags": [
-            "horror",
-            "isekai",
-            "regression",
-            "supernatural",
-            "drama"
-        ],
-        "id": "d86cf65b-5f6c-437d-a0af-19a31f94ec55"
-    },
-    {
-        "ref": "kumo-desu-ga-nani-ka",
-        "title": "Kumo desu ga, Nani ka?",
-        "altTitles": [
-            "The Legend of Heaven's Soul Hunter",
-            "Tome of kumo-desu-ga-nani-ka"
-        ],
-        "description": "Reincarnated into a world of magic and monsters, he must find his way back to strength.",
+        "description": "In a world where dungeons and monsters threaten humanity, one hero rises above all.",
         "status": "hiatus",
-        "year": 2022,
-        "contentRating": "safe",
-        "demographic": "seinen",
+        "year": 2020,
+        "contentRating": "suggestive",
+        "demographic": "shoujo",
         "creators": [
-            "kim-yong-hyun-author",
+            "hwang-do-hoon-author",
             "heo-jin-wook-artist"
         ],
         "tags": [
-            "martial-arts",
+            "dungeons",
+            "magic",
+            "slice-of-life",
+            "long-strip",
+            "isekai",
             "romance",
             "web-comic"
         ],
-        "id": "eb2d1a45-d4e7-4e32-a171-b5b029c5b0cb"
+        "id": "d86cf65b-5f6c-437d-a0af-19a31f94ec55"
     },
     {
         "ref": "tsuki-ga-michibiku-isekai-douchuu",
         "title": "Tsuki ga Michibiku Isekai Douchuu",
         "altTitles": [
-            "The The King of Dark Dungeons",
-            "A The Guild's Strongest Mage",
-            "A Heaven's Soul Hunter",
-            "A The Final Boss is Me",
+            "Return of the Celestial Executioner",
             "Tome of tsuki-ga-michibiku-isekai-douchuu"
         ],
-        "description": "A tale of revenge, power, and the relentless pursuit of becoming the strongest.",
-        "status": "hiatus",
-        "year": 2017,
-        "contentRating": "suggestive",
-        "demographic": "seinen",
+        "description": "After being betrayed by his comrades, he returns from the brink of death with newfound powers.",
+        "status": "completed",
+        "year": 2021,
+        "contentRating": "safe",
+        "demographic": "none",
         "creators": [
-            "bae-yong-joon-author",
-            "kang-dong-ho-artist"
+            "oh-seung-min-author",
+            "seol-hyun-ju-artist"
         ],
         "tags": [
-            "adaptation",
-            "dungeons",
-            "isekai",
-            "supernatural",
-            "romance",
-            "drama"
+            "regression",
+            "action",
+            "adventure",
+            "full-color",
+            "adaptation"
         ],
         "id": "7643e9f6-8455-4a58-b7e8-bf6cd00f5251"
     },
     {
-        "ref": "mieruko-chan",
-        "title": "Mieruko-chan",
+        "ref": "kumo-desu-ga-nani-ka",
+        "title": "Kumo desu ga, Nani ka?",
         "altTitles": [
-            "Rebirth of the The Invincible Mercenary",
-            "A The Cursed King",
-            "The Legend of Solo Player's Ascent",
-            "A Tower of Ascension",
-            "Tome of mieruko-chan"
+            "Rebirth of the The Martial God's Return",
+            "Tome of kumo-desu-ga-nani-ka"
         ],
         "description": "After being betrayed by his comrades, he returns from the brink of death with newfound powers.",
         "status": "cancelled",
         "year": 2016,
         "contentRating": "safe",
-        "demographic": "shounen",
+        "demographic": "shoujo",
         "creators": [
-            "kim-yong-hyun-author",
-            "na-yeon-soo-artist"
+            "jung-pil-won-author",
+            "go-bong-hwa-artist"
         ],
         "tags": [
-            "drama",
-            "isekai",
-            "action",
-            "supernatural",
-            "slice-of-life"
+            "adventure",
+            "regression",
+            "fantasy",
+            "isekai"
         ],
-        "id": "6670ee28-f26d-4b61-b49c-d71149cd5a6e"
+        "id": "eb2d1a45-d4e7-4e32-a171-b5b029c5b0cb"
     },
     {
         "ref": "mairimashita-iruma-kun",
         "title": "Mairimashita! Iruma-kun",
         "altTitles": [
-            "A The Martial God's Return",
-            "The The Constellation That Returned",
+            "Rebirth of the The Constellation That Returned",
+            "Rebirth of the Heavenly Demon Reborn",
             "Tome of mairimashita-iruma-kun"
         ],
-        "description": "A tale of revenge, power, and the relentless pursuit of becoming the strongest.",
-        "status": "cancelled",
-        "year": 2023,
-        "contentRating": "suggestive",
+        "description": "When the gates between worlds opened, he was the only one who could save humanity.",
+        "status": "completed",
+        "year": 2016,
+        "contentRating": "safe",
         "demographic": "shounen",
         "creators": [
-            "cha-sang-min-author",
-            "jeong-ha-na-artist"
+            "yoo-jin-ho-author",
+            "na-yeon-soo-artist"
         ],
         "tags": [
+            "full-color",
+            "supernatural",
+            "monsters",
+            "fantasy",
             "award-winning",
-            "regression",
-            "academy",
-            "dungeons",
-            "thriller",
-            "horror",
-            "full-color"
+            "magic"
         ],
         "id": "d7037b2a-874a-4360-8a7b-07f2899152fd"
+    },
+    {
+        "ref": "mieruko-chan",
+        "title": "Mieruko-chan",
+        "altTitles": [
+            "Rebirth of the The Eternal Monarch",
+            "Tome of mieruko-chan"
+        ],
+        "description": "A tale of revenge, power, and the relentless pursuit of becoming the strongest.",
+        "status": "hiatus",
+        "year": 2020,
+        "contentRating": "suggestive",
+        "demographic": "josei",
+        "creators": [
+            "kwak-dong-soo-author",
+            "yoon-seo-yeon-artist"
+        ],
+        "tags": [
+            "regression",
+            "comedy",
+            "action",
+            "drama",
+            "academy",
+            "fantasy",
+            "magic"
+        ],
+        "id": "6670ee28-f26d-4b61-b49c-d71149cd5a6e"
     },
     {
         "ref": "akuyaku-reijou-level-99-watashi-wa-ura-boss-desuga-maou-de-wa-arimasen",
         "title": "Akuyaku Reijou Level 99: Watashi wa Ura Boss desuga Maou de wa Arimasen",
         "altTitles": [
-            "The Legend of The Final Boss is Me",
-            "The The Archmage Returns",
+            "Rebirth of the The Beginning After the Endless",
+            "The Legend of Legend of the Northern Blade",
             "Tome of akuyaku-reijou-level-99-watashi-wa-ura-boss-desuga-maou-de-wa-arimasen"
         ],
-        "description": "A tale of revenge, power, and the relentless pursuit of becoming the strongest.",
-        "status": "hiatus",
-        "year": 2023,
-        "contentRating": "suggestive",
-        "demographic": "josei",
+        "description": "Follow the journey of an ordinary gamer who becomes the strongest player in a fantasy world.",
+        "status": "cancelled",
+        "year": 2024,
+        "contentRating": "safe",
+        "demographic": "shoujo",
         "creators": [
-            "park-ji-eun-author",
-            "heo-jin-wook-artist"
+            "yoo-jin-ho-author",
+            "park-sung-woo-artist"
         ],
         "tags": [
-            "sci-fi",
-            "supernatural",
-            "thriller",
-            "magic",
-            "system",
+            "slice-of-life",
+            "comedy",
+            "full-color",
+            "monsters",
+            "academy",
             "dungeons"
         ],
         "id": "878634d2-ea39-4001-a4bf-31458020d16a"
@@ -460,28 +453,23 @@
         "ref": "kusuriya-no-hitorigoto",
         "title": "Kusuriya no Hitorigoto",
         "altTitles": [
-            "A The Sole Survivor",
-            "Rebirth of the The Shadow Monarch Reborn",
-            "A Immortal Blade Master",
+            "Return of the Master of the Divine Arts",
+            "The Legend of The Unstoppable Player",
             "Tome of kusuriya-no-hitorigoto"
         ],
-        "description": "In a world where dungeons and monsters threaten humanity, one hero rises above all.",
-        "status": "hiatus",
-        "year": 2022,
+        "description": "When the gates between worlds opened, he was the only one who could save humanity.",
+        "status": "completed",
+        "year": 2016,
         "contentRating": "safe",
-        "demographic": "shoujo",
+        "demographic": "shounen",
         "creators": [
-            "son-ki-woon-author",
-            "seol-hyun-ju-artist"
+            "park-ji-eun-author",
+            "na-yeon-soo-artist"
         ],
         "tags": [
-            "regression",
-            "full-color",
-            "supernatural",
-            "web-comic",
-            "romance",
             "mystery",
-            "long-strip"
+            "dungeons",
+            "adaptation"
         ],
         "id": "e18fe8c6-f6dc-4f05-8462-7b2083ff9a6c"
     },
@@ -489,27 +477,26 @@
         "ref": "jujutsu-kaisen",
         "title": "Jujutsu Kaisen",
         "altTitles": [
-            "The Sage of the Endless World",
-            "Rebirth of the Reborn as a Monster Lord",
+            "Return of the Rebirth of the Heavenly Clan",
+            "Return of the Solo Player's Ascent",
+            "Rebirth of the Rebirth of the Heavenly Clan",
             "Tome of jujutsu-kaisen"
         ],
-        "description": "In a world where dungeons and monsters threaten humanity, one hero rises above all.",
-        "status": "completed",
-        "year": 2025,
+        "description": "A tale of revenge, power, and the relentless pursuit of becoming the strongest.",
+        "status": "ongoing",
+        "year": 2024,
         "contentRating": "safe",
         "demographic": "none",
         "creators": [
-            "bae-yong-joon-author",
-            "choi-min-seo-artist"
+            "kwak-dong-soo-author",
+            "go-bong-hwa-artist"
         ],
         "tags": [
-            "isekai",
-            "horror",
-            "web-comic",
-            "drama",
-            "action",
-            "magic",
-            "adventure"
+            "award-winning",
+            "dungeons",
+            "slice-of-life",
+            "fantasy",
+            "horror"
         ],
         "id": "c52b2ce3-7f95-469c-96b0-479524fb7a1a"
     },
@@ -517,26 +504,27 @@
         "ref": "ki-ni-natteru-hito-ga-otoko-ja-nakatta",
         "title": "Ki ni Natteru Hito ga Otoko ja Nakatta",
         "altTitles": [
-            "Return of the The Dark Sorcerer's Legacy",
-            "The Infinite Level Up",
-            "Rebirth of the The Eternal Monarch",
+            "The Legend of The Calamity Reincarnator",
+            "Rebirth of the The Greatest Warrior Reborn",
+            "Rebirth of the The Invincible Mercenary",
+            "Return of the Heavenly Grandmaster's Legacy",
             "Tome of ki-ni-natteru-hito-ga-otoko-ja-nakatta"
         ],
-        "description": "Summoned to another world, he uses his modern knowledge to become an unstoppable force.",
-        "status": "hiatus",
-        "year": 2022,
+        "description": "A tale of revenge, power, and the relentless pursuit of becoming the strongest.",
+        "status": "ongoing",
+        "year": 2020,
         "contentRating": "suggestive",
-        "demographic": "shoujo",
+        "demographic": "shounen",
         "creators": [
-            "kim-yong-hyun-author",
-            "heo-jin-wook-artist"
+            "hong-jin-woo-author",
+            "min-soo-ah-artist"
         ],
         "tags": [
-            "regression",
-            "isekai",
-            "dungeons",
-            "romance",
-            "adventure"
+            "mystery",
+            "action",
+            "horror",
+            "slice-of-life",
+            "award-winning"
         ],
         "id": "9d3d3403-1a87-4737-9803-bc3d99db1424"
     },
@@ -544,23 +532,23 @@
         "ref": "kaoru-hana-wa-rin-to-saku",
         "title": "Kaoru Hana wa Rin to Saku",
         "altTitles": [
-            "The Reborn as a Monster Lord",
+            "Return of the Limit Breaker",
             "Tome of kaoru-hana-wa-rin-to-saku"
         ],
         "description": "Reincarnated into a world of magic and monsters, he must find his way back to strength.",
-        "status": "completed",
-        "year": 2019,
+        "status": "ongoing",
+        "year": 2016,
         "contentRating": "suggestive",
-        "demographic": "josei",
+        "demographic": "shounen",
         "creators": [
-            "hong-jin-woo-author",
-            "go-bong-hwa-artist"
+            "kwak-dong-soo-author",
+            "joo-hyun-ah-artist"
         ],
         "tags": [
             "award-winning",
-            "mystery",
-            "web-comic",
-            "long-strip"
+            "magic",
+            "supernatural",
+            "adventure"
         ],
         "id": "418791c0-35cf-4f87-936b-acd9cddf0989"
     },
@@ -568,26 +556,27 @@
         "ref": "anta-to-osananajimi-tte-dake-demo-iya-nanoni-zekkou-kara-hajimaru-s-kyuu-bishoujo-to-no-gakuen-naria",
         "title": "Anta to Osananajimi tte dake demo Iya nanoni!: Zekkou kara Hajimaru S-kyuu Bishoujo to no Gakuen Nariagari Seikatsu",
         "altTitles": [
-            "The The Unstoppable Player",
-            "The Legend of Heavenly Grandmaster's Legacy",
+            "A The Return of the War God",
+            "The Legend of Sage of the Endless World",
             "Tome of anta-to-osananajimi-tte-dake-demo-iya-nanoni-zekkou-kara-hajimaru-s-kyuu-bishoujo-to-no-gakuen-naria"
         ],
-        "description": "In a world where dungeons and monsters threaten humanity, one hero rises above all.",
-        "status": "cancelled",
-        "year": 2025,
-        "contentRating": "suggestive",
+        "description": "After being betrayed by his comrades, he returns from the brink of death with newfound powers.",
+        "status": "completed",
+        "year": 2023,
+        "contentRating": "safe",
         "demographic": "shounen",
         "creators": [
-            "kwak-dong-soo-author",
-            "choi-min-seo-artist"
+            "yoo-jin-ho-author",
+            "ha-jin-sung-artist"
         ],
         "tags": [
-            "full-color",
             "sci-fi",
-            "adventure",
-            "romance",
-            "award-winning",
-            "mystery"
+            "isekai",
+            "full-color",
+            "academy",
+            "supernatural",
+            "drama",
+            "martial-arts"
         ],
         "id": "202718c6-525e-4cec-a469-c945548cacc3"
     },
@@ -595,29 +584,24 @@
         "ref": "one-piece",
         "title": "One Piece",
         "altTitles": [
-            "The Legend of The Cursed King",
-            "Return of the The Guild's Strongest Mage",
-            "The Legend of The Demon King's Awakening",
-            "The Arcane Sniper",
+            "A Sage of the Endless World",
             "Tome of one-piece"
         ],
-        "description": "In a world where dungeons and monsters threaten humanity, one hero rises above all.",
-        "status": "completed",
-        "year": 2022,
-        "contentRating": "safe",
-        "demographic": "josei",
+        "description": "When the gates between worlds opened, he was the only one who could save humanity.",
+        "status": "cancelled",
+        "year": 2024,
+        "contentRating": "suggestive",
+        "demographic": "shounen",
         "creators": [
-            "park-ji-eun-author",
-            "byun-young-joon-artist"
+            "kwak-dong-soo-author",
+            "bae-jin-young-artist"
         ],
         "tags": [
-            "adaptation",
-            "thriller",
-            "monsters",
-            "drama",
-            "martial-arts",
+            "isekai",
             "mystery",
-            "isekai"
+            "academy",
+            "regression",
+            "magic"
         ],
         "id": "a1c7c817-4e59-43b7-9365-09675a149a6f"
     },
@@ -625,24 +609,26 @@
         "ref": "kaette-kudasai-akutsu-san",
         "title": "Kaette Kudasai! Akutsu-san",
         "altTitles": [
-            "Rebirth of the Sword Saint of the Ruins",
-            "The Rise of the Phoenix King",
-            "The Sword Saint of the Ruins",
+            "The The Final Boss is Me",
+            "The The Archmage Returns",
+            "The Arcane Sniper",
             "Tome of kaette-kudasai-akutsu-san"
         ],
-        "description": "Reincarnated into a world of magic and monsters, he must find his way back to strength.",
+        "description": "Summoned to another world, he uses his modern knowledge to become an unstoppable force.",
         "status": "hiatus",
-        "year": 2020,
+        "year": 2025,
         "contentRating": "suggestive",
         "demographic": "josei",
         "creators": [
-            "hong-jin-woo-author",
-            "ryu-ho-jin-artist"
+            "jang-jae-hyuk-author",
+            "im-ji-yeon-artist"
         ],
         "tags": [
-            "thriller",
-            "comedy",
-            "web-comic"
+            "full-color",
+            "dungeons",
+            "monsters",
+            "mystery",
+            "thriller"
         ],
         "id": "737a846b-2e67-4d63-9f7e-f54b3beebac4"
     },
@@ -650,29 +636,27 @@
         "ref": "spy-family",
         "title": "SPY×FAMILY",
         "altTitles": [
-            "The Legend of The Fifth Ranker",
-            "A Sword Saint of the Ruins",
-            "The The Max Level Hero",
-            "A Path of the Divine Warrior",
+            "Rebirth of the The Unbeatable Swordsman",
+            "The Path of the Divine Warrior",
             "Tome of spy-family"
         ],
-        "description": "Reincarnated into a world of magic and monsters, he must find his way back to strength.",
+        "description": "When the gates between worlds opened, he was the only one who could save humanity.",
         "status": "ongoing",
-        "year": 2020,
-        "contentRating": "safe",
+        "year": 2017,
+        "contentRating": "suggestive",
         "demographic": "none",
         "creators": [
-            "seo-dong-chul-author",
-            "joo-hyun-ah-artist"
+            "ko-jae-won-author",
+            "ryu-ho-jin-artist"
         ],
         "tags": [
-            "comedy",
+            "fantasy",
+            "full-color",
+            "drama",
             "mystery",
-            "romance",
-            "adaptation",
-            "award-winning",
-            "supernatural",
-            "fantasy"
+            "system",
+            "adventure",
+            "academy"
         ],
         "id": "6b958848-c885-4735-9201-12ee77abcb3c"
     },
@@ -680,23 +664,26 @@
         "ref": "maou-no-ore-ga-dorei-elf-wo-yome-ni-shitanda-ga-dou-medereba-ii",
         "title": "Maou no Ore ga Dorei Elf wo Yome ni Shitanda ga, Dou Medereba Ii?",
         "altTitles": [
-            "Return of the The Sole Survivor",
+            "Rebirth of the The Final Boss is Me",
             "Tome of maou-no-ore-ga-dorei-elf-wo-yome-ni-shitanda-ga-dou-medereba-ii"
         ],
-        "description": "A tale of revenge, power, and the relentless pursuit of becoming the strongest.",
-        "status": "hiatus",
-        "year": 2024,
-        "contentRating": "suggestive",
+        "description": "Reincarnated into a world of magic and monsters, he must find his way back to strength.",
+        "status": "completed",
+        "year": 2019,
+        "contentRating": "safe",
         "demographic": "none",
         "creators": [
-            "seo-dong-chul-author",
-            "yoon-seo-yeon-artist"
+            "kim-yong-hyun-author",
+            "min-soo-ah-artist"
         ],
         "tags": [
-            "long-strip",
-            "drama",
-            "monsters",
-            "thriller"
+            "dungeons",
+            "action",
+            "thriller",
+            "supernatural",
+            "sci-fi",
+            "full-color",
+            "martial-arts"
         ],
         "id": "55ace2fb-e157-4d76-9e72-67c6bd762a39"
     },
@@ -704,26 +691,26 @@
         "ref": "boku-no-kokoro-no-yabai-yatsu",
         "title": "Boku no Kokoro no Yabai Yatsu",
         "altTitles": [
-            "Rebirth of the Heavenly Grandmaster's Legacy",
-            "A Infinite Level Up",
-            "Rebirth of the The Beginning After the Endless",
+            "A The Unstoppable Player",
             "Tome of boku-no-kokoro-no-yabai-yatsu"
         ],
-        "description": "Follow the journey of an ordinary gamer who becomes the strongest player in a fantasy world.",
-        "status": "completed",
-        "year": 2024,
-        "contentRating": "suggestive",
-        "demographic": "shoujo",
+        "description": "Reincarnated into a world of magic and monsters, he must find his way back to strength.",
+        "status": "cancelled",
+        "year": 2016,
+        "contentRating": "safe",
+        "demographic": "shounen",
         "creators": [
-            "hwang-do-hoon-author",
-            "sung-ki-won-artist"
+            "yoo-jin-ho-author",
+            "gong-min-ji-artist"
         ],
         "tags": [
-            "martial-arts",
-            "isekai",
-            "regression",
+            "thriller",
+            "romance",
+            "system",
             "academy",
-            "full-color"
+            "regression",
+            "magic",
+            "horror"
         ],
         "id": "3df1a9a3-a1be-47a3-9e90-9b3e55b1d0ac"
     },
@@ -731,24 +718,24 @@
         "ref": "dungeon-ni-hisomu-yandere-na-kanojo-ni-ore-wa-nandomo-korosareru",
         "title": "Dungeon ni Hisomu Yandere na Kanojo ni Ore wa Nandomo Korosareru",
         "altTitles": [
-            "Rebirth of the The Dark Sorcerer's Legacy",
+            "The The Cursed King",
+            "Return of the Limit Breaker",
             "Tome of dungeon-ni-hisomu-yandere-na-kanojo-ni-ore-wa-nandomo-korosareru"
         ],
-        "description": "Summoned to another world, he uses his modern knowledge to become an unstoppable force.",
+        "description": "When the gates between worlds opened, he was the only one who could save humanity.",
         "status": "completed",
-        "year": 2019,
+        "year": 2022,
         "contentRating": "safe",
-        "demographic": "shoujo",
+        "demographic": "josei",
         "creators": [
-            "hwang-do-hoon-author",
+            "yoo-jin-ho-author",
             "min-soo-ah-artist"
         ],
         "tags": [
-            "thriller",
-            "adventure",
-            "dungeons",
-            "long-strip",
-            "horror"
+            "fantasy",
+            "web-comic",
+            "academy",
+            "adventure"
         ],
         "id": "ea0e7020-2b2f-4f17-9251-fee3632dc135"
     },
@@ -756,28 +743,22 @@
         "ref": "horimiya",
         "title": "Horimiya",
         "altTitles": [
-            "Return of the Immortal Blade Master",
-            "Return of the Master of the Divine Arts",
-            "The Legend of Infinite Level Up",
+            "Return of the Arcane Sniper",
             "Tome of horimiya"
         ],
-        "description": "Follow the journey of an ordinary gamer who becomes the strongest player in a fantasy world.",
-        "status": "ongoing",
-        "year": 2019,
+        "description": "Reincarnated into a world of magic and monsters, he must find his way back to strength.",
+        "status": "hiatus",
+        "year": 2018,
         "contentRating": "suggestive",
-        "demographic": "seinen",
+        "demographic": "shounen",
         "creators": [
-            "jang-jae-hyuk-author",
-            "maeng-ki-soo-artist"
+            "jung-pil-won-author",
+            "ryu-ho-jin-artist"
         ],
         "tags": [
-            "regression",
-            "fantasy",
-            "horror",
-            "sci-fi",
             "slice-of-life",
-            "isekai",
-            "monsters"
+            "supernatural",
+            "system"
         ],
         "id": "a25e46ec-30f7-4db6-89df-cacbc1d9a900"
     },
@@ -785,26 +766,27 @@
         "ref": "jeonjijeok-dokja-sijeom",
         "title": "Jeonjijeok Dokja Sijeom",
         "altTitles": [
-            "The The Martial God's Return",
-            "The The Dragon King's Return",
-            "Return of the Rebirth of the Heavenly Clan",
+            "Rebirth of the Sword King of the Nether",
+            "A The Calamity Reincarnator",
+            "Return of the Path of the Divine Warrior",
+            "The The Max Level Hero",
             "Tome of jeonjijeok-dokja-sijeom"
         ],
-        "description": "Summoned to another world, he uses his modern knowledge to become an unstoppable force.",
-        "status": "ongoing",
-        "year": 2024,
+        "description": "In a world where dungeons and monsters threaten humanity, one hero rises above all.",
+        "status": "hiatus",
+        "year": 2023,
         "contentRating": "suggestive",
         "demographic": "shounen",
         "creators": [
-            "jung-pil-won-author",
-            "do-eun-hye-artist"
+            "yoon-tae-ho-author",
+            "ryu-ho-jin-artist"
         ],
         "tags": [
-            "martial-arts",
-            "horror",
-            "system",
-            "full-color",
-            "romance"
+            "supernatural",
+            "romance",
+            "fantasy",
+            "action",
+            "magic"
         ],
         "id": "9a414441-bbad-43f1-a3a7-dc262ca790a3"
     },
@@ -812,134 +794,155 @@
         "ref": "isekai-de-cheat-skill-wo-te-ni-shita-ore-wa-genjitsu-sekai-wo-mo-musou-suru-level-up-wa-jinsei-wo-ka",
         "title": "Isekai de Cheat Skill wo Te ni Shita Ore wa, Genjitsu Sekai wo mo Musou Suru: Level Up wa Jinsei wo Kaeta",
         "altTitles": [
-            "A The Shadow Monarch Reborn",
-            "A Heavenly Grandmaster's Legacy",
-            "Return of the The Greatest Warrior Reborn",
-            "The The Archmage Returns",
+            "The Legend of Path of the Divine Warrior",
             "Tome of isekai-de-cheat-skill-wo-te-ni-shita-ore-wa-genjitsu-sekai-wo-mo-musou-suru-level-up-wa-jinsei-wo-ka"
         ],
-        "description": "When the gates between worlds opened, he was the only one who could save humanity.",
-        "status": "completed",
-        "year": 2024,
-        "contentRating": "suggestive",
+        "description": "Summoned to another world, he uses his modern knowledge to become an unstoppable force.",
+        "status": "hiatus",
+        "year": 2016,
+        "contentRating": "safe",
         "demographic": "shounen",
         "creators": [
-            "son-ki-woon-author",
-            "heo-jin-wook-artist"
+            "yoon-tae-ho-author",
+            "park-sung-woo-artist"
         ],
         "tags": [
-            "sci-fi",
-            "mystery",
+            "full-color",
+            "web-comic",
             "thriller",
-            "system",
+            "isekai",
             "adventure",
-            "martial-arts"
+            "dungeons"
         ],
         "id": "37838287-3fe9-443d-9d22-eafc1089140e"
-    },
-    {
-        "ref": "arifureta-shokugyou-de-sekai-saikyou",
-        "title": "Arifureta Shokugyou de Sekai Saikyou",
-        "altTitles": [
-            "The Legend of The Max Level Hero",
-            "The The Eternal Monarch",
-            "Tome of arifureta-shokugyou-de-sekai-saikyou"
-        ],
-        "description": "Summoned to another world, he uses his modern knowledge to become an unstoppable force.",
-        "status": "ongoing",
-        "year": 2021,
-        "contentRating": "safe",
-        "demographic": "seinen",
-        "creators": [
-            "son-ki-woon-author",
-            "joo-hyun-ah-artist"
-        ],
-        "tags": [
-            "academy",
-            "system",
-            "mystery",
-            "full-color",
-            "fantasy",
-            "monsters",
-            "long-strip"
-        ],
-        "id": "248525ed-ad1c-4ddc-a834-5d6ce66a3ad2"
     },
     {
         "ref": "isekai-mokushiroku-mynoghra-hametsu-no-bunmei-de-hajimeru-sekai-seifuku",
         "title": "Isekai Mokushiroku Mynoghra: Hametsu no Bunmei de Hajimeru Sekai Seifuku",
         "altTitles": [
-            "Rebirth of the Rise of the Phoenix King",
-            "Rebirth of the Second Life Ranker",
+            "The Legend of Rise of the Phoenix King",
+            "Rebirth of the Legend of the Northern Blade",
             "Tome of isekai-mokushiroku-mynoghra-hametsu-no-bunmei-de-hajimeru-sekai-seifuku"
         ],
-        "description": "Follow the journey of an ordinary gamer who becomes the strongest player in a fantasy world.",
-        "status": "ongoing",
-        "year": 2019,
-        "contentRating": "suggestive",
-        "demographic": "josei",
+        "description": "Summoned to another world, he uses his modern knowledge to become an unstoppable force.",
+        "status": "hiatus",
+        "year": 2017,
+        "contentRating": "safe",
+        "demographic": "shounen",
         "creators": [
-            "lee-jae-hoon-author",
-            "jeong-ha-na-artist"
+            "shin-woo-jin-author",
+            "maeng-ki-soo-artist"
         ],
         "tags": [
-            "action",
-            "adaptation",
-            "academy",
-            "award-winning"
+            "comedy",
+            "long-strip",
+            "supernatural",
+            "horror",
+            "drama"
         ],
         "id": "6e156d65-cf65-4d5b-9d04-52f2f8100fbf"
+    },
+    {
+        "ref": "arifureta-shokugyou-de-sekai-saikyou",
+        "title": "Arifureta Shokugyou de Sekai Saikyou",
+        "altTitles": [
+            "The The Unbeatable Swordsman",
+            "A The Dark Sorcerer's Legacy",
+            "Return of the The Constellation That Returned",
+            "The Sword King of the Nether",
+            "Tome of arifureta-shokugyou-de-sekai-saikyou"
+        ],
+        "description": "When the gates between worlds opened, he was the only one who could save humanity.",
+        "status": "ongoing",
+        "year": 2025,
+        "contentRating": "safe",
+        "demographic": "seinen",
+        "creators": [
+            "woo-geun-tak-author",
+            "joo-hyun-ah-artist"
+        ],
+        "tags": [
+            "supernatural",
+            "slice-of-life",
+            "mystery",
+            "sci-fi",
+            "award-winning"
+        ],
+        "id": "248525ed-ad1c-4ddc-a834-5d6ce66a3ad2"
     },
     {
         "ref": "taida-na-akujoku-kizoku-ni-tensei-shita-ore-scenario-wo-bukkowashitara-kikakugai-no-maryoku-de-saiky",
         "title": "Taida na Akujoku Kizoku ni Tensei shita Ore, Scenario wo Bukkowashitara Kikakugai no Maryoku de Saikyou ni Natta",
         "altTitles": [
-            "A Limit Breaker",
+            "The Legend of Genius of the Ancient Arts",
+            "Return of the God of Black Field",
             "Tome of taida-na-akujoku-kizoku-ni-tensei-shita-ore-scenario-wo-bukkowashitara-kikakugai-no-maryoku-de-saiky"
         ],
-        "description": "Follow the journey of an ordinary gamer who becomes the strongest player in a fantasy world.",
-        "status": "completed",
-        "year": 2016,
-        "contentRating": "safe",
-        "demographic": "none",
+        "description": "Reincarnated into a world of magic and monsters, he must find his way back to strength.",
+        "status": "cancelled",
+        "year": 2018,
+        "contentRating": "suggestive",
+        "demographic": "shoujo",
         "creators": [
-            "jang-hyun-woo-author",
-            "seol-hyun-ju-artist"
+            "son-ki-woon-author",
+            "joo-hyun-ah-artist"
         ],
         "tags": [
-            "mystery",
+            "sci-fi",
+            "romance",
             "thriller",
-            "adventure",
-            "regression"
+            "martial-arts",
+            "action",
+            "adaptation"
         ],
         "id": "b0dc2f88-4e89-4e30-8d68-20116db788ff"
+    },
+    {
+        "ref": "osoraku-kanojo-wa-ore-no-aniki-wo-neratteru",
+        "title": "Osoraku Kanojo wa Ore no Aniki wo Neratteru",
+        "altTitles": [
+            "The The Eternal Monarch",
+            "Tome of osoraku-kanojo-wa-ore-no-aniki-wo-neratteru"
+        ],
+        "description": "Reincarnated into a world of magic and monsters, he must find his way back to strength.",
+        "status": "completed",
+        "year": 2025,
+        "contentRating": "suggestive",
+        "demographic": "josei",
+        "creators": [
+            "oh-seung-min-author",
+            "gong-min-ji-artist"
+        ],
+        "tags": [
+            "system",
+            "thriller",
+            "monsters"
+        ],
+        "id": "1fc3d326-c037-43fa-8953-ed52a56caa18"
     },
     {
         "ref": "fuufu-ijou-koibito-miman",
         "title": "Fuufu Ijou, Koibito Miman.",
         "altTitles": [
-            "Rebirth of the Heaven's Soul Hunter",
-            "A The Invincible Mercenary",
-            "A Rebirth of the Heavenly Clan",
+            "Return of the Reborn as a Monster Lord",
+            "Return of the Arcane Sniper",
+            "The Legend of The Archmage Returns",
+            "Rebirth of the Sage of the Endless World",
             "Tome of fuufu-ijou-koibito-miman"
         ],
-        "description": "Summoned to another world, he uses his modern knowledge to become an unstoppable force.",
-        "status": "cancelled",
-        "year": 2021,
-        "contentRating": "suggestive",
-        "demographic": "josei",
+        "description": "After being betrayed by his comrades, he returns from the brink of death with newfound powers.",
+        "status": "completed",
+        "year": 2016,
+        "contentRating": "safe",
+        "demographic": "shounen",
         "creators": [
-            "park-ji-eun-author",
-            "yoon-seo-yeon-artist"
+            "cha-sang-min-author",
+            "byun-young-joon-artist"
         ],
         "tags": [
-            "regression",
-            "drama",
-            "sci-fi",
-            "adventure",
-            "slice-of-life",
-            "web-comic",
-            "thriller"
+            "magic",
+            "adaptation",
+            "isekai"
         ],
         "id": "b4c93297-b32f-4f90-b619-55456a38b0aa"
     },
@@ -947,75 +950,75 @@
         "ref": "kaguya-sama-love-is-war",
         "title": "Kaguya-sama: Love Is War",
         "altTitles": [
-            "Return of the The Eternal Monarch",
+            "The The Unbeatable Swordsman",
             "Tome of kaguya-sama-love-is-war"
         ],
-        "description": "Summoned to another world, he uses his modern knowledge to become an unstoppable force.",
-        "status": "completed",
-        "year": 2016,
+        "description": "A tale of revenge, power, and the relentless pursuit of becoming the strongest.",
+        "status": "ongoing",
+        "year": 2018,
         "contentRating": "suggestive",
-        "demographic": "josei",
+        "demographic": "none",
         "creators": [
-            "ko-jae-won-author",
-            "kang-dong-ho-artist"
+            "lee-jae-hoon-author",
+            "min-soo-ah-artist"
         ],
         "tags": [
-            "adaptation",
+            "thriller",
             "comedy",
-            "martial-arts",
-            "web-comic",
-            "drama"
+            "adaptation",
+            "mystery"
         ],
         "id": "37f5cce0-8070-4ada-96e5-fa24b1bd4ff9"
     },
     {
-        "ref": "osoraku-kanojo-wa-ore-no-aniki-wo-neratteru",
-        "title": "Osoraku Kanojo wa Ore no Aniki wo Neratteru",
+        "ref": "tsuihou-sareru-tabi-ni-skill-o-te-ni-ireta-ore-ga-100-no-isekai-de-2-shuume-musou",
+        "title": "Tsuihou Sareru Tabi ni Skill o Te ni Ireta Ore ga, 100 no Isekai de 2-shuume Musou",
         "altTitles": [
-            "A The Return of the War God",
-            "Tome of osoraku-kanojo-wa-ore-no-aniki-wo-neratteru"
+            "A The Dragon King's Return",
+            "The Solo Player's Ascent",
+            "Rebirth of the Limit Breaker",
+            "Tome of tsuihou-sareru-tabi-ni-skill-o-te-ni-ireta-ore-ga-100-no-isekai-de-2-shuume-musou"
         ],
-        "description": "In a world where dungeons and monsters threaten humanity, one hero rises above all.",
-        "status": "hiatus",
-        "year": 2022,
-        "contentRating": "safe",
-        "demographic": "josei",
+        "description": "A tale of revenge, power, and the relentless pursuit of becoming the strongest.",
+        "status": "completed",
+        "year": 2019,
+        "contentRating": "suggestive",
+        "demographic": "shounen",
         "creators": [
-            "son-ki-woon-author",
-            "yoon-seo-yeon-artist"
+            "yoon-tae-ho-author",
+            "heo-jin-wook-artist"
         ],
         "tags": [
-            "dungeons",
+            "romance",
+            "web-comic",
+            "monsters",
             "supernatural",
-            "isekai",
-            "regression"
+            "fantasy",
+            "thriller"
         ],
-        "id": "1fc3d326-c037-43fa-8953-ed52a56caa18"
+        "id": "5f64d517-c4ea-40c0-a463-fcc069d39d3b"
     },
     {
         "ref": "tensei-kizoku-no-isekai-boukenroku-jichou-wo-shiranai-kamigami-no-shito",
         "title": "Tensei Kizoku no Isekai Boukenroku ~Jichou wo Shiranai Kamigami no Shito~",
         "altTitles": [
-            "The The Demon King's Awakening",
-            "Rebirth of the The Unstoppable Player",
-            "The Sword King of the Nether",
+            "A The Archmage Returns",
+            "A The Ruler of the Land",
             "Tome of tensei-kizoku-no-isekai-boukenroku-jichou-wo-shiranai-kamigami-no-shito"
         ],
-        "description": "Follow the journey of an ordinary gamer who becomes the strongest player in a fantasy world.",
-        "status": "hiatus",
-        "year": 2025,
-        "contentRating": "suggestive",
-        "demographic": "seinen",
+        "description": "When the gates between worlds opened, he was the only one who could save humanity.",
+        "status": "completed",
+        "year": 2019,
+        "contentRating": "safe",
+        "demographic": "shoujo",
         "creators": [
-            "kwak-dong-soo-author",
-            "jeong-ha-na-artist"
+            "park-ji-eun-author",
+            "heo-jin-wook-artist"
         ],
         "tags": [
-            "drama",
-            "dungeons",
-            "fantasy",
-            "long-strip",
-            "adventure"
+            "adaptation",
+            "comedy",
+            "martial-arts"
         ],
         "id": "39b4e02a-f2f2-4ff0-bf2c-f87cf54ab178"
     },
@@ -1023,23 +1026,29 @@
         "ref": "dungeon-meshi",
         "title": "Dungeon Meshi",
         "altTitles": [
-            "Return of the Sword Saint of the Ruins",
+            "The The Constellation That Returned",
+            "The Legend of The Greatest Warrior Reborn",
+            "Rebirth of the The Greatest Warrior Reborn",
+            "A The Fifth Ranker",
             "Tome of dungeon-meshi"
         ],
-        "description": "A tale of revenge, power, and the relentless pursuit of becoming the strongest.",
-        "status": "hiatus",
-        "year": 2022,
-        "contentRating": "suggestive",
-        "demographic": "none",
+        "description": "Reincarnated into a world of magic and monsters, he must find his way back to strength.",
+        "status": "ongoing",
+        "year": 2024,
+        "contentRating": "safe",
+        "demographic": "shoujo",
         "creators": [
-            "woo-geun-tak-author",
-            "jeong-ha-na-artist"
+            "jung-pil-won-author",
+            "joo-hyun-ah-artist"
         ],
         "tags": [
-            "web-comic",
-            "comedy",
-            "award-winning",
-            "sci-fi"
+            "martial-arts",
+            "drama",
+            "adventure",
+            "romance",
+            "system",
+            "fantasy",
+            "horror"
         ],
         "id": "d90ea6cb-7bc3-4d80-8af0-28557e6c4e17"
     },
@@ -1047,77 +1056,53 @@
         "ref": "hazure-waku-no-joutai-ijou-skill-de-saikyou-ni-natta-ore-ga-subete-o-juurin-suru-made",
         "title": "Hazure Waku no [Joutai Ijou Skill] de Saikyou ni Natta Ore ga Subete o Juurin Suru made",
         "altTitles": [
-            "Rebirth of the The Invincible Mercenary",
-            "Rebirth of the The King of Dark Dungeons",
+            "The Legend of Solo Player's Ascent",
+            "Return of the The King of Dark Dungeons",
+            "Rebirth of the Celestial Executioner",
+            "The Reborn as a Monster Lord",
             "Tome of hazure-waku-no-joutai-ijou-skill-de-saikyou-ni-natta-ore-ga-subete-o-juurin-suru-made"
         ],
-        "description": "Summoned to another world, he uses his modern knowledge to become an unstoppable force.",
-        "status": "cancelled",
-        "year": 2019,
-        "contentRating": "suggestive",
+        "description": "The strongest warrior of the past awakens in a new era to face even greater threats.",
+        "status": "ongoing",
+        "year": 2018,
+        "contentRating": "safe",
         "demographic": "seinen",
         "creators": [
-            "lee-jae-hoon-author",
-            "sung-ki-won-artist"
+            "ahn-hyo-seok-author",
+            "ha-jin-sung-artist"
         ],
         "tags": [
-            "comedy",
-            "dungeons",
-            "adaptation"
+            "adaptation",
+            "martial-arts",
+            "action",
+            "slice-of-life"
         ],
         "id": "0b171f64-89a5-4c37-b5f9-75cca57e8787"
-    },
-    {
-        "ref": "tsuihou-sareru-tabi-ni-skill-o-te-ni-ireta-ore-ga-100-no-isekai-de-2-shuume-musou",
-        "title": "Tsuihou Sareru Tabi ni Skill o Te ni Ireta Ore ga, 100 no Isekai de 2-shuume Musou",
-        "altTitles": [
-            "Rebirth of the The Demon King's Awakening",
-            "The The Constellation That Returned",
-            "A Emperor of the Abyss",
-            "The Legend of The Cursed King",
-            "Tome of tsuihou-sareru-tabi-ni-skill-o-te-ni-ireta-ore-ga-100-no-isekai-de-2-shuume-musou"
-        ],
-        "description": "Summoned to another world, he uses his modern knowledge to become an unstoppable force.",
-        "status": "hiatus",
-        "year": 2025,
-        "contentRating": "safe",
-        "demographic": "shoujo",
-        "creators": [
-            "jang-jae-hyuk-author",
-            "seol-hyun-ju-artist"
-        ],
-        "tags": [
-            "fantasy",
-            "supernatural",
-            "isekai",
-            "long-strip"
-        ],
-        "id": "5f64d517-c4ea-40c0-a463-fcc069d39d3b"
     },
     {
         "ref": "yancha-gal-no-anjou-san",
         "title": "Yancha Gal no Anjou-san",
         "altTitles": [
+            "The Legend of The Unbeatable Swordsman",
             "The Legend of The Ruler of the Land",
+            "Return of the The Return of the War God",
+            "The Legend of The Dark Sorcerer's Legacy",
             "Tome of yancha-gal-no-anjou-san"
         ],
-        "description": "A tale of revenge, power, and the relentless pursuit of becoming the strongest.",
+        "description": "The strongest warrior of the past awakens in a new era to face even greater threats.",
         "status": "hiatus",
-        "year": 2024,
-        "contentRating": "safe",
+        "year": 2023,
+        "contentRating": "suggestive",
         "demographic": "shoujo",
         "creators": [
-            "hwang-do-hoon-author",
-            "maeng-ki-soo-artist"
+            "yoon-tae-ho-author",
+            "yoon-seo-yeon-artist"
         ],
         "tags": [
-            "long-strip",
-            "isekai",
-            "full-color",
-            "system",
-            "horror",
-            "award-winning",
-            "sci-fi"
+            "mystery",
+            "comedy",
+            "regression",
+            "drama"
         ],
         "id": "5e3a710f-0b0d-482b-9e84-d9c91960c625"
     },
@@ -1125,104 +1110,102 @@
         "ref": "chiyu-mahou-no-machigatta-tsukaikata-senjou-wo-kakeru-kaifuku-youin",
         "title": "Chiyu Mahou no Machigatta Tsukaikata ~Senjou wo Kakeru Kaifuku Youin~",
         "altTitles": [
-            "The Legend of The Ruler of the Land",
-            "A The Beginning After the Endless",
-            "Rebirth of the The God of War Online",
+            "The Legend of Tower of Ascension",
+            "Return of the The Fifth Ranker",
+            "Return of the Overgeared Blacksmith",
             "Tome of chiyu-mahou-no-machigatta-tsukaikata-senjou-wo-kakeru-kaifuku-youin"
         ],
-        "description": "After being betrayed by his comrades, he returns from the brink of death with newfound powers.",
-        "status": "completed",
-        "year": 2019,
+        "description": "Reincarnated into a world of magic and monsters, he must find his way back to strength.",
+        "status": "ongoing",
+        "year": 2025,
         "contentRating": "safe",
-        "demographic": "josei",
+        "demographic": "shounen",
         "creators": [
-            "seo-dong-chul-author",
-            "go-bong-hwa-artist"
+            "lee-jae-hoon-author",
+            "heo-jin-wook-artist"
         ],
         "tags": [
-            "martial-arts",
-            "system",
-            "thriller",
-            "dungeons",
-            "action"
+            "supernatural",
+            "drama",
+            "award-winning"
         ],
         "id": "e0589f47-72f9-4e9a-ac31-5b88bcad6220"
-    },
-    {
-        "ref": "yofukashi-no-uta",
-        "title": "Yofukashi no Uta",
-        "altTitles": [
-            "The Second Life Ranker",
-            "A The Unstoppable Player",
-            "Return of the The Final Boss is Me",
-            "The The Guild's Strongest Mage",
-            "Tome of yofukashi-no-uta"
-        ],
-        "description": "In a world where dungeons and monsters threaten humanity, one hero rises above all.",
-        "status": "hiatus",
-        "year": 2016,
-        "contentRating": "safe",
-        "demographic": "none",
-        "creators": [
-            "park-ji-eun-author",
-            "yoon-seo-yeon-artist"
-        ],
-        "tags": [
-            "long-strip",
-            "system",
-            "romance",
-            "adaptation"
-        ],
-        "id": "259dfd8a-f06a-4825-8fa6-a2dcd7274230"
     },
     {
         "ref": "hitoribocchi-no-isekai-kouryaku",
         "title": "Hitoribocchi no Isekai Kouryaku",
         "altTitles": [
-            "Return of the The Greatest Warrior Reborn",
+            "Return of the The Guild's Strongest Mage",
+            "Rebirth of the Second Life Ranker",
+            "A Arcane Sniper",
+            "Return of the The Eternal Monarch",
             "Tome of hitoribocchi-no-isekai-kouryaku"
         ],
-        "description": "In a world where dungeons and monsters threaten humanity, one hero rises above all.",
-        "status": "cancelled",
-        "year": 2025,
+        "description": "A tale of revenge, power, and the relentless pursuit of becoming the strongest.",
+        "status": "ongoing",
+        "year": 2018,
         "contentRating": "safe",
-        "demographic": "seinen",
+        "demographic": "shounen",
         "creators": [
-            "woo-geun-tak-author",
-            "min-soo-ah-artist"
+            "jang-hyun-woo-author",
+            "go-bong-hwa-artist"
         ],
         "tags": [
-            "monsters",
-            "drama",
             "academy",
-            "award-winning",
-            "romance",
-            "slice-of-life"
+            "system",
+            "sci-fi",
+            "comedy",
+            "adventure"
         ],
         "id": "ffe69cc2-3f9e-4eab-a7f7-c963cea9ec25"
+    },
+    {
+        "ref": "yofukashi-no-uta",
+        "title": "Yofukashi no Uta",
+        "altTitles": [
+            "Return of the Celestial Executioner",
+            "Rebirth of the The Unbeatable Swordsman",
+            "Rebirth of the Solo Player's Ascent",
+            "Tome of yofukashi-no-uta"
+        ],
+        "description": "In a world where dungeons and monsters threaten humanity, one hero rises above all.",
+        "status": "completed",
+        "year": 2021,
+        "contentRating": "suggestive",
+        "demographic": "seinen",
+        "creators": [
+            "park-ji-eun-author",
+            "byun-young-joon-artist"
+        ],
+        "tags": [
+            "fantasy",
+            "mystery",
+            "romance"
+        ],
+        "id": "259dfd8a-f06a-4825-8fa6-a2dcd7274230"
     },
     {
         "ref": "tokidoki-bosotto-russia-go-de-dereru-tonari-no-alya-san",
         "title": "Tokidoki Bosotto Russia-go de Dereru Tonari no Alya-san",
         "altTitles": [
-            "The Legend of The Shadow Monarch Reborn",
+            "A The Calamity Reincarnator",
+            "Return of the The Cursed King",
             "Tome of tokidoki-bosotto-russia-go-de-dereru-tonari-no-alya-san"
         ],
-        "description": "Follow the journey of an ordinary gamer who becomes the strongest player in a fantasy world.",
-        "status": "ongoing",
-        "year": 2018,
+        "description": "The strongest warrior of the past awakens in a new era to face even greater threats.",
+        "status": "cancelled",
+        "year": 2021,
         "contentRating": "suggestive",
-        "demographic": "josei",
+        "demographic": "seinen",
         "creators": [
-            "hong-jin-woo-author",
-            "ryu-ho-jin-artist"
+            "cha-sang-min-author",
+            "do-eun-hye-artist"
         ],
         "tags": [
-            "long-strip",
-            "academy",
-            "award-winning",
-            "regression",
-            "system"
+            "adaptation",
+            "web-comic",
+            "comedy",
+            "romance"
         ],
         "id": "6bf844c8-2ce4-401a-a761-3151042efe30"
     },
@@ -1230,28 +1213,23 @@
         "ref": "maou-ni-natta-node-dungeon-tsukutte-jingai-musume-to-honobono-suru",
         "title": "Maou ni Natta node, Dungeon Tsukutte Jingai Musume to Honobono Suru",
         "altTitles": [
-            "A Path of the Divine Warrior",
+            "The Legend of Arcane Sniper",
             "Return of the Reborn as a Monster Lord",
-            "Rebirth of the Heavenly Demon Reborn",
             "Tome of maou-ni-natta-node-dungeon-tsukutte-jingai-musume-to-honobono-suru"
         ],
-        "description": "After being betrayed by his comrades, he returns from the brink of death with newfound powers.",
+        "description": "The strongest warrior of the past awakens in a new era to face even greater threats.",
         "status": "hiatus",
-        "year": 2017,
-        "contentRating": "safe",
-        "demographic": "josei",
+        "year": 2020,
+        "contentRating": "suggestive",
+        "demographic": "none",
         "creators": [
-            "shin-woo-jin-author",
-            "kang-dong-ho-artist"
+            "yoon-tae-ho-author",
+            "na-yeon-soo-artist"
         ],
         "tags": [
-            "fantasy",
-            "thriller",
-            "supernatural",
-            "comedy",
-            "action",
-            "award-winning",
-            "slice-of-life"
+            "full-color",
+            "academy",
+            "isekai"
         ],
         "id": "9d351a80-5037-4334-a020-6985899f5b1f"
     },
@@ -1259,24 +1237,25 @@
         "ref": "tondemo-skill-de-isekai-hourou-meshi",
         "title": "Tondemo Skill de Isekai Hourou Meshi",
         "altTitles": [
-            "The The Final Boss is Me",
-            "Rebirth of the The Fifth Ranker",
-            "Return of the Heavenly Grandmaster's Legacy",
+            "Return of the Rise of the Phoenix King",
+            "The Legend of The Guild's Strongest Mage",
+            "Rebirth of the The Greatest Warrior Reborn",
+            "A Genius of the Ancient Arts",
             "Tome of tondemo-skill-de-isekai-hourou-meshi"
         ],
-        "description": "When the gates between worlds opened, he was the only one who could save humanity.",
-        "status": "completed",
-        "year": 2024,
-        "contentRating": "suggestive",
+        "description": "After being betrayed by his comrades, he returns from the brink of death with newfound powers.",
+        "status": "cancelled",
+        "year": 2019,
+        "contentRating": "safe",
         "demographic": "seinen",
         "creators": [
-            "jang-hyun-woo-author",
-            "na-yeon-soo-artist"
+            "lee-jae-hoon-author",
+            "bae-jin-young-artist"
         ],
         "tags": [
-            "sci-fi",
-            "full-color",
-            "dungeons"
+            "mystery",
+            "thriller",
+            "award-winning"
         ],
         "id": "8352a9ca-22e0-4a1c-bf1f-89f23d95262a"
     },
@@ -1284,29 +1263,25 @@
         "ref": "shuumatsu-no-valkyrie",
         "title": "Shuumatsu no Valkyrie",
         "altTitles": [
-            "The Legend of Genius of the Ancient Arts",
-            "Rebirth of the The Fifth Ranker",
-            "A The Sole Survivor",
-            "The Legend of Emperor of the Abyss",
+            "The Legend of The Unbeatable Swordsman",
             "Tome of shuumatsu-no-valkyrie"
         ],
-        "description": "After being betrayed by his comrades, he returns from the brink of death with newfound powers.",
-        "status": "completed",
+        "description": "A tale of revenge, power, and the relentless pursuit of becoming the strongest.",
+        "status": "hiatus",
         "year": 2018,
         "contentRating": "safe",
-        "demographic": "seinen",
+        "demographic": "none",
         "creators": [
-            "hwang-do-hoon-author",
-            "ha-jin-sung-artist"
+            "oh-seung-min-author",
+            "maeng-ki-soo-artist"
         ],
         "tags": [
+            "adaptation",
+            "dungeons",
             "drama",
-            "academy",
-            "regression",
-            "slice-of-life",
-            "magic",
-            "sci-fi",
-            "fantasy"
+            "comedy",
+            "adventure",
+            "long-strip"
         ],
         "id": "b5b21ca1-bba5-4b9a-8cd1-6248f731650b"
     },
@@ -1314,27 +1289,28 @@
         "ref": "oshi-no-ko",
         "title": "【Oshi no Ko】",
         "altTitles": [
-            "The Reborn as a Monster Lord",
-            "Return of the Immortal Blade Master",
+            "Return of the The Beginning After the Endless",
+            "The Limit Breaker",
+            "Rebirth of the The Legendary Mechanic",
             "Tome of oshi-no-ko"
         ],
-        "description": "After being betrayed by his comrades, he returns from the brink of death with newfound powers.",
-        "status": "hiatus",
-        "year": 2022,
-        "contentRating": "suggestive",
+        "description": "The strongest warrior of the past awakens in a new era to face even greater threats.",
+        "status": "cancelled",
+        "year": 2020,
+        "contentRating": "safe",
         "demographic": "shounen",
         "creators": [
-            "kwak-dong-soo-author",
-            "byun-young-joon-artist"
+            "hong-jin-woo-author",
+            "sung-ki-won-artist"
         ],
         "tags": [
-            "academy",
+            "comedy",
+            "award-winning",
             "magic",
-            "adventure",
+            "long-strip",
             "dungeons",
-            "thriller",
-            "martial-arts",
-            "adaptation"
+            "adaptation",
+            "monsters"
         ],
         "id": "296cbc31-af1a-4b5b-a34b-fee2b4cad542"
     }
