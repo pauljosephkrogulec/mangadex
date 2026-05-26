@@ -15,9 +15,9 @@ if [ ! -f config/jwt/private.pem ]; then
     echo "JWT keys generated."
 fi
 
-# Ensure www-data workers can read the keys
-chmod 644 config/jwt/public.pem
-chmod 640 config/jwt/private.pem
-chown root:www-data config/jwt/private.pem
+# Best-effort permission fix — may be skipped on bind-mounted volumes where host owns the files
+chmod 644 config/jwt/public.pem 2>/dev/null || true
+chmod 640 config/jwt/private.pem 2>/dev/null || true
+chown root:www-data config/jwt/private.pem 2>/dev/null || true
 
 exec "$@"

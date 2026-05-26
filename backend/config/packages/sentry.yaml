@@ -1,0 +1,7 @@
+sentry:
+    dsn: '%env(default::SENTRY_DSN)%'
+    register_error_listener: true
+    options:
+        environment: '%kernel.environment%'
+        traces_sample_rate: 1.0
+        send_default_pii: false

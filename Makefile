@@ -1,10 +1,26 @@
-.PHONY: up down build restart logs logs-backend logs-frontend shell-backend shell-frontend shell-db lint lint-backend lint-frontend fix-backend fix-frontend migrate migrate-diff migrate-rollback install-backend install-frontend test-backend test-backend-coverage test-frontend test-frontend-coverage clear-cache cleanup-files cleanup-files-dry-run fresh setup fixtures fixtures-users generate-fixtures-data fix lighthouse
+SENTRY_DIR ?= $(HOME)/sentry-self-hosted
 
-up:
+.PHONY: up down build restart logs logs-backend logs-frontend shell-backend shell-frontend shell-db lint lint-backend lint-frontend fix-backend fix-frontend migrate migrate-diff migrate-rollback install-backend install-frontend test-backend test-backend-coverage test-frontend test-frontend-coverage clear-cache cleanup-files cleanup-files-dry-run fresh setup fixtures fixtures-users generate-fixtures-data fix lighthouse sentry-up sentry-down
+
+sentry-up:
+	@if [ -d "$(SENTRY_DIR)" ]; then \
+		echo "Starting Sentry self-hosted..."; \
+		docker compose -f $(SENTRY_DIR)/docker-compose.yml up -d; \
+	else \
+		echo "Sentry not installed. Run: bash sentry/setup.sh"; \
+	fi
+
+sentry-down:
+	@if [ -d "$(SENTRY_DIR)" ]; then \
+		docker compose -f $(SENTRY_DIR)/docker-compose.yml down; \
+	fi
+
+up: sentry-up
 	docker compose up -d
 
 down:
 	docker compose down
+	$(MAKE) sentry-down
 
 build:
 	docker compose build
@@ -46,6 +62,7 @@ install-frontend:
 
 fresh:
 	docker compose down -v
+	$(MAKE) sentry-up
 	docker compose up -d --build
 	docker compose exec backend php bin/console doctrine:migrations:migrate --no-interaction
 	$(MAKE) fixtures
