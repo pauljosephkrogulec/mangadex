@@ -1,0 +1,13 @@
+{
+  "name": "mangadex",
+  "private": true,
+  "description": "Outillage du monorepo (hooks Git). Les dépendances de l'app front sont dans web/.",
+  "scripts": {
+    "prepare": "lefthook install"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^21.2.4",
+    "@commitlint/config-conventional": "^21.2.4",
+    "lefthook": "^2.2.2"
+  }
+}
