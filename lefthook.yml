@@ -1,0 +1,40 @@
+# Hooks Git du monorepo (issue #2).
+# Installation : `npm install` à la racine (le script `prepare` lance `lefthook install`).
+# Contournement ponctuel : `LEFTHOOK=0 git commit ...`
+#
+# Chaque job n'agit que sur les fichiers indexés qui correspondent à son `glob`
+# et à son `root`. Tant que `api/` ou `web/` n'existent pas, ces jobs sont simplement ignorés.
+
+pre-commit:
+  jobs:
+    # --- API (Symfony) ---
+    - name: php-cs-fixer
+      root: "api/"
+      glob: "*.php"
+      # --path-mode=intersection : ne traiter que les fichiers indexés qui sont aussi dans le Finder de la config
+      run: vendor/bin/php-cs-fixer fix --path-mode=intersection {staged_files}
+      stage_fixed: true
+
+    - name: phpstan
+      root: "api/"
+      glob: "*.php"
+      run: vendor/bin/phpstan analyse --no-progress --memory-limit=1G {staged_files}
+
+    # --- Front (Next.js) ---
+    # ESLint puis Prettier, l'un après l'autre (pas en parallèle) : les deux réécrivent les mêmes fichiers.
+    - name: eslint
+      root: "web/"
+      glob: "*.{js,jsx,ts,tsx,mjs,cjs}"
+      run: npx --no -- eslint --fix {staged_files}
+      stage_fixed: true
+
+    - name: prettier
+      root: "web/"
+      glob: "*.{js,jsx,ts,tsx,mjs,cjs,json,css,scss,md}"
+      run: npx --no -- prettier --write --ignore-unknown {staged_files}
+      stage_fixed: true
+
+commit-msg:
+  jobs:
+    - name: commitlint
+      run: npx --no -- commitlint --edit {1}
