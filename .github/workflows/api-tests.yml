@@ -1,0 +1,94 @@
+name: API — tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "api/**"
+      - ".github/workflows/api-tests.yml"
+  # Pas de filtre `paths` sur les PR : les checks sont requis par le ruleset de dev/main,
+  # un check qui ne se lance pas bloquerait la PR indéfiniment.
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  phpunit:
+    name: PHPUnit (PHP 8.5, PostgreSQL, Redis)
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: api
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: app
+          POSTGRES_PASSWORD: app
+          POSTGRES_DB: app
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U app"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      APP_ENV: test
+      # En env "test", Doctrine ajoute le suffixe `_test` au nom de base → base réelle : app_test.
+      DATABASE_URL: "postgresql://app:app@127.0.0.1:5432/app?serverVersion=16&charset=utf8"
+      REDIS_URL: "redis://127.0.0.1:6379"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.5"
+          extensions: ctype, iconv, intl, pdo_pgsql, redis
+          coverage: pcov
+          tools: composer:v2
+
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@v3
+        with:
+          working-directory: api
+
+      - name: Create test database
+        run: bin/console doctrine:database:create --if-not-exists --no-interaction
+
+      - name: Replay migrations on empty database
+        run: bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
+
+      - name: Validate mapping against migrated schema
+        run: bin/console doctrine:schema:validate
+
+      - name: Run PHPUnit with coverage
+        run: vendor/bin/phpunit --coverage-clover coverage.xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: api/coverage.xml
+          flags: api
+          fail_ci_if_error: false

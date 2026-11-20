@@ -1,0 +1,22 @@
+# Reverse proxy : point d'entrée unique de la stack.
+# Une seule origine (même host/port) pour le front et l'API : pas de CORS à gérer.
+
+{
+	# HTTP simple en dev. Le HTTPS sera traité avec la config de prod.
+	auto_https off
+	admin off
+}
+
+:80 {
+	# Routes servies par Symfony (API + outils de debug du profiler).
+	@api path /api /api/* /_profiler /_profiler/* /_wdt /_wdt/* /bundles/*
+
+	handle @api {
+		reverse_proxy php:8080
+	}
+
+	# Tout le reste va au front Next.js (WebSocket du hot reload inclus).
+	handle {
+		reverse_proxy web:3000
+	}
+}

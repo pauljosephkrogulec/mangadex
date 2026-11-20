@@ -1,0 +1,73 @@
+name: Front — CI
+
+on:
+  push:
+    branches: [main, dev]
+    paths:
+      - "web/**"
+      - ".github/workflows/front-ci.yml"
+  # Pas de filtre `paths` sur les PR : les checks sont requis par le ruleset de dev/main,
+  # un check qui ne se lance pas bloquerait la PR indéfiniment.
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Lint, types, tests, build (Node LTS)
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: web
+
+    env:
+      # Désactive la télémétrie Next.js en CI.
+      NEXT_TELEMETRY_DISABLED: 1
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node (version de web/.nvmrc)
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: web/.nvmrc
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: ESLint
+        run: npm run lint
+
+      - name: Prettier
+        run: npm run format:check
+
+      - name: TypeScript (tsc --noEmit)
+        run: npm run typecheck
+
+      - name: Vitest
+        run: npm test
+
+      # Cache incrémental du build Next.js (recommandé par la doc Next.js pour la CI).
+      - name: Cache Next.js build
+        uses: actions/cache@v4
+        with:
+          path: web/.next/cache
+          key: nextjs-${{ runner.os }}-${{ hashFiles('web/package-lock.json') }}-${{ hashFiles('web/src/**', 'web/next.config.ts') }}
+          restore-keys: |
+            nextjs-${{ runner.os }}-${{ hashFiles('web/package-lock.json') }}-
+
+      - name: Build Next.js
+        run: npm run build
+
+      # Seuil "high" : les 4 alertes "moderate" actuelles viennent de la CLI shadcn (ts-morph → minimatch),
+      # sans correctif non cassant. Une faille high/critical fait échouer la CI.
+      - name: npm audit
+        run: npm audit --audit-level=high

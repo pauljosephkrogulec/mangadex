@@ -1,0 +1,12 @@
+**/*.log
+**/*.php~
+**/.DS_Store
+**/Thumbs.db
+/.env.local
+/.env.local.php
+/.env.*.local
+/.php-cs-fixer.cache
+/.phpunit.cache
+/Dockerfile
+/var/
+/vendor/

@@ -1,0 +1,58 @@
+name: Release — Tag
+
+# Au merge de la PR `chore(release): vX.Y.Z` (dev → main) : pose le tag vX.Y.Z sur le
+# commit de merge de `main` et crée la GitHub Release (notes générées automatiquement).
+# Le tag est créé avec RELEASE_TOKEN (PAT) : un tag poussé par GITHUB_TOKEN ne déclencherait
+# pas `release-images.yml`, et les images ne seraient pas publiées.
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  tag:
+    name: Tag & GitHub Release
+    if: >-
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.head.ref == 'dev' &&
+      startsWith(github.event.pull_request.title, 'chore(release): v')
+    runs-on: ubuntu-latest
+
+    env:
+      GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+      # Passés par env (jamais interpolés dans le script) : pas d'injection via le titre de PR.
+      PR_TITLE: ${{ github.event.pull_request.title }}
+      MERGE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
+
+    steps:
+      - name: Extract version from PR title
+        run: |
+          version="${PR_TITLE#chore(release): }"
+          if ! printf '%s' "$version" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$'; then
+            echo "::error::Version invalide dans le titre de PR : '$version'."
+            exit 1
+          fi
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+
+      - name: Create tag on main
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/git/refs" \
+            -f ref="refs/tags/$VERSION" \
+            -f sha="$MERGE_SHA" > /dev/null
+          echo "Tag $VERSION → $MERGE_SHA"
+
+      - name: Create GitHub Release
+        run: |
+          prerelease=""
+          case "$VERSION" in *-*) prerelease="--prerelease" ;; esac
+          gh release create "$VERSION" --repo "$GITHUB_REPOSITORY" \
+            --verify-tag --generate-notes --title "$VERSION" $prerelease
+          echo "Release $VERSION créée : les images sont en cours de publication (CD — Publication des images)." >> "$GITHUB_STEP_SUMMARY"

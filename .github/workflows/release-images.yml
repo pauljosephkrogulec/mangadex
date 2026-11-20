@@ -1,0 +1,124 @@
+name: CD — Publication des images
+
+# Publie les images de prod (php, web) sur GHCR quand un tag de version est poussé :
+#   git tag v1.2.3 && git push origin v1.2.3
+# Tags d'image produits : 1.2.3, 1.2, latest (versions stables uniquement), sha-<commit>.
+# Chaque image est publiée avec un SBOM + une provenance (attestations BuildKit),
+# puis signée avec cosign en mode « keyless » (identité OIDC du workflow, sans clé à gérer).
+#
+# Sur une PR qui modifie ce workflow : « dry-run » (build + calcul des tags, sans push ni signature).
+
+on:
+  push:
+    tags: ["v*.*.*"]
+  pull_request:
+    paths:
+      - ".github/workflows/release-images.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  # Ne jamais interrompre une publication en cours.
+  cancel-in-progress: false
+
+env:
+  REGISTRY: ghcr.io
+  PUBLISH: ${{ github.event_name == 'push' }}
+
+jobs:
+  publish:
+    name: Publish (${{ matrix.image }})
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write # push sur GHCR
+      id-token: write # jeton OIDC pour la signature cosign keyless
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - image: php
+            context: api
+            target: frankenphp_prod
+          - image: web
+            context: web
+            target: prod
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+
+      - name: Log in to GHCR
+        if: env.PUBLISH == 'true'
+        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Calcule les tags et les labels OCI (source, révision, version…) à partir du tag Git.
+      - name: Image metadata
+        id: meta
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
+        with:
+          images: ${{ env.REGISTRY }}/${{ github.repository }}-${{ matrix.image }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,format=short
+          # `latest` uniquement pour une version stable (pas pour v1.0.0-rc.1).
+          flavor: |
+            latest=auto
+
+      - name: Build and push
+        id: build
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: ${{ matrix.context }}
+          target: ${{ matrix.target }}
+          push: ${{ env.PUBLISH == 'true' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          annotations: ${{ steps.meta.outputs.annotations }}
+          # Réutilise le cache du workflow Docker (mêmes cibles, mêmes scopes) sans l'écrire.
+          cache-from: type=gha,scope=${{ matrix.image }}
+          # SBOM (liste des paquets de l'image) et provenance (comment/où elle a été construite),
+          # attachés à l'image dans le registry.
+          sbom: true
+          provenance: mode=max
+
+      - name: Install cosign
+        if: env.PUBLISH == 'true'
+        uses: sigstore/cosign-installer@756fe2d284c7292c4e9b62c8a28f1e5629c59532 # v4.1.3
+        with:
+          cosign-release: v3.1.4
+
+      # Signe le digest (immuable) et non les tags (déplaçables).
+      - name: Sign image with cosign
+        if: env.PUBLISH == 'true'
+        env:
+          IMAGE: ${{ env.REGISTRY }}/${{ github.repository }}-${{ matrix.image }}
+          DIGEST: ${{ steps.build.outputs.digest }}
+        run: cosign sign --yes "${IMAGE}@${DIGEST}"
+
+      - name: Summary
+        env:
+          TAGS: ${{ steps.meta.outputs.tags }}
+          DIGEST: ${{ steps.build.outputs.digest }}
+        run: |
+          {
+            echo "### ${{ matrix.image }}"
+            if [ "$PUBLISH" = "true" ]; then echo "Publiée et signée."; else echo "Dry-run : rien n'a été publié."; fi
+            echo
+            echo "Digest : \`${DIGEST}\`"
+            echo
+            echo '```'
+            echo "$TAGS"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
