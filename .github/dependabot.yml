@@ -1,0 +1,133 @@
+# Mises à jour automatiques des dépendances (Dependabot).
+# https://docs.github.com/code-security/dependabot/working-with-dependabot/dependabot-options-reference
+#
+# Principe commun à chaque écosystème :
+# - une PR hebdomadaire (lundi matin) qui regroupe toutes les mises à jour mineures/correctifs ;
+# - les mises à jour majeures arrivent en PR séparées (souvent cassantes, à relire une par une) ;
+# - cooldown : une version n'est proposée que quelques jours après sa publication
+#   (laisse le temps de détecter une release compromise ou boguée) ;
+# - messages de commit au format Conventional Commits (cf. commitlint.config.mjs).
+# Les PR ciblent `dev` (branche par défaut) et passent par les checks requis du ruleset.
+
+version: 2
+
+updates:
+  # --- API : Composer ---------------------------------------------------------
+  - package-ecosystem: composer
+    directory: /api
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Paris
+    cooldown:
+      default-days: 3
+    groups:
+      composer:
+        update-types: [minor, patch]
+    commit-message:
+      prefix: chore
+      include: scope
+    labels: ["type:chore", "area:api"]
+
+  # --- Front : npm (web/) -----------------------------------------------------
+  - package-ecosystem: npm
+    directory: /web
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Paris
+    cooldown:
+      default-days: 3
+    groups:
+      npm-web:
+        update-types: [minor, patch]
+    ignore:
+      # Majeure de Node pilotée à la main (web/.nvmrc, engines, image Docker alignés).
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+    commit-message:
+      prefix: chore
+      include: scope
+    labels: ["type:chore", "area:front"]
+
+  # --- Outillage du monorepo : npm racine (lefthook, commitlint) --------------
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Paris
+    cooldown:
+      default-days: 3
+    groups:
+      npm-tooling:
+        patterns: ["*"]
+    commit-message:
+      prefix: chore
+      include: scope
+    labels: ["type:chore", "area:infra"]
+
+  # --- GitHub Actions ---------------------------------------------------------
+  # Met aussi à jour les actions épinglées par SHA (en conservant le commentaire `# vX.Y.Z`).
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Paris
+    cooldown:
+      default-days: 3
+    groups:
+      github-actions:
+        patterns: ["*"]
+    commit-message:
+      prefix: ci
+    labels: ["type:ci", "area:infra"]
+
+  # --- Images Docker : Dockerfiles (api/, web/) -------------------------------
+  - package-ecosystem: docker
+    directories: ["/api", "/web"]
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Paris
+    cooldown:
+      default-days: 3
+    groups:
+      docker-images:
+        patterns: ["*"]
+    ignore:
+      # Majeure de Node pilotée à la main (alignée avec web/.nvmrc et `engines`).
+      - dependency-name: node
+        update-types: ["version-update:semver-major"]
+    commit-message:
+      prefix: chore
+      include: scope
+    labels: ["type:chore", "area:infra"]
+
+  # --- Images Docker : Compose (proxy Caddy, PostgreSQL) ----------------------
+  - package-ecosystem: docker-compose
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Paris
+    cooldown:
+      default-days: 3
+    groups:
+      compose-images:
+        patterns: ["*"]
+    ignore:
+      # Une majeure de PostgreSQL impose une migration des données (pg_upgrade / dump-restore).
+      - dependency-name: postgres
+        update-types: ["version-update:semver-major"]
+    commit-message:
+      prefix: chore
+      include: scope
+    labels: ["type:chore", "area:infra"]
