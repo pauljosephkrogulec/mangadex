@@ -13,7 +13,7 @@ pre-commit:
       root: "api/"
       glob: "*.php"
       # --path-mode=intersection : ne traiter que les fichiers indexés qui sont aussi dans le Finder de la config
-      run: ../scripts/docker-php.sh vendor/bin/php-cs-fixer fix --path-mode=intersection {staged_files}
+      run: ../scripts/docker-php.sh vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php --path-mode=intersection {staged_files}
       stage_fixed: true
 
     - name: phpstan
