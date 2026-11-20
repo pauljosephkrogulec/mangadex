@@ -4,7 +4,7 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.4",
+        "php": ">=8.5",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "doctrine/doctrine-bundle": "^3.4",
@@ -35,7 +35,7 @@
         "bump-after-update": true,
         "sort-packages": true,
         "platform": {
-            "php": "8.4.10"
+            "php": "8.5.0"
         }
     },
     "autoload": {
@@ -78,6 +78,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
+            "docker": false,
             "require": "8.1.*"
         }
     }

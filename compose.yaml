@@ -1,0 +1,68 @@
+# Stack commune à tous les environnements.
+# Les réglages de dev (volumes de code, ports, Xdebug) sont dans compose.override.yaml,
+# chargé automatiquement par `docker compose`.
+name: mangadex
+
+services:
+  proxy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      php:
+        condition: service_healthy
+      web:
+        condition: service_started
+    ports:
+      - "${HTTP_PORT:-80}:80"
+    volumes:
+      - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+  php:
+    build:
+      context: ./api
+      target: frankenphp_prod
+    restart: unless-stopped
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      # Remplace la valeur de api/.env : la base est joignable via le nom du service.
+      DATABASE_URL: "postgresql://${POSTGRES_USER:-app}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-app}?serverVersion=${POSTGRES_VERSION:-16}&charset=utf8"
+    volumes:
+      - caddy_php_data:/data
+      - caddy_php_config:/config
+
+  web:
+    build:
+      context: ./web
+      target: prod
+    restart: unless-stopped
+
+  database:
+    image: postgres:${POSTGRES_VERSION:-16}-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-app}
+      # À changer en production (variable d'environnement ou fichier .env non versionné).
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
+      POSTGRES_USER: ${POSTGRES_USER:-app}
+    healthcheck:
+      test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB:-app}", "-U", "${POSTGRES_USER:-app}"]
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    volumes:
+      - database_data:/var/lib/postgresql/data:rw
+
+# Pas de bloc `networks` : Compose crée un réseau `mangadex_default` partagé par tous
+# les services, qui se joignent par leur nom (php, web, database).
+# Seul le proxy publie un port sur l'hôte.
+
+volumes:
+  database_data:
+  caddy_data:
+  caddy_config:
+  caddy_php_data:
+  caddy_php_config:
