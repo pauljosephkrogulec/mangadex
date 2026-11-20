@@ -1,0 +1,32 @@
+# Labels posés automatiquement sur les PR (workflow labeler.yml), utilisés pour classer
+# les notes de version (.github/release.yml) et filtrer les PR.
+
+# --- Type : déduit du préfixe de branche `<type>/<n°>-slug` (convention du projet) ---
+"type:feat":
+  - head-branch: ["^feat/"]
+"type:fix":
+  - head-branch: ["^fix/"]
+"type:ci":
+  - head-branch: ["^ci/"]
+"type:chore":
+  - head-branch: ["^chore/"]
+"type:docs":
+  - head-branch: ["^docs/"]
+"type:test":
+  - head-branch: ["^test/"]
+"type:security":
+  - head-branch: ["^security/"]
+
+# --- Zone : déduite des fichiers modifiés ---
+"area:api":
+  - changed-files:
+      - any-glob-to-any-file: ["api/**"]
+"area:front":
+  - changed-files:
+      - any-glob-to-any-file: ["web/**"]
+"area:infra":
+  - changed-files:
+      - any-glob-to-any-file: [".github/**", "docker/**", "compose*.yaml", "scripts/**"]
+"area:docs":
+  - changed-files:
+      - any-glob-to-any-file: ["docs/**", "**/*.md"]
