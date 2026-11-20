@@ -1,0 +1,33 @@
+# Surcharge de développement (chargée automatiquement par `docker compose up`).
+
+services:
+  php:
+    build:
+      target: frankenphp_dev
+      args:
+        # Aligne l'utilisateur du conteneur sur celui de l'hôte (`export UID GID` si ≠ 1000).
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+    volumes:
+      # Code monté depuis l'hôte : les modifications sont visibles sans rebuild.
+      - ./api:/app
+    environment:
+      XDEBUG_MODE: "${XDEBUG_MODE:-off}"
+    extra_hosts:
+      # Permet à Xdebug de joindre l'IDE sur l'hôte (Linux).
+      - host.docker.internal:host-gateway
+
+  web:
+    build:
+      target: dev
+    volumes:
+      - ./web:/app
+      # Volumes anonymes : node_modules (binaires Linux/musl de l'image) et .next
+      # restent dans le conteneur au lieu d'écraser / polluer ceux de l'hôte.
+      - /app/node_modules
+      - /app/.next
+
+  database:
+    ports:
+      # Port aléatoire sur l'hôte (`docker compose port database 5432` pour le connaître).
+      - "5432"

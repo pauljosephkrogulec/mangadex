@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Sortie autonome (server.js + dépendances minimales) utilisée par l'image Docker de prod.
+  output: "standalone",
   cacheComponents: true,
   partialPrefetching: true,
   turbopack: {
