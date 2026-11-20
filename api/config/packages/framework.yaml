@@ -2,6 +2,14 @@
 framework:
     secret: '%env(APP_SECRET)%'
 
+    # Proxys de confiance (voir docs/configuration.md) : sans eux, Symfony ignore les en-têtes
+    # X-Forwarded-* et croit la requête en HTTP / sur la mauvaise IP derrière un load balancer.
+    # Vide par défaut (aucun proxy). Sur Render : TRUSTED_PROXIES=REMOTE_ADDR (le pair direct est
+    # toujours le load balancer). REMOTE_ADDR est résolu au boot du kernel : à revoir si on passe
+    # FrankenPHP en mode worker (utiliser alors `private_ranges`).
+    trusted_proxies: '%env(TRUSTED_PROXIES)%'
+    trusted_headers: ['x-forwarded-for', 'x-forwarded-proto', 'x-forwarded-host', 'x-forwarded-port']
+
     # Note that the session will be started ONLY if you read or write from it.
     session: true
 
