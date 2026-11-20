@@ -87,5 +87,6 @@ jobs:
         run: |
           url=$(gh pr create --base main --head dev \
             --title "chore(release): $VERSION" \
+            --label release \
             --body-file "$RUNNER_TEMP/release-body.md")
           echo "PR de release : $url" >> "$GITHUB_STEP_SUMMARY"

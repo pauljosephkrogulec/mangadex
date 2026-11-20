@@ -1,0 +1,24 @@
+# Catégories des notes de version générées par GitHub (gh release create --generate-notes, cf. release-tag.yml).
+# Les PR sont classées selon leurs labels, posés automatiquement par .github/labeler.yml
+# (préfixe de branche `<type>/<n°>-slug`). Une PR va dans la première catégorie qui correspond.
+# https://docs.github.com/repositories/releasing-projects-on-github/automatically-generated-release-notes
+
+changelog:
+  exclude:
+    labels:
+      - release # la PR de release dev → main elle-même
+  categories:
+    - title: Sécurité
+      labels: ["type:security"]
+    - title: Nouveautés
+      labels: ["type:feat"]
+    - title: Corrections
+      labels: ["type:fix"]
+    - title: Dépendances
+      labels: ["dependencies"]
+    - title: CI/CD
+      labels: ["type:ci"]
+    - title: Maintenance
+      labels: ["type:chore", "type:test", "type:docs"]
+    - title: Autres changements
+      labels: ["*"]

@@ -28,7 +28,7 @@ updates:
     commit-message:
       prefix: chore
       include: scope
-    labels: ["type:chore", "area:api"]
+    labels: ["dependencies", "type:chore", "area:api"]
 
   # --- Front : npm (web/) -----------------------------------------------------
   - package-ecosystem: npm
@@ -50,7 +50,7 @@ updates:
     commit-message:
       prefix: chore
       include: scope
-    labels: ["type:chore", "area:front"]
+    labels: ["dependencies", "type:chore", "area:front"]
 
   # --- Outillage du monorepo : npm racine (lefthook, commitlint) --------------
   - package-ecosystem: npm
@@ -68,7 +68,7 @@ updates:
     commit-message:
       prefix: chore
       include: scope
-    labels: ["type:chore", "area:infra"]
+    labels: ["dependencies", "type:chore", "area:infra"]
 
   # --- GitHub Actions ---------------------------------------------------------
   # Met aussi à jour les actions épinglées par SHA (en conservant le commentaire `# vX.Y.Z`).
@@ -86,7 +86,7 @@ updates:
         patterns: ["*"]
     commit-message:
       prefix: ci
-    labels: ["type:ci", "area:infra"]
+    labels: ["dependencies", "type:ci", "area:infra"]
 
   # --- Images Docker : Dockerfiles (api/, web/) -------------------------------
   - package-ecosystem: docker
@@ -108,7 +108,7 @@ updates:
     commit-message:
       prefix: chore
       include: scope
-    labels: ["type:chore", "area:infra"]
+    labels: ["dependencies", "type:chore", "area:infra"]
 
   # --- Images Docker : Compose (proxy Caddy, PostgreSQL) ----------------------
   - package-ecosystem: docker-compose
@@ -130,4 +130,4 @@ updates:
     commit-message:
       prefix: chore
       include: scope
-    labels: ["type:chore", "area:infra"]
+    labels: ["dependencies", "type:chore", "area:infra"]
