@@ -92,3 +92,8 @@ RUN set -eux; \
 	composer run-script --no-dev post-install-cmd; \
 	chmod +x bin/console; \
 	sync;
+
+# Version déployée, exposée par GET /api/health (commit pour le staging, tag pour la prod).
+# Déclarée en dernier : changer de version n'invalide pas le cache des couches précédentes.
+ARG APP_VERSION=dev
+ENV APP_VERSION=${APP_VERSION}

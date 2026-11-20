@@ -29,6 +29,8 @@ Ce document liste les variables d'environnement du projet et indique où chacune
 | `DATABASE_URL` | Connexion PostgreSQL | **oui** (mot de passe) | `compose.yaml` (service `database`) | workflow `api-tests.yml` | Render : URL **pooled** de la branche Neon |
 | `DEFAULT_URI` | Base des URL générées hors requête (CLI, mails) | non | `api/.env` (`http://localhost`) | `api/.env` | Render : URL publique du front (Vercel) |
 | `TRUSTED_PROXIES` | Proxys dont on accepte les en-têtes `X-Forwarded-*` | non | vide | vide | Render : `REMOTE_ADDR` |
+| `APP_VERSION` | Version servie par `GET /api/health` | non | `api/.env` (`dev`) | `api/.env` | Injectée au build de l'image (commit en staging, tag en prod) |
+| `PORT` | Port qu'utilise Render pour joindre le service | non | — | — | Render : `8080` |
 
 ### Valeurs à générer
 
@@ -76,4 +78,4 @@ Toutes les variables ont une valeur par défaut, voir `.env.example`. Pour en ch
 | `RELEASE_TOKEN` | secret | dépôt | PAT utilisé par les workflows de release (PR `dev → main`, tag) |
 | `CODECOV_TOKEN` | secret | dépôt | Envoi de la couverture de tests |
 
-Les secrets de déploiement (deploy hooks Render, URL directes Neon pour les migrations) seront ajoutés dans des **GitHub Environments** `staging` et `production`, avec les issues #10 et #11.
+Les secrets de déploiement sont rangés dans des **GitHub Environments** : `staging` (#10, voir `deploiement.md`) et `production` (#11).
