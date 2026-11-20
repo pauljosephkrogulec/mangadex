@@ -39,11 +39,15 @@ EXPOSE 8080
 
 # Utilisateur non-root. UID/GID alignés sur l'utilisateur de l'hôte en dev
 # pour que les fichiers créés dans le volume (var/, vendor/) lui appartiennent.
+# `setcap -r` : l'image upstream donne au binaire la capability NET_BIND_SERVICE (écoute sur 80/443
+# en non-root). Inutile ici (port 8080) et bloquant sur les plateformes qui retirent cette capability
+# aux conteneurs (Render) : le noyau refuse alors de lancer le binaire (« Operation not permitted »).
 ARG UID=1000
 ARG GID=1000
 RUN groupadd --gid "$GID" app \
 	&& useradd --uid "$UID" --gid "$GID" --create-home app \
-	&& chown -R app:app /app /config/caddy /data/caddy
+	&& chown -R app:app /app /config/caddy /data/caddy \
+	&& setcap -r /usr/local/bin/frankenphp
 
 COPY --link --chmod=755 frankenphp/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 
