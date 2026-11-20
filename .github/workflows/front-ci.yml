@@ -6,10 +6,9 @@ on:
     paths:
       - "web/**"
       - ".github/workflows/front-ci.yml"
+  # Pas de filtre `paths` sur les PR : les checks sont requis par le ruleset de dev/main,
+  # un check qui ne se lance pas bloquerait la PR indéfiniment.
   pull_request:
-    paths:
-      - "web/**"
-      - ".github/workflows/front-ci.yml"
 
 permissions:
   contents: read
