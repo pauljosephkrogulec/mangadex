@@ -6,10 +6,9 @@ on:
     paths:
       - "api/**"
       - ".github/workflows/api-tests.yml"
+  # Pas de filtre `paths` sur les PR : les checks sont requis par le ruleset de dev/main,
+  # un check qui ne se lance pas bloquerait la PR indéfiniment.
   pull_request:
-    paths:
-      - "api/**"
-      - ".github/workflows/api-tests.yml"
 
 permissions:
   contents: read

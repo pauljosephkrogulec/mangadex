@@ -40,6 +40,9 @@ FROM base AS prod
 ENV NODE_ENV=production \
     HOSTNAME=0.0.0.0 \
     PORT=3000
+# npm/npx/corepack ne servent pas à l'exécution (`node server.js`) : on les retire
+# pour réduire la surface d'attaque (leurs dépendances embarquées remontent des CVE dans Trivy).
+RUN rm -rf /usr/local/lib/node_modules /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack
 COPY --from=build --chown=node:node /app/public ./public
 COPY --from=build --chown=node:node /app/.next/standalone ./
 COPY --from=build --chown=node:node /app/.next/static ./.next/static

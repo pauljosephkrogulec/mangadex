@@ -1,0 +1,88 @@
+name: Docker — CI
+
+on:
+  push:
+    branches: [main, dev]
+    paths:
+      - "api/**"
+      - "web/**"
+      - "docker/**"
+      - "compose.yaml"
+      - "compose.override.yaml"
+      - ".github/workflows/docker-ci.yml"
+  # Pas de filtre `paths` sur les PR : les checks sont requis par le ruleset de dev/main,
+  # un check qui ne se lance pas bloquerait la PR indéfiniment.
+  pull_request:
+  # De nouvelles CVE sont publiées sans que le code change : scan hebdomadaire (lundi 6h UTC).
+  schedule:
+    - cron: "0 6 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  compose:
+    name: Validate Compose files
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Config de dev (compose.yaml + compose.override.yaml, fusionnés automatiquement).
+      - name: docker compose config (dev)
+        run: docker compose config --quiet
+
+      # Config de base seule, sans la surcharge de dev.
+      - name: docker compose config (base)
+        run: docker compose -f compose.yaml config --quiet
+
+  images:
+    name: Build & scan (${{ matrix.image }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      # Un échec sur une image ne doit pas annuler le scan de l'autre.
+      fail-fast: false
+      matrix:
+        include:
+          - image: php
+            context: api
+            target: frankenphp_prod
+          - image: web
+            context: web
+            target: prod
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Actions tierces épinglées par SHA (protection contre un tag déplacé / compromis).
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+
+      - name: Build image (${{ matrix.target }})
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: ${{ matrix.context }}
+          target: ${{ matrix.target }}
+          # Pas de registry pour l'instant : l'image est chargée dans le Docker local pour Trivy.
+          push: false
+          load: true
+          tags: mangadex-${{ matrix.image }}:ci
+          # Cache des couches dans le cache GitHub Actions, un scope par image pour ne pas s'écraser.
+          cache-from: type=gha,scope=${{ matrix.image }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.image }}
+
+      # Échoue sur toute faille HIGH/CRITICAL qui a un correctif disponible.
+      - name: Trivy scan
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          image-ref: mangadex-${{ matrix.image }}:ci
+          version: v0.76.2
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: "1"
+          format: table
