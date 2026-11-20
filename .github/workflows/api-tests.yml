@@ -20,7 +20,7 @@ concurrency:
 
 jobs:
   phpunit:
-    name: PHPUnit (PHP 8.4, PostgreSQL, Redis)
+    name: PHPUnit (PHP 8.5, PostgreSQL, Redis)
     runs-on: ubuntu-latest
 
     defaults:
@@ -64,7 +64,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.4"
+          php-version: "8.5"
           extensions: ctype, iconv, intl, pdo_pgsql, redis
           coverage: pcov
           tools: composer:v2
