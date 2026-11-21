@@ -47,6 +47,11 @@ updates:
       # Majeure de Node pilotée à la main (web/.nvmrc, engines, image Docker alignés).
       - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
+      # TypeScript 7 (réécriture native) casse typescript-eslint, donc `npm run lint`.
+      # À retirer quand typescript-eslint supportera TS >= 7 :
+      # https://github.com/typescript-eslint/typescript-eslint/issues/10940
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
     commit-message:
       prefix: chore
       include: scope
