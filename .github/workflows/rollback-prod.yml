@@ -1,0 +1,51 @@
+name: CD — Rollback production
+
+# Redéploie une version précédente de l'API en production (image déjà publiée et signée).
+# Lancement : Actions → « CD — Rollback production » → Run workflow → version (ex. v1.2.2).
+#
+# ⚠ La base n'est PAS restaurée : les migrations de la version fautive restent appliquées.
+#   D'où la règle : une migration doit rester compatible avec la version précédente du code.
+#   Restauration de données : Neon → branche main → Restore (fenêtre de 6 h sur le plan gratuit).
+# Le front se restaure séparément : Vercel → Deployments → déploiement précédent → Instant Rollback.
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version à redéployer (tag existant, ex. v1.2.2)"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Check version exists
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Tag must exist
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          if ! git rev-parse -q --verify "refs/tags/$VERSION" > /dev/null; then
+            echo "::error::Le tag $VERSION n'existe pas. Tags disponibles :"
+            git tag --list 'v*' --sort=-v:refname | head -10
+            exit 1
+          fi
+
+  rollback:
+    name: Rollback
+    needs: check
+    permissions:
+      contents: read
+      packages: read
+    uses: ./.github/workflows/deploy-prod.yml
+    with:
+      version: ${{ inputs.version }}
+      migrate: false
+    secrets: inherit

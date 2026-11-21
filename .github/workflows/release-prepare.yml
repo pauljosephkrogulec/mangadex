@@ -33,7 +33,7 @@ jobs:
       GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0 # historique et tags complets pour comparer main et dev
 
@@ -87,5 +87,6 @@ jobs:
         run: |
           url=$(gh pr create --base main --head dev \
             --title "chore(release): $VERSION" \
+            --label release \
             --body-file "$RUNNER_TEMP/release-body.md")
           echo "PR de release : $url" >> "$GITHUB_STEP_SUMMARY"

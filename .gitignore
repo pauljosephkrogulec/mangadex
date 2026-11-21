@@ -1,1 +1,4 @@
 node_modules/
+
+# Surcharges locales des variables Docker Compose (modèle : .env.example)
+.env

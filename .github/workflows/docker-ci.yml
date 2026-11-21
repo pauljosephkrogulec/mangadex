@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # Config de dev (compose.yaml + compose.override.yaml, fusionnés automatiquement).
       - name: docker compose config (dev)
@@ -57,7 +57,7 @@ jobs:
             target: prod
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # Actions tierces épinglées par SHA (protection contre un tag déplacé / compromis).
       - name: Set up Docker Buildx

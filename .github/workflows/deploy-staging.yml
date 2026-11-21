@@ -1,0 +1,208 @@
+name: CD — Déploiement staging
+
+# À chaque push sur `dev` (merge d'une PR) :
+#   1. build + push de l'image API  ghcr.io/<repo>-php:dev  (+ :sha-<commit>)
+#   2. migrations Doctrine sur la base Neon de staging
+#   3. déploiement du digest exact sur Render (deploy hook), attente de la nouvelle version
+#   4. smoke tests sur le front de staging (preview Vercel de `dev`, qui relaie /api vers Render)
+# Le front est déployé par l'intégration Git de Vercel (pas par ce workflow).
+#
+# Configuration : GitHub → Settings → Environments → `staging` (voir docs/deploiement.md).
+
+on:
+  push:
+    branches: [dev]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Un seul déploiement de staging à la fois, sans annuler celui en cours (migrations !).
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: false
+
+env:
+  IMAGE: ghcr.io/${{ github.repository }}-php
+
+jobs:
+  build:
+    name: Build & push API image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      ref: ${{ env.IMAGE }}@${{ steps.build.outputs.digest }}
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+
+      - name: Log in to GHCR
+        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Image metadata
+        id: meta
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
+        with:
+          images: ${{ env.IMAGE }}
+          tags: |
+            type=raw,value=dev
+            type=sha,format=short
+
+      - name: Build and push
+        id: build
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: api
+          target: frankenphp_prod
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          # Exposée par GET /api/health : permet de vérifier que Render sert bien ce commit.
+          build-args: |
+            APP_VERSION=${{ github.sha }}
+          cache-from: type=gha,scope=php
+
+  deploy:
+    name: Migrate & deploy API (Render)
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: read
+    environment:
+      name: staging
+      url: ${{ vars.FRONT_URL }}
+
+    env:
+      REF: ${{ needs.build.outputs.ref }}
+
+    steps:
+      - name: Check staging configuration
+        env:
+          DATABASE_URL_DIRECT: ${{ secrets.DATABASE_URL_DIRECT }}
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+          API_URL: ${{ vars.API_URL }}
+        run: |
+          missing=""
+          [ -n "$DATABASE_URL_DIRECT" ] || missing="$missing secret:DATABASE_URL_DIRECT"
+          [ -n "$RENDER_DEPLOY_HOOK_URL" ] || missing="$missing secret:RENDER_DEPLOY_HOOK_URL"
+          [ -n "$API_URL" ] || missing="$missing variable:API_URL"
+          if [ -n "$missing" ]; then
+            echo "::error::Environnement GitHub 'staging' incomplet :$missing (voir docs/deploiement.md)."
+            exit 1
+          fi
+
+      - name: Log in to GHCR
+        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Avant le déploiement : la nouvelle version du code ne démarre que sur un schéma à jour.
+      # URL *directe* de Neon (pas le pooler) pour les migrations.
+      - name: Doctrine migrations (Neon staging)
+        env:
+          DATABASE_URL_DIRECT: ${{ secrets.DATABASE_URL_DIRECT }}
+        run: |
+          docker run --rm -e DATABASE_URL="$DATABASE_URL_DIRECT" "$REF" \
+            bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
+
+      # Déploie le digest exact construit plus haut (et non le tag `dev`, qui peut bouger).
+      - name: Trigger Render deploy
+        env:
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          curl -fsS --get "$RENDER_DEPLOY_HOOK_URL" --data-urlencode "imgURL=$REF" -o /dev/null
+          echo "Déploiement Render demandé : $REF"
+
+      # Render remplace l'ancienne instance une fois la nouvelle en bonne santé : on attend que
+      # /api/health renvoie ce commit (plan gratuit : démarrage à froid possible, jusqu'à ~1 min).
+      - name: Wait for new version on Render
+        env:
+          API_URL: ${{ vars.API_URL }}
+          EXPECTED: ${{ github.sha }}
+        run: |
+          for i in $(seq 1 60); do
+            version=$(curl -fsS --max-time 30 "$API_URL/api/health" 2>/dev/null | jq -r '.version // empty' || true)
+            if [ "$version" = "$EXPECTED" ]; then
+              echo "API de staging à jour ($version)."
+              exit 0
+            fi
+            echo "[$i/60] version servie : ${version:-indisponible}, attendue : $EXPECTED"
+            sleep 15
+          done
+          echo "::error::Render ne sert pas $EXPECTED après 15 minutes."
+          exit 1
+
+  smoke:
+    name: Smoke tests (staging)
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: staging
+      url: ${{ vars.FRONT_URL }}
+
+    env:
+      FRONT_URL: ${{ vars.FRONT_URL }}
+      EXPECTED: ${{ github.sha }}
+      # En-tête qui contourne la protection Vercel des previews (Protection Bypass for Automation).
+      BYPASS: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+
+    steps:
+      - name: Check staging configuration
+        run: |
+          if [ -z "$FRONT_URL" ] || [ -z "$BYPASS" ]; then
+            echo "::error::Environnement 'staging' : variable FRONT_URL et secret VERCEL_AUTOMATION_BYPASS_SECRET requis."
+            exit 1
+          fi
+
+      # Le front est (re)déployé par Vercel en parallèle : on réessaie le temps que la preview soit prête.
+      - name: Front responds (home page)
+        run: |
+          for i in $(seq 1 40); do
+            if curl -fsS --max-time 30 -H "x-vercel-protection-bypass: $BYPASS" "$FRONT_URL/" | grep -q "Mangadex"; then
+              echo "Page d'accueil OK."
+              exit 0
+            fi
+            echo "[$i/40] page d'accueil pas encore prête"
+            sleep 15
+          done
+          echo "::error::La page d'accueil du staging ne répond pas."
+          exit 1
+
+      # Vérifie toute la chaîne : Vercel → rewrite /api → Render → Symfony, avec la bonne version.
+      - name: API reachable through the front (rewrite)
+        run: |
+          for i in $(seq 1 20); do
+            body=$(curl -fsS --max-time 30 -H "x-vercel-protection-bypass: $BYPASS" "$FRONT_URL/api/health" || true)
+            if [ "$(printf '%s' "$body" | jq -r '.status // empty' 2>/dev/null)" = "ok" ] \
+              && [ "$(printf '%s' "$body" | jq -r '.version // empty')" = "$EXPECTED" ]; then
+              echo "Rewrite /api OK : $body"
+              exit 0
+            fi
+            echo "[$i/20] réponse : ${body:-aucune}"
+            sleep 15
+          done
+          echo "::error::/api/health via le front ne renvoie pas status=ok et version=$EXPECTED."
+          exit 1
+
+      - name: Summary
+        run: |
+          {
+            echo "### Staging déployé"
+            echo
+            echo "- Commit : \`$EXPECTED\`"
+            echo "- Front : $FRONT_URL"
+          } >> "$GITHUB_STEP_SUMMARY"

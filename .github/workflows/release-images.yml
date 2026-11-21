@@ -7,6 +7,7 @@ name: CD — Publication des images
 # puis signée avec cosign en mode « keyless » (identité OIDC du workflow, sans clé à gérer).
 #
 # Sur une PR qui modifie ce workflow : « dry-run » (build + calcul des tags, sans push ni signature).
+# Après publication d'un tag : déploiement automatique de l'API en production (deploy-prod.yml).
 
 on:
   push:
@@ -49,7 +50,7 @@ jobs:
             target: prod
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
@@ -86,6 +87,9 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           annotations: ${{ steps.meta.outputs.annotations }}
+          # Version exposée par GET /api/health (tag en release, commit en dry-run). Ignorée par l'image web.
+          build-args: |
+            APP_VERSION=${{ github.ref_type == 'tag' && github.ref_name || github.sha }}
           # Réutilise le cache du workflow Docker (mêmes cibles, mêmes scopes) sans l'écrire.
           cache-from: type=gha,scope=${{ matrix.image }}
           # SBOM (liste des paquets de l'image) et provenance (comment/où elle a été construite),
@@ -122,3 +126,17 @@ jobs:
             echo "$TAGS"
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
+
+  # Déploiement 100 % automatique : le merge de la PR de release (6 checks requis verts) vaut approbation.
+  deploy:
+    name: Deploy production
+    needs: publish
+    if: github.event_name == 'push'
+    permissions:
+      contents: read
+      packages: read
+    uses: ./.github/workflows/deploy-prod.yml
+    with:
+      version: ${{ github.ref_name }}
+      migrate: true
+    secrets: inherit
