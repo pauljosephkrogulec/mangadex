@@ -68,10 +68,15 @@ install-hooks: ## Installe les hooks Git (lefthook + commitlint, sur l'hôte)
 
 lint: lint-api lint-web ## Lance tous les linters (sans rien modifier)
 
-lint-api: ## PHP-CS-Fixer (dry-run), PHPStan, validation Composer et conteneur Symfony
+# Configs : api/.php-cs-fixer.dist.php, api/phpstan.dist.neon, api/rector.php (#17).
+# Le conteneur compilé (var/cache/dev) est lu par PHPStan et Rector : on le génère d'abord.
+lint-api: ## Composer (validate + audit), PHP-CS-Fixer, PHPStan (max), Rector (dry-run), conteneur Symfony
 	$(PHP) composer validate --strict --no-check-publish
-	$(PHP) vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php --dry-run --diff
-	$(PHP) vendor/bin/phpstan analyse --no-progress --memory-limit=1G src tests
+	$(PHP) composer audit
+	$(CONSOLE) cache:warmup --env=dev --quiet
+	$(PHP) vendor/bin/php-cs-fixer fix --dry-run --diff
+	$(PHP) vendor/bin/phpstan analyse --no-progress --memory-limit=1G
+	$(PHP) vendor/bin/rector process --dry-run --no-progress-bar
 	$(CONSOLE) lint:container
 	$(CONSOLE) lint:yaml config --parse-tags
 
@@ -80,10 +85,13 @@ lint-web: ## ESLint, Prettier (check) et TypeScript
 	$(WEB) npm run format:check
 	$(WEB) npm run typecheck
 
-fix: fix-api fix-web ## Corrige automatiquement le style (PHP-CS-Fixer, ESLint, Prettier)
+fix: fix-api fix-web ## Corrige automatiquement (Rector, PHP-CS-Fixer, ESLint, Prettier)
 
-fix-api: ## PHP-CS-Fixer
-	$(PHP) vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php
+# Rector d'abord : ses changements sont ensuite remis au style par PHP-CS-Fixer.
+fix-api: ## Rector puis PHP-CS-Fixer
+	$(CONSOLE) cache:warmup --env=dev --quiet
+	$(PHP) vendor/bin/rector process --no-progress-bar
+	$(PHP) vendor/bin/php-cs-fixer fix
 
 fix-web: ## ESLint --fix puis Prettier
 	$(WEB) npm run lint -- --fix

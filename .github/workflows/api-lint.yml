@@ -1,0 +1,75 @@
+name: API — lint & analyse statique
+
+# Mêmes vérifications que `make lint-api` (#17), exécutées sans Docker pour aller plus vite.
+# Configs : api/.php-cs-fixer.dist.php, api/phpstan.dist.neon, api/rector.php.
+
+on:
+  push:
+    branches: [main, dev]
+    paths:
+      - "api/**"
+      - ".github/workflows/api-lint.yml"
+  # Pas de filtre `paths` sur les PR : les checks sont requis par le ruleset de dev/main,
+  # un check qui ne se lance pas bloquerait la PR indéfiniment.
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Composer, PHP-CS-Fixer, PHPStan, Rector
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: api
+
+    env:
+      APP_ENV: dev
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.5"
+          extensions: ctype, iconv, intl, pdo_pgsql
+          coverage: none
+          tools: composer:v2
+
+      - name: Validate composer.json / composer.lock
+        run: composer validate --strict --no-check-publish
+
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@v4
+        with:
+          working-directory: api
+
+      # Failles connues dans les dépendances (base d'avis de sécurité Packagist).
+      - name: Composer audit
+        run: composer audit
+
+      # Conteneur compilé (var/cache/dev/*.xml) lu par phpstan-symfony et Rector.
+      - name: Warm up Symfony cache
+        run: bin/console cache:warmup
+
+      - name: PHP-CS-Fixer (dry-run)
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff
+
+      # Format `github` : les erreurs apparaissent en annotations sur la PR.
+      - name: PHPStan (level max)
+        run: vendor/bin/phpstan analyse --no-progress --memory-limit=1G --error-format=github
+
+      - name: Rector (dry-run)
+        run: vendor/bin/rector process --dry-run --no-progress-bar
+
+      - name: Lint Symfony container & YAML
+        run: |
+          bin/console lint:container
+          bin/console lint:yaml config --parse-tags

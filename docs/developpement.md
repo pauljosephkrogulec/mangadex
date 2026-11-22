@@ -27,8 +27,8 @@ Ensuite :
 | `make up` / `make down` | Démarre (en attendant que les services soient sains) / arrête la stack |
 | `make logs s=php` | Suit les logs d'un service (tous si `s` est omis) |
 | `make sh` / `make sh s=web` | Shell dans le conteneur `php` / `web` |
-| `make lint` | Tous les linters, sans rien modifier (`lint-api`, `lint-web`) |
-| `make fix` | Corrige le style automatiquement (PHP-CS-Fixer, ESLint, Prettier) |
+| `make lint` | Tous les linters, sans rien modifier : Composer (validate, audit), PHP-CS-Fixer, PHPStan niveau max, Rector, puis ESLint, Prettier, TypeScript |
+| `make fix` | Corrections automatiques : Rector puis PHP-CS-Fixer, ESLint, Prettier |
 | `make test` | PHPUnit (crée et migre la base `app_test`) puis Vitest |
 | `make db-reset` | Supprime et recrée la base de dev, migrations et fixtures (si installées) |
 | `make db-reset ENV=test` | Idem pour la base de test |
