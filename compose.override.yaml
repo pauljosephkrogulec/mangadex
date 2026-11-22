@@ -11,8 +11,13 @@ services:
     volumes:
       # Code monté depuis l'hôte : les modifications sont visibles sans rebuild.
       - ./api:/app
+    depends_on:
+      mailpit:
+        condition: service_healthy
     environment:
       XDEBUG_MODE: "${XDEBUG_MODE:-off}"
+      # En dev, tous les mails partent dans Mailpit (aucun n'est réellement envoyé).
+      MAILER_DSN: "smtp://mailpit:1025"
     extra_hosts:
       # Permet à Xdebug de joindre l'IDE sur l'hôte (Linux).
       - host.docker.internal:host-gateway
@@ -31,3 +36,15 @@ services:
     ports:
       # Port aléatoire sur l'hôte (`docker compose port database 5432` pour le connaître).
       - "5432"
+
+  storage:
+    ports:
+      # Console web de RustFS : http://localhost:9001 (identifiants S3_ACCESS_KEY / S3_SECRET_KEY).
+      - "${STORAGE_CONSOLE_PORT:-9001}:9001"
+
+  # Faux serveur SMTP, dev uniquement : interface web sur http://localhost:8025.
+  mailpit:
+    image: axllent/mailpit:v1.29
+    restart: unless-stopped
+    ports:
+      - "${MAILPIT_PORT:-8025}:8025"

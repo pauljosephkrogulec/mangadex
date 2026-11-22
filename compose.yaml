@@ -27,9 +27,28 @@ services:
     depends_on:
       database:
         condition: service_healthy
+      redis:
+        condition: service_healthy
+      storage-init:
+        condition: service_completed_successfully
+      mercure:
+        condition: service_healthy
     environment:
       # Remplace la valeur de api/.env : la base est joignable via le nom du service.
       DATABASE_URL: "postgresql://${POSTGRES_USER:-app}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-app}?serverVersion=${POSTGRES_VERSION:-16}&charset=utf8"
+      # Services annexes (#14), lus par les bundles installés plus tard
+      # (Cache/Lock/Messenger, Flysystem, Mercure) : voir docs/configuration.md.
+      REDIS_URL: "redis://redis:6379"
+      S3_ENDPOINT: "http://storage:9000"
+      S3_REGION: "us-east-1"
+      S3_BUCKET: "mangadex"
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY:-mangadex}
+      S3_SECRET_KEY: ${S3_SECRET_KEY:-!ChangeMe!}
+      # URL interne (publication depuis PHP) et URL publique (abonnement depuis le navigateur, via Caddy).
+      MERCURE_URL: "http://mercure/.well-known/mercure"
+      MERCURE_PUBLIC_URL: ${MERCURE_PUBLIC_URL:-http://localhost/.well-known/mercure}
+      MERCURE_JWT_SECRET: ${MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
+      MERCURE_JWT_ISSUER: ${MERCURE_JWT_ISSUER:-http://localhost}
     volumes:
       - caddy_php_data:/data
       - caddy_php_config:/config
@@ -56,8 +75,78 @@ services:
     volumes:
       - database_data:/var/lib/postgresql/data:rw
 
+  # Cache applicatif, locks (#51) et transport Messenger (#47).
+  redis:
+    image: redis:8.8-alpine
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - redis_data:/data
+
+  # Stockage objet compatible S3 (#46). RustFS remplace MinIO, dont les images Docker
+  # ne sont plus publiées.
+  storage:
+    image: rustfs/rustfs:1.0.6
+    restart: unless-stopped
+    environment:
+      RUSTFS_ACCESS_KEY: ${S3_ACCESS_KEY:-mangadex}
+      RUSTFS_SECRET_KEY: ${S3_SECRET_KEY:-!ChangeMe!}
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:9000/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    volumes:
+      - storage_data:/data
+
+  # Tâche ponctuelle : crée le bucket s'il n'existe pas, puis s'arrête.
+  # curl signe lui-même les requêtes S3 (--aws-sigv4) : pas besoin d'un client S3 en plus.
+  # (Le bootstrap de buckets intégré à RustFS 1.0.6 est inutilisable : son client `rc` est trop ancien.)
+  storage-init:
+    image: rustfs/rustfs:1.0.6
+    depends_on:
+      storage:
+        condition: service_healthy
+    environment:
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY:-mangadex}
+      S3_SECRET_KEY: ${S3_SECRET_KEY:-!ChangeMe!}
+    entrypoint: ["sh", "-c"]
+    command:
+      - |
+        set -e
+        s3() { curl -fsS -o /dev/null --aws-sigv4 aws:amz:us-east-1:s3 --user "$$S3_ACCESS_KEY:$$S3_SECRET_KEY" "$$@"; }
+        if s3 --head http://storage:9000/mangadex; then
+          echo "Bucket mangadex déjà présent"
+        else
+          s3 -X PUT http://storage:9000/mangadex && echo "Bucket mangadex créé"
+        fi
+
+  # Hub Mercure (#52) : temps réel en Server-Sent Events, exposé par Caddy sur /.well-known/mercure.
+  # Le healthcheck est fourni par l'image.
+  mercure:
+    image: dunglas/mercure:v1.1
+    restart: unless-stopped
+    environment:
+      # HTTP simple derrière le proxy, comme FrankenPHP.
+      SERVER_NAME: ":80"
+      MERCURE_PUBLISHER_JWT_KEY: ${MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
+      MERCURE_SUBSCRIBER_JWT_KEY: ${MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
+      # Mercure v1 exige dans chaque JWT les claims `iss` (émetteur de confiance), `aud` et `exp`.
+      # Sans `resource_identifier`, l'audience attendue dépendrait du Host de la requête
+      # (`mercure` pour PHP, `localhost` via Caddy) : on la fixe à l'URL publique du hub.
+      MERCURE_TRUSTED_ISSUERS: ${MERCURE_JWT_ISSUER:-http://localhost}
+      MERCURE_EXTRA_DIRECTIVES: "resource_identifier ${MERCURE_PUBLIC_URL:-http://localhost/.well-known/mercure}"
+    volumes:
+      - mercure_data:/data
+      - mercure_config:/config
+
 # Pas de bloc `networks` : Compose crée un réseau `mangadex_default` partagé par tous
-# les services, qui se joignent par leur nom (php, web, database).
+# les services, qui se joignent par leur nom (php, web, database, redis, storage, mercure).
 # Seul le proxy publie un port sur l'hôte.
 
 volumes:
@@ -66,3 +155,7 @@ volumes:
   caddy_config:
   caddy_php_data:
   caddy_php_config:
+  redis_data:
+  storage_data:
+  mercure_data:
+  mercure_config:
