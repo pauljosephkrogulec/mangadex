@@ -27,9 +27,11 @@ Ensuite :
 | `make up` / `make down` | Démarre (en attendant que les services soient sains) / arrête la stack |
 | `make logs s=php` | Suit les logs d'un service (tous si `s` est omis) |
 | `make sh` / `make sh s=web` | Shell dans le conteneur `php` / `web` |
-| `make lint` | Tous les linters, sans rien modifier : Composer (validate, audit), PHP-CS-Fixer, PHPStan niveau max, Rector, puis ESLint, Prettier, TypeScript |
+| `make lint` | Tous les linters, sans rien modifier : Composer (validate, audit), PHP-CS-Fixer, PHPStan niveau max, Rector, puis ESLint (type-aware, 0 warning toléré), Prettier, TypeScript strict |
 | `make fix` | Corrections automatiques : Rector puis PHP-CS-Fixer, ESLint, Prettier |
 | `make test` | PHPUnit (crée et migre la base `app_test`) puis Vitest |
+| `make test-web-coverage` | Vitest avec couverture ; échoue sous 80 % (rapport HTML/lcov dans `web/coverage/`) |
+| `make e2e` | Tests Playwright contre la stack, dans l'image officielle Playwright (aucun navigateur à installer) |
 | `make db-reset` | Supprime et recrée la base de dev, migrations et fixtures (si installées) |
 | `make db-reset ENV=test` | Idem pour la base de test |
 | `make install-web` | Après un changement de `web/package-lock.json` : `make build` puis `make install-web` |

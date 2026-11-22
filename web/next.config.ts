@@ -7,10 +7,12 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   // Staging/prod (Vercel) : `/api/*` est relayé vers l'API Symfony sur Render. Le navigateur reste sur
   // la même origine (pas de CORS, cookies first-party). En local, Caddy route déjà `/api` : pas d'API_URL.
-  async rewrites() {
+  // Next.js attend une Promise ; rien d'asynchrone ici, d'où Promise.resolve plutôt qu'`async`.
+  rewrites() {
     const apiUrl = process.env.API_URL;
-    if (!apiUrl) return [];
-    return [{ source: "/api/:path*", destination: `${apiUrl}/api/:path*` }];
+    return Promise.resolve(
+      apiUrl ? [{ source: "/api/:path*", destination: `${apiUrl}/api/:path*` }] : [],
+    );
   },
   turbopack: {
     // L'app est autonome dans web/ : évite que Next prenne le package-lock.json racine (outillage Git) pour le workspace.

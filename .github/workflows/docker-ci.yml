@@ -47,7 +47,7 @@ jobs:
       - name: Makefile (aide + dry-run)
         run: |
           make help
-          make -n install up down lint fix test db-migrate db-reset > /dev/null
+          make -n install up down lint fix test e2e db-migrate db-reset > /dev/null
 
   images:
     name: Build & scan (${{ matrix.image }})
