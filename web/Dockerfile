@@ -48,4 +48,7 @@ COPY --from=build --chown=node:node /app/.next/standalone ./
 COPY --from=build --chown=node:node /app/.next/static ./.next/static
 USER node
 EXPOSE 3000
+# Sonde sur la route /healthz (src/app/healthz/route.ts). npm/curl absents : fetch natif de Node.
+HEALTHCHECK --start-period=20s --start-interval=2s --interval=30s --timeout=5s --retries=3 \
+    CMD ["node", "-e", "fetch('http://127.0.0.1:3000/healthz').then(r => process.exit(r.ok ? 0 : 1), () => process.exit(1))"]
 CMD ["node", "server.js"]
