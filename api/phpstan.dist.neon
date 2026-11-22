@@ -1,0 +1,25 @@
+# PHPStan (issue #17). Les extensions (symfony, phpunit, deprecation-rules) sont chargées
+# automatiquement par phpstan/extension-installer.
+# Surcharge locale possible dans phpstan.neon (non versionné), qui inclut ce fichier.
+parameters:
+    level: max
+    paths:
+        - config/
+        - public/
+        - src/
+        - tests/
+    excludePaths:
+        # Fichier généré par Symfony (référence de configuration), pas du code applicatif.
+        - config/reference.php
+    tmpDir: var/cache/phpstan
+
+    # Contrôles plus stricts que le niveau max par défaut.
+    checkUninitializedProperties: true
+    checkMissingCallableSignature: true
+    reportUnmatchedIgnoredErrors: true
+    treatPhpDocTypesAsCertain: false
+
+    # phpstan-symfony : le conteneur compilé permet de typer $container->get(), les paramètres, etc.
+    # Généré par `bin/console cache:warmup` (env dev), ce que fait tout démarrage de l'app en dev.
+    symfony:
+        containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml

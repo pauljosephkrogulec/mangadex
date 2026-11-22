@@ -20,3 +20,4 @@
 /.env.dev
 /.env.test
 /AGENTS.md
+/rector.php
