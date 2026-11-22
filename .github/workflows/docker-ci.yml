@@ -9,6 +9,8 @@ on:
       - "docker/**"
       - "compose.yaml"
       - "compose.override.yaml"
+      - "Makefile"
+      - "scripts/**"
       - ".github/workflows/docker-ci.yml"
   # Pas de filtre `paths` sur les PR : les checks sont requis par le ruleset de dev/main,
   # un check qui ne se lance pas bloquerait la PR indéfiniment.
@@ -39,6 +41,13 @@ jobs:
       # Config de base seule, sans la surcharge de dev.
       - name: docker compose config (base)
         run: docker compose -f compose.yaml config --quiet
+
+      # Makefile (#16) : syntaxe et cibles documentées. `make -n` affiche les commandes
+      # sans les exécuter : détecte une cible manquante ou une dépendance cassée.
+      - name: Makefile (aide + dry-run)
+        run: |
+          make help
+          make -n install up down lint fix test db-migrate db-reset > /dev/null
 
   images:
     name: Build & scan (${{ matrix.image }})
