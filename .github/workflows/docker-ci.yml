@@ -9,6 +9,8 @@ on:
       - "docker/**"
       - "compose.yaml"
       - "compose.override.yaml"
+      - "Makefile"
+      - "scripts/**"
       - ".github/workflows/docker-ci.yml"
   # Pas de filtre `paths` sur les PR : les checks sont requis par le ruleset de dev/main,
   # un check qui ne se lance pas bloquerait la PR indéfiniment.
@@ -39,6 +41,13 @@ jobs:
       # Config de base seule, sans la surcharge de dev.
       - name: docker compose config (base)
         run: docker compose -f compose.yaml config --quiet
+
+      # Makefile (#16) : syntaxe et cibles documentées. `make -n` affiche les commandes
+      # sans les exécuter : détecte une cible manquante ou une dépendance cassée.
+      - name: Makefile (aide + dry-run)
+        run: |
+          make help
+          make -n install up down lint fix test e2e db-migrate db-reset > /dev/null
 
   images:
     name: Build & scan (${{ matrix.image }})
@@ -75,6 +84,26 @@ jobs:
           # Cache des couches dans le cache GitHub Actions, un scope par image pour ne pas s'écraser.
           cache-from: type=gha,scope=${{ matrix.image }}
           cache-to: type=gha,mode=max,scope=${{ matrix.image }}
+
+      # Smoke test : l'image démarre seule et son HEALTHCHECK passe à `healthy`
+      # (php : GET /api/health via FrankenPHP, sans base ; web : GET /healthz via Node).
+      - name: Smoke test (HEALTHCHECK)
+        env:
+          IMAGE: mangadex-${{ matrix.image }}:ci
+        run: |
+          docker run -d --name smoke "$IMAGE"
+          for _ in $(seq 1 60); do
+            status=$(docker inspect -f '{{.State.Health.Status}}' smoke)
+            case "$status" in
+              healthy) echo "Conteneur healthy"; exit 0 ;;
+              unhealthy) break ;;
+            esac
+            sleep 2
+          done
+          echo "::error::Le conteneur n'est pas devenu healthy (statut : $status)"
+          docker inspect -f '{{json .State.Health}}' smoke
+          docker logs smoke
+          exit 1
 
       # Échoue sur toute faille HIGH/CRITICAL qui a un correctif disponible.
       - name: Trivy scan

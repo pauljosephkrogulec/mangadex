@@ -87,8 +87,18 @@ a controller or a service call for a service, not just "it didn't throw."
 ## Code style
 
 Symfony's coding standard, the `@Symfony` php-cs-fixer ruleset (a PSR-12-derived
-superset). Run `vendor/bin/php-cs-fixer fix` if `friendsofphp/php-cs-fixer` is
-installed; it isn't part of the skeleton by default.
+superset) plus `@Symfony:risky`: every file declares `strict_types`, comparisons
+are strict, PHPUnit assertions are called as `self::assert*()`.
+
+Quality tools (configs at the root of `api/`), all run by `make lint` and the CI:
+
+- PHP-CS-Fixer: `.php-cs-fixer.dist.php`
+- PHPStan, level `max` with the symfony, phpunit and deprecation extensions:
+  `phpstan.dist.neon`. Fix the types instead of adding `ignoreErrors`; if an
+  ignore is unavoidable, use an inline `@phpstan-ignore <identifier>` with a reason.
+- Rector: `rector.php` (PHP 8.5, Symfony, PHPUnit, Doctrine sets)
+
+`make fix` applies Rector then PHP-CS-Fixer.
 
 ## Discover, don't guess
 

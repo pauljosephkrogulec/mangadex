@@ -19,6 +19,7 @@ final class DatabaseConnectionTest extends KernelTestCase
         $connection = self::getContainer()->get(Connection::class);
         self::assertInstanceOf(Connection::class, $connection);
 
-        self::assertSame(1, (int) $connection->fetchOne('SELECT 1'));
+        // pdo_pgsql renvoie les entiers en type natif (PHP >= 8.1) : pas de cast nécessaire.
+        self::assertSame(1, $connection->fetchOne('SELECT 1'));
     }
 }

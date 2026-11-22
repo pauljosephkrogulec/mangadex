@@ -52,6 +52,9 @@ updates:
       # https://github.com/typescript-eslint/typescript-eslint/issues/10940
       - dependency-name: "typescript"
         update-types: ["version-update:semver-major"]
+      # À partir de 1.6.28, le plugin exige TypeScript >= 6 (peer) : épinglé tant qu'on reste en TS 5.
+      - dependency-name: "@vitest/eslint-plugin"
+        versions: [">=1.6.28"]
     commit-message:
       prefix: chore
       include: scope

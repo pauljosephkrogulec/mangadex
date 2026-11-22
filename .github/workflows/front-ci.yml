@@ -52,8 +52,17 @@ jobs:
       - name: TypeScript (tsc --noEmit)
         run: npm run typecheck
 
-      - name: Vitest
-        run: npm test
+      # Échoue si la couverture passe sous les seuils de vitest.config.mts (80 %).
+      - name: Vitest (avec couverture)
+        run: npm run test:coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v7
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: web/coverage/lcov.info
+          flags: web
+          fail_ci_if_error: false
 
       # Cache incrémental du build Next.js (recommandé par la doc Next.js pour la CI).
       - name: Cache Next.js build

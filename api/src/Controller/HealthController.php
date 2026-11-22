@@ -14,11 +14,11 @@ use Symfony\Component\Routing\Attribute\Route;
  * `version` = commit déployé (APP_VERSION, injecté au build de l'image), pour vérifier qu'un
  * déploiement a bien remplacé la version précédente.
  */
-final class HealthController
+final readonly class HealthController
 {
     public function __construct(
         #[Autowire(env: 'APP_VERSION')]
-        private readonly string $version,
+        private string $version,
     ) {
     }
 

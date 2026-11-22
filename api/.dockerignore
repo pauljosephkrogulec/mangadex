@@ -10,3 +10,14 @@
 /Dockerfile
 /var/
 /vendor/
+
+# Inutiles à l'exécution : tests, outillage qualité, fichiers d'env des autres environnements.
+/tests/
+/phpunit.dist.xml
+/.php-cs-fixer.dist.php
+/phpstan*.neon*
+/.editorconfig
+/.env.dev
+/.env.test
+/AGENTS.md
+/rector.php

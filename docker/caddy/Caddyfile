@@ -15,6 +15,11 @@
 		reverse_proxy php:8080
 	}
 
+	# Hub Mercure : même origine que le front, pas de CORS (le flux SSE est transmis sans buffer).
+	handle /.well-known/mercure* {
+		reverse_proxy mercure:80
+	}
+
 	# Tout le reste va au front Next.js (WebSocket du hot reload inclus).
 	handle {
 		reverse_proxy web:3000
