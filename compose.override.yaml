@@ -44,7 +44,7 @@ services:
 
   # Faux serveur SMTP, dev uniquement : interface web sur http://localhost:8025.
   mailpit:
-    image: axllent/mailpit:v1.29
+    image: axllent/mailpit:v1.34
     restart: unless-stopped
     ports:
       - "${MAILPIT_PORT:-8025}:8025"
