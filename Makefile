@@ -50,12 +50,17 @@ sh: ## Ouvre un shell dans un service (défaut : php ; `make sh s=web`)
 
 ##@ Installation
 
-.PHONY: install install-api install-web install-hooks
+.PHONY: install install-api install-web install-hooks lock-api
 
 install: build install-hooks up install-api install-web db-migrate ## Installe tout : images, dépendances, hooks Git, base
 
 install-api: ## Installe les dépendances Composer
 	$(PHP) composer install --prefer-dist --no-interaction
+
+# Après une modification de composer.json (version de PHP, config…) : remet le hash du lock à jour
+# sans monter de version de paquet. Les paquets incompatibles font échouer la commande (voir `composer why-not`).
+lock-api: ## Resynchronise composer.lock avec composer.json (sans mettre à jour les paquets)
+	$(PHP) composer update --lock --no-interaction --no-install
 
 # node_modules du front vit dans un volume anonyme initialisé depuis l'image :
 # après un changement de package-lock.json, on le recrée à partir de l'image reconstruite.

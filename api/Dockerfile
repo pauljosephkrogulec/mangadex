@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-# Image PHP de l'API : FrankenPHP (serveur Caddy + PHP 8.5 embarqué).
+# Image PHP de l'API : FrankenPHP (serveur Caddy + PHP 8.6 embarqué).
 # Stages :
 #   frankenphp_base  : commun à l'exécution (extensions, config PHP, utilisateur non-root, healthcheck)
 #   composer_tools   : base + Composer, git, unzip (outils de build, absents de l'image de prod)
@@ -8,7 +8,7 @@
 #   frankenphp_build : installe vendor/, compile le cache Symfony et le fichier de preload
 #   frankenphp_prod  : prod (php.ini-production, OPcache + preload), ne reçoit que /app du build
 
-FROM dunglas/frankenphp:1-php8.5 AS frankenphp_upstream
+FROM dunglas/frankenphp:1-php8.6 AS frankenphp_upstream
 
 # ---------------------------------------------------------------------------
 FROM frankenphp_upstream AS frankenphp_base
