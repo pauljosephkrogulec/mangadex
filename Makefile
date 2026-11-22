@@ -12,13 +12,16 @@ WEB     := scripts/compose-exec.sh web
 # Environnement Symfony ciblé par les commandes de base de données : `make db-reset ENV=test`.
 ENV ?= dev
 
+# Image Playwright alignée sur la version de @playwright/test (web/package.json) : navigateurs inclus.
+PLAYWRIGHT_IMAGE := mcr.microsoft.com/playwright:v$(shell sed -n 's/.*"@playwright\/test": "\([0-9.]*\)".*/\1/p' web/package.json)-noble
+
 ##@ Aide
 
 .PHONY: help
 help: ## Affiche cette aide
 	@awk 'BEGIN {FS = ":.*## "} \
 		/^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } \
-		/^[a-zA-Z0-9_-]+:.*## / { printf "  \033[36m%-14s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
+		/^[a-zA-Z0-9_-]+:.*## / { printf "  \033[36m%-18s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
 	@echo
 
 ##@ Stack Docker
@@ -99,9 +102,9 @@ fix-web: ## ESLint --fix puis Prettier
 
 ##@ Tests
 
-.PHONY: test test-api test-web
+.PHONY: test test-api test-web test-web-coverage e2e
 
-test: test-api test-web ## Lance tous les tests
+test: test-api test-web ## Lance tous les tests (hors E2E)
 
 # La base de test (app_test, cf. dbname_suffix) est créée et migrée avant PHPUnit, comme en CI.
 test-api: ## PHPUnit (prépare la base de test)
@@ -112,6 +115,21 @@ test-api: ## PHPUnit (prépare la base de test)
 
 test-web: ## Vitest
 	$(WEB) npm test
+
+test-web-coverage: ## Vitest avec couverture (échoue sous 80 %, rapport dans web/coverage/)
+	$(WEB) npm run test:coverage
+
+# Playwright tourne dans son image officielle (navigateurs inclus), sur le réseau de la stack :
+# rien à installer sur l'hôte. node_modules vit dans un volume nommé (Linux, réutilisé entre runs).
+# Les rapports (web/playwright-report, web/test-results) sont rendus à l'utilisateur de l'hôte.
+e2e: up ## Tests E2E Playwright contre la stack (options : `make e2e args="--grep proxy"`)
+	docker run --rm --init \
+		--network mangadex_default \
+		-v "$(CURDIR)/web:/app" -v mangadex_playwright_node_modules:/app/node_modules -w /app \
+		-e E2E_BASE_URL=http://proxy \
+		$(PLAYWRIGHT_IMAGE) \
+		sh -c 'npm ci --no-audit --no-fund --loglevel=error && npx playwright test $(args); status=$$?; \
+			chown -R $(shell id -u):$(shell id -g) playwright-report test-results 2>/dev/null; exit $$status'
 
 ##@ Base de données
 

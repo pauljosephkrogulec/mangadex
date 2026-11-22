@@ -13,7 +13,9 @@ export default defineConfig({
   // Échoue en CI si un `test.only` a été oublié.
   forbidOnly: isCI,
   retries: isCI ? 2 : 0,
-  workers: isCI ? 1 : undefined,
+  // Un seul worker en CI ; en local, Playwright choisit selon les cœurs disponibles (clé absente).
+  // `exactOptionalPropertyTypes` interdit `workers: undefined` : on n'ajoute la clé qu'en CI.
+  ...(isCI && { workers: 1 }),
   reporter: isCI
     ? [["github"], ["html", { open: "never" }]]
     : [["list"], ["html", { open: "on-failure" }]],
