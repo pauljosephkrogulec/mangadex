@@ -1,0 +1,45 @@
+# API Platform (issue #20). Doc : https://api-platform.com/docs/core/configuration/
+api_platform:
+    title: Manga Reader API
+    description: API du lecteur de mangas et webtoons.
+    version: '%env(APP_VERSION)%'
+
+    # Formats de sortie négociés via l'en-tête Accept. JSON-LD/Hydra par défaut (1er de la liste).
+    formats:
+        jsonld: ['application/ld+json']
+        jsonapi: ['application/vnd.api+json']
+        jsonhal: ['application/hal+json']
+        json: ['application/json']
+    patch_formats:
+        json: ['application/merge-patch+json']
+        jsonapi: ['application/vnd.api+json']
+    docs_formats:
+        jsonld: ['application/ld+json']
+        jsonopenapi: ['application/vnd.openapi+json']
+        html: ['text/html']
+
+    # Swagger UI sur /api/docs. ReDoc et GraphiQL ne sont pas utilisés.
+    enable_swagger_ui: true
+    enable_re_doc: false
+
+    defaults:
+        stateless: true
+        cache_headers:
+            vary: ['Content-Type', 'Authorization', 'Origin']
+        # Pagination : 30 éléments par page, le client peut demander jusqu'à 100 (`?itemsPerPage=`).
+        pagination_enabled: true
+        pagination_items_per_page: 30
+        pagination_maximum_items_per_page: 100
+        pagination_client_items_per_page: true
+
+    collection:
+        pagination:
+            items_per_page_parameter_name: itemsPerPage
+
+    # Swagger UI ne doit pas être servi en prod (surface d'attaque, doc publique non voulue).
+    # La spec OpenAPI reste générable en CLI : `bin/console api:openapi:export`.
+when@prod:
+    api_platform:
+        enable_swagger_ui: false
+        enable_docs: false
+        enable_entrypoint: false
