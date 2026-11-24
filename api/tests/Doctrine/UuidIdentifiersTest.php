@@ -7,6 +7,8 @@ namespace App\Tests\Doctrine;
 use App\Entity\Trait\UuidV7Id;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\ClassMetadata;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -69,5 +71,40 @@ final class UuidIdentifiersTest extends KernelTestCase
         self::assertInstanceOf(EntityManagerInterface::class, $entityManager);
 
         self::assertInstanceOf(UuidV7::class, $generator->generateId($entityManager, null));
+    }
+
+    /**
+     * @return iterable<string, array{class-string}>
+     */
+    public static function entities(): iterable
+    {
+        self::bootKernel();
+        $entityManager = self::getContainer()->get(EntityManagerInterface::class);
+        self::assertInstanceOf(EntityManagerInterface::class, $entityManager);
+
+        foreach ($entityManager->getMetadataFactory()->getAllMetadata() as $metadata) {
+            if (!$metadata->isMappedSuperclass && !$metadata->isEmbeddedClass) {
+                yield $metadata->getName() => [$metadata->getName()];
+            }
+        }
+
+        self::ensureKernelShutdown();
+    }
+
+    /**
+     * @param class-string $entityClass
+     */
+    #[DataProvider('entities')]
+    public function testEveryEntityIsIdentifiedByUuidV7(string $entityClass): void
+    {
+        self::bootKernel();
+        $entityManager = self::getContainer()->get(EntityManagerInterface::class);
+        self::assertInstanceOf(EntityManagerInterface::class, $entityManager);
+        $metadata = $entityManager->getClassMetadata($entityClass);
+
+        self::assertSame(['id'], $metadata->getIdentifierFieldNames(), 'Identifiant "id" attendu : utiliser le trait UuidV7Id.');
+        self::assertSame(UuidType::NAME, $metadata->getTypeOfField('id'));
+        self::assertSame(ClassMetadata::GENERATOR_TYPE_CUSTOM, $metadata->generatorType);
+        self::assertInstanceOf(UuidGenerator::class, $metadata->idGenerator);
     }
 }

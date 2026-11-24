@@ -47,6 +47,8 @@ Logs (Monolog) : en dev dans `api/var/log/dev.log` ; en prod sur `stderr` au for
 
 - **Identifiants** : toutes les entités utilisent le trait `App\Entity\Trait\UuidV7Id` (UUID v7, colonne `uuid` PostgreSQL, généré au `persist()`). Pas d'entier auto-incrémenté : un UUID v7 est triable par date de création et ne laisse pas deviner les autres identifiants.
 - **Dates** : jamais `new \DateTimeImmutable()`, `time()` ou `date()` pour « maintenant » (PHPStan les refuse, via `spaze/phpstan-disallowed-calls`). On injecte `Symfony\Component\Clock\ClockInterface` et on appelle `$clock->now()`. En test : `ClockSensitiveTrait::mockTime('2026-01-01')` ou une `MockClock`. Les entités horodatées implémentent `TimestampableInterface` avec le trait `Timestampable` : `createdAt` et `updatedAt` sont remplis par `TimestampableListener`.
+- **Schéma** : on modifie l'entité, puis `scripts/compose-exec.sh php bin/console doctrine:migrations:diff` génère la migration dans `api/migrations/`. On relit le SQL et on vérifie le `down()` (`doctrine:migrations:migrate prev`). La CI rejoue toutes les migrations sur une base vide puis lance `doctrine:schema:validate`.
+- **Données de test** : fabriques Foundry dans `api/src/Factory/`, jeux de données dans `api/src/Story/` (`AppStory`, chargée par `make db-reset`). Dans un test : traits `Factories` + `ResetDatabase`, puis `SeriesFactory::createOne([...])`.
 
 ## Pièges connus
 
