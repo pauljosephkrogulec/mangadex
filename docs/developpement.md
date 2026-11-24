@@ -43,6 +43,10 @@ Maker (dev) : `scripts/compose-exec.sh php bin/console make:entity`, `make:contr
 
 Logs (Monolog) : en dev dans `api/var/log/dev.log` ; en prod sur `stderr` au format JSON (seulement autour d'une erreur, via `fingers_crossed`).
 
+## Conventions de l'API
+
+- **Identifiants** : toutes les entités utilisent le trait `App\Entity\Trait\UuidV7Id` (UUID v7, colonne `uuid` PostgreSQL, généré au `persist()`). Pas d'entier auto-incrémenté : un UUID v7 est triable par date de création et ne laisse pas deviner les autres identifiants.
+
 ## Pièges connus
 
 - **`web` redémarre en boucle (`Cannot find module '/app/server.js'` ou `next: not found`)** : l'image locale `mangadex-web` est la version prod, par exemple après un `docker compose -f compose.yaml up`. Lance `make build install-web`.
