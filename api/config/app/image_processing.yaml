@@ -1,0 +1,8 @@
+# Traitement des pages et couvertures (issue #26, utilisé par #47 / #48).
+# Validé par App\ImageProcessing\ImageProcessingConfig::configureOptions().
+formats: [webp, avif]
+quality: 80
+max_width: 1600
+thumbnail_widths: [160, 320, 640]
+# Délai maximal d'une conversion (Symfony Process), en secondes.
+timeout: 30

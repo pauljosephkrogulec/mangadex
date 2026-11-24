@@ -19,6 +19,11 @@ services:
     App\:
         resource: '../src/'
 
+    # Configuration du traitement d'images (config/app/image_processing.yaml, issue #26) :
+    # construite et validée quand un service en a besoin.
+    App\ImageProcessing\ImageProcessingConfig:
+        factory: ['App\ImageProcessing\ImageProcessingConfig', 'fromYaml']
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
