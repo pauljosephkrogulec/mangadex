@@ -84,6 +84,11 @@ jobs:
           # Cache des couches dans le cache GitHub Actions, un scope par image pour ne pas s'écraser.
           cache-from: type=gha,scope=${{ matrix.image }}
           cache-to: type=gha,mode=max,scope=${{ matrix.image }}
+          # Toujours la dernière version du tag de base (correctifs upstream).
+          pull: true
+          # Build hebdomadaire sans cache : `apt-get upgrade` récupère les correctifs Debian
+          # publiés depuis, sinon sa couche en cache garderait les anciens paquets indéfiniment.
+          no-cache: ${{ github.event_name == 'schedule' }}
 
       # Smoke test : l'image démarre seule et son HEALTHCHECK passe à `healthy`
       # (php : GET /api/health via FrankenPHP, sans base ; web : GET /healthz via Node).

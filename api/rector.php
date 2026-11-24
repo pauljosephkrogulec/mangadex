@@ -25,7 +25,7 @@ return RectorConfig::configure()
     ])
     ->withCache(__DIR__.'/var/cache/rector')
     ->withImportNames(importShortClasses: false, removeUnusedImports: true)
-    // Version de PHP lue dans composer.json (config.platform.php = 8.6).
+    // Version de PHP lue dans composer.json (config.platform.php = 8.5).
     ->withPhpSets()
     // Règles Symfony / PHPUnit / Doctrine adaptées aux versions installées (composer.lock).
     ->withComposerBased(doctrine: true, phpunit: true, symfony: true)
