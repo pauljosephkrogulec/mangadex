@@ -1,0 +1,15 @@
+# Sources d'import de métadonnées (issue #26, utilisé par #62 / #65).
+# Validé par App\Import\ImportersConfig::configureOptions() : une option inconnue ou mal typée
+# fait échouer le chargement (et les tests).
+importers:
+    mangadex:
+        enabled: true
+        base_url: 'https://api.mangadex.org'
+        # Limite publique de l'API MangaDex : ~5 requêtes/s par IP.
+        requests_per_second: 5
+        languages: [fr, en]
+    anilist:
+        enabled: false
+        base_url: 'https://graphql.anilist.co'
+        # 90 requêtes/min.
+        requests_per_second: 1.5
