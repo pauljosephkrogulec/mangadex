@@ -1,0 +1,14 @@
+# CORS (issue #20). En dev, Caddy sert front et API sur la même origine : CORS n'y sert pas.
+# Il est utile pour un client hors de cette origine (front Next.js sur un autre port, Vercel en direct…).
+# CORS_ALLOW_ORIGIN est une regex (origin_regex) ; voir docs/configuration.md.
+nelmio_cors:
+    defaults:
+        origin_regex: true
+        allow_origin: ['%env(CORS_ALLOW_ORIGIN)%']
+        allow_methods: ['GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']
+        allow_headers: ['Content-Type', 'Authorization']
+        expose_headers: ['Link']
+        max_age: 3600
+    paths:
+        # Uniquement l'API : le profiler et les assets n'ont pas à être lus en cross-origin.
+        '^/api/': null

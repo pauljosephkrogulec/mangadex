@@ -30,6 +30,7 @@ Ce document liste les variables d'environnement du projet et indique où chacune
 | `DEFAULT_URI` | Base des URL générées hors requête (CLI, mails) | non | `api/.env` (`http://localhost`) | `api/.env` | Render : URL publique du front (Vercel) |
 | `TRUSTED_PROXIES` | Proxys dont on accepte les en-têtes `X-Forwarded-*` | non | vide | vide | Render : `REMOTE_ADDR` |
 | `APP_VERSION` | Version servie par `GET /api/health` | non | `api/.env` (`dev`) | `api/.env` | Injectée au build de l'image (commit en staging, tag en prod) |
+| `CORS_ALLOW_ORIGIN` | Regex des origines autorisées en cross-origin (NelmioCorsBundle) | non | `api/.env` (`localhost` / `127.0.0.1`, tout port) | `api/.env` | Render : URL du front (ex. `^https://mangadex\.vercel\.app$`) |
 | `PORT` | Port qu'utilise Render pour joindre le service | non | — | — | Render : `8080` |
 | `REDIS_URL` | Redis : cache, locks, transport Messenger | **oui** (si mot de passe) | `compose.yaml` (`redis://redis:6379`) | — | à définir avec #47 / #51 / #58 |
 | `MAILER_DSN` | Transport des mails | **oui** | `compose.override.yaml` (Mailpit) | — | à définir avec #43 |
