@@ -1,0 +1,8 @@
+# Symfony Uid (issue #22) : UUID v7 pour les identifiants de toutes les entités.
+# v7 = horodatage (ms) + aléa : triable dans l'ordre de création, donc des index B-tree compacts
+# côté PostgreSQL (contrairement à v4), et non devinable (contrairement à un entier auto-incrémenté).
+# Ces valeurs sont les défauts de Symfony 8 : on les fige pour qu'un changement de défaut ne passe pas inaperçu.
+framework:
+    uid:
+        default_uuid_version: 7
+        time_based_uuid_version: 7
