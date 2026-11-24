@@ -15,6 +15,13 @@ FROM frankenphp_upstream AS frankenphp_base
 
 WORKDIR /app
 
+# Correctifs de sécurité Debian publiés après la construction de l'image upstream
+# (scan Trivy en CI). Cette couche est en cache : le build hebdomadaire de docker-ci.yml
+# la reconstruit sans cache pour récupérer les nouveaux correctifs.
+RUN apt-get update \
+	&& apt-get upgrade -y --no-install-recommends \
+	&& rm -rf /var/lib/apt/lists/*
+
 # Extensions PHP (OPcache est intégré à PHP depuis la 8.5).
 RUN set -eux; \
 	install-php-extensions \

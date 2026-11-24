@@ -15,6 +15,7 @@ Ensuite :
 |---|---|
 | http://localhost | Front Next.js (et API sous `/api`) |
 | http://localhost/api/health | Sonde de l'API |
+| http://localhost/_profiler | Web Profiler Symfony (dev). Chaque réponse de l'API donne son lien dans l'en-tête `X-Debug-Token-Link` |
 | http://localhost:8025 | Mailpit (mails envoyés en dev) |
 | http://localhost:9001 | Console RustFS (stockage S3) |
 
@@ -38,6 +39,9 @@ Ensuite :
 
 Les commandes passent par `scripts/compose-exec.sh <service> <commande>`. Il réutilise le conteneur si le service tourne, et sinon il en lance un temporaire.
 Exemple : `scripts/compose-exec.sh php bin/console debug:router`.
+Maker (dev) : `scripts/compose-exec.sh php bin/console make:entity`, `make:controller`, etc. (`bin/console list make`).
+
+Logs (Monolog) : en dev dans `api/var/log/dev.log` ; en prod sur `stderr` au format JSON (seulement autour d'une erreur, via `fingers_crossed`).
 
 ## Pièges connus
 
