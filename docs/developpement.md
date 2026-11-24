@@ -46,6 +46,7 @@ Logs (Monolog) : en dev dans `api/var/log/dev.log` ; en prod sur `stderr` au for
 ## Conventions de l'API
 
 - **Identifiants** : toutes les entités utilisent le trait `App\Entity\Trait\UuidV7Id` (UUID v7, colonne `uuid` PostgreSQL, généré au `persist()`). Pas d'entier auto-incrémenté : un UUID v7 est triable par date de création et ne laisse pas deviner les autres identifiants.
+- **Dates** : jamais `new \DateTimeImmutable()`, `time()` ou `date()` pour « maintenant » (PHPStan les refuse, via `spaze/phpstan-disallowed-calls`). On injecte `Symfony\Component\Clock\ClockInterface` et on appelle `$clock->now()`. En test : `ClockSensitiveTrait::mockTime('2026-01-01')` ou une `MockClock`. Les entités horodatées implémentent `TimestampableInterface` avec le trait `Timestampable` : `createdAt` et `updatedAt` sont remplis par `TimestampableListener`.
 
 ## Pièges connus
 
