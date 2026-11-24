@@ -22,6 +22,30 @@ api_platform:
     enable_swagger_ui: true
     enable_re_doc: false
 
+    # Erreurs au format RFC 7807 (issue #24), docs/developpement.md.
+    # problem+json par défaut ; Hydra et JSON:API si le client les demande dans Accept.
+    error_formats:
+        jsonproblem: ['application/problem+json']
+        jsonld: ['application/ld+json']
+        jsonapi: ['application/vnd.api+json']
+        # Navigateur : page d'erreur HTML de Symfony (debug en dev), pas de JSON.
+        html: ['text/html']
+
+    # Les erreurs des contrôleurs Symfony classiques (ex. /api/health, route /api inconnue) passent
+    # aussi par API Platform : même format partout. Les navigateurs (Accept: text/html) gardent la page HTML.
+    handle_symfony_errors: true
+
+    # Exceptions sans statut HTTP propre → statut (une sous-classe est aussi concernée).
+    # Les exceptions métier (App\Exception\BusinessException) portent elles-mêmes leur statut.
+    # Cette liste remplace celle d'API Platform : on y reprend ses valeurs par défaut.
+    exception_to_status:
+        Symfony\Component\Serializer\Exception\ExceptionInterface: 400
+        ApiPlatform\Metadata\Exception\InvalidArgumentException: 400
+        Doctrine\ORM\OptimisticLockException: 409
+    # Pas de mapping d'exceptions Doctrine/DBAL : pour un statut < 500, le message devient le `detail`
+    # renvoyé au client, et celui d'une exception SQL exposerait le schéma. Valider en amont
+    # (UniqueEntity…) ou relancer une App\Exception\ConflictException avec un message maîtrisé.
+
     defaults:
         stateless: true
         cache_headers:
