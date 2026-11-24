@@ -9,3 +9,10 @@
 
 controllers:
     resource: routing.controllers
+
+when@test:
+    test_fixtures:
+        resource:
+            path: ../tests/Fixtures/Controller/
+            namespace: App\Tests\Fixtures\Controller
+        type: attribute

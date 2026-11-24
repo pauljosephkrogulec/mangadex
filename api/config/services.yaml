@@ -21,3 +21,10 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+when@test:
+    services:
+        # Contrôleurs de test (tests/Fixtures) : routes qui déclenchent des erreurs, cf. ProblemDetailsTest.
+        App\Tests\Fixtures\Controller\:
+            resource: '../tests/Fixtures/Controller/'
+            tags: ['controller.service_arguments']
