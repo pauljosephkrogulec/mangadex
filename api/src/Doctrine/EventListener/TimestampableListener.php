@@ -6,8 +6,8 @@ namespace App\Doctrine\EventListener;
 
 use App\Entity\TimestampableInterface;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
+use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PrePersistEventArgs;
-use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
 use Symfony\Component\Clock\ClockInterface;
 
@@ -16,7 +16,7 @@ use Symfony\Component\Clock\ClockInterface;
  * `new \DateTimeImmutable()` : les tests figent ou avancent le temps via MockClock.
  */
 #[AsDoctrineListener(event: Events::prePersist)]
-#[AsDoctrineListener(event: Events::preUpdate)]
+#[AsDoctrineListener(event: Events::onFlush)]
 final readonly class TimestampableListener
 {
     public function __construct(
@@ -33,17 +33,22 @@ final readonly class TimestampableListener
     }
 
     /**
-     * En preUpdate, Doctrine a déjà calculé le changeset : modifier une propriété ne suffit pas,
-     * il faut passer par setNewValue() pour que la nouvelle date soit écrite.
+     * Mise à jour : en onFlush plutôt qu'en preUpdate. En preUpdate, le changeset est figé et
+     * setNewValue() refuse un champ qui n'y figure pas déjà : or `updatedAt` n'y est jamais quand
+     * seul le titre change. Ici, on modifie l'entité puis on demande à Doctrine de recalculer son changeset.
      */
-    public function preUpdate(PreUpdateEventArgs $args): void
+    public function onFlush(OnFlushEventArgs $args): void
     {
-        $entity = $args->getObject();
-        if (!$entity instanceof TimestampableInterface) {
-            return;
-        }
+        $entityManager = $args->getObjectManager();
+        $unitOfWork = $entityManager->getUnitOfWork();
 
-        $entity->touch($this->clock->now());
-        $args->setNewValue('updatedAt', $entity->getUpdatedAt());
+        foreach ($unitOfWork->getScheduledEntityUpdates() as $entity) {
+            if (!$entity instanceof TimestampableInterface) {
+                continue;
+            }
+
+            $entity->touch($this->clock->now());
+            $unitOfWork->recomputeSingleEntityChangeSet($entityManager->getClassMetadata($entity::class), $entity);
+        }
     }
 }
