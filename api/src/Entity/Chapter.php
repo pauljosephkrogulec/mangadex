@@ -23,6 +23,7 @@ use App\Security\AccessRule;
 use App\Validator\UniqueChapterNumber;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Intl\Locales;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
@@ -62,7 +63,7 @@ class Chapter implements TimestampableInterface
     use Timestampable;
     use UuidV7Id;
 
-    /** Code de langue BCP 47 simplifié : `fr`, `en`, `pt-BR`. Validé contre la liste ICU avec #34. */
+    /** Code de langue BCP 47 simplifié : `fr`, `en`, `pt-BR`, dont l'existence est vérifiée par Intl. */
     public const string LANGUAGE_PATTERN = '/^[a-z]{2,3}(?:-[A-Z]{2})?$/';
 
     /** Numéro décimal positif : `1`, `10.5`, `1084`. */
@@ -96,12 +97,16 @@ class Chapter implements TimestampableInterface
         /** Chaîne numérique (DECIMAL côté PostgreSQL) : évite les arrondis des flottants. */
         #[ORM\Column(type: Types::DECIMAL, precision: 8, scale: 2)]
         #[Assert\NotBlank]
-        #[Assert\Regex(pattern: self::NUMBER_PATTERN, message: 'Le numéro de chapitre est un nombre positif (deux décimales au plus).')]
+        #[Assert\Regex(pattern: self::NUMBER_PATTERN, message: 'chapter.number.invalid')]
         #[Groups(['chapter:read', 'chapter:write'])]
         private string $number,
         #[ORM\Column(length: 8)]
         #[Assert\NotBlank]
-        #[Assert\Regex(pattern: self::LANGUAGE_PATTERN, message: 'La langue est un code comme « fr », « en » ou « pt-BR ».')]
+        // Format d'abord, puis existence selon ICU (Intl) : « xx » a le bon format mais n'est pas une langue.
+        #[Assert\Sequentially([
+            new Assert\Regex(pattern: self::LANGUAGE_PATTERN, message: 'chapter.language.invalid'),
+            new Assert\Locale(message: 'chapter.language.unknown', canonicalize: true),
+        ])]
         #[Groups(['chapter:read', 'chapter:write'])]
         private string $language,
     ) {
@@ -137,6 +142,18 @@ class Chapter implements TimestampableInterface
         $this->language = $language;
 
         return $this;
+    }
+
+    /**
+     * Nom de la langue dans la locale de la requête (Intl) : « français » avec `Accept-Language: fr`,
+     * « French » avec `en`. La locale négociée devient la locale PHP par défaut (Request::setLocale()).
+     */
+    #[Groups(['chapter:read'])]
+    public function getLanguageName(): string
+    {
+        $locale = str_replace('-', '_', $this->language);
+
+        return Locales::exists($locale) ? Locales::getName($locale) : $this->language;
     }
 
     public function getTitle(): ?string
@@ -194,7 +211,7 @@ class Chapter implements TimestampableInterface
     public function validatePublication(ExecutionContextInterface $context): void
     {
         if (ChapterStatus::Draft !== $this->status && !$this->publishedAt instanceof \DateTimeImmutable) {
-            $context->buildViolation('Un chapitre programmé ou publié doit avoir une date de publication.')
+            $context->buildViolation('chapter.published_at.required')
                 ->atPath('publishedAt')
                 ->addViolation();
         }

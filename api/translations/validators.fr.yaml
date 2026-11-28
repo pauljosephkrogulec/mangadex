@@ -1,0 +1,27 @@
+# Messages des contraintes de l'application (issue #34). Les messages des contraintes Symfony
+# (NotBlank, Range…) sont déjà traduits par le composant Validator.
+slug:
+    invalid: 'Le slug ne contient que des minuscules, des chiffres et des tirets.'
+    taken:
+        series: 'Ce slug est déjà utilisé par une autre série.'
+        author: 'Ce slug est déjà utilisé par un autre auteur.'
+        genre: 'Ce slug est déjà utilisé par un autre genre.'
+        tag: 'Ce slug est déjà utilisé par un autre tag.'
+chapter:
+    number:
+        invalid: 'Le numéro de chapitre est un nombre positif (deux décimales au plus).'
+        taken: 'Le chapitre {{ number }} existe déjà en « {{ language }} » pour cette série.'
+    language:
+        invalid: 'La langue est un code comme « fr », « en » ou « pt-BR ».'
+        unknown: 'La langue {{ value }} n''existe pas.'
+    published_at:
+        required: 'Un chapitre programmé ou publié doit avoir une date de publication.'
+page:
+    hash:
+        invalid: "L'empreinte est un SHA-256 hexadécimal (64 caractères)."
+    position:
+        taken: 'Cette position est déjà occupée dans ce chapitre.'
+    segment:
+        image_required: 'Chaque segment doit avoir une image.'
+        height_positive: "La hauteur d'un segment doit être positive."
+        total_mismatch: 'Les segments mesurent {{ total }} px au total, la page {{ height }} px.'

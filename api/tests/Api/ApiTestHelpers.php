@@ -12,14 +12,16 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 trait ApiTestHelpers
 {
     /**
+     * Langue explicite : sans elle, Request::create() envoie `Accept-Language: en-us`.
+     *
      * @param 'admin'|'reader'|null $as
      * @param array<mixed>|null     $body
      *
      * @return array<mixed>
      */
-    private function request(KernelBrowser $client, string $method, string $uri, ?array $body = null, ?string $as = null): array
+    private function request(KernelBrowser $client, string $method, string $uri, ?array $body = null, ?string $as = null, string $language = 'fr'): array
     {
-        $server = ['HTTP_ACCEPT' => 'application/ld+json'];
+        $server = ['HTTP_ACCEPT' => 'application/ld+json', 'HTTP_ACCEPT_LANGUAGE' => $language];
         if (null !== $body) {
             $server['CONTENT_TYPE'] = 'PATCH' === $method ? 'application/merge-patch+json' : 'application/ld+json';
         }

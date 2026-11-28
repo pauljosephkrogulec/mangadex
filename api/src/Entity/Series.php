@@ -63,7 +63,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     denormalizationContext: ['groups' => ['series:write']],
     order: ['createdAt' => 'DESC'],
 )]
-#[UniqueEntity(fields: ['slug'], message: 'Ce slug est déjà utilisé par une autre série.')]
+#[UniqueEntity(fields: ['slug'], message: 'slug.taken.series')]
 class Series implements SluggableInterface, TimestampableInterface
 {
     use Timestampable;
@@ -112,7 +112,7 @@ class Series implements SluggableInterface, TimestampableInterface
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(allowNull: true)]
     #[Assert\Length(max: 255)]
-    #[Assert\Regex(pattern: self::SLUG_PATTERN, message: 'Le slug ne contient que des minuscules, chiffres et tirets.')]
+    #[Assert\Regex(pattern: self::SLUG_PATTERN, message: 'slug.invalid')]
     #[Groups(['series:read', 'series:write'])]
     private ?string $slug = null;
 

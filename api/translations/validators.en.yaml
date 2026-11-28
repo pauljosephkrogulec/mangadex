@@ -1,0 +1,27 @@
+# Application constraint messages (issue #34). Symfony constraint messages (NotBlank, Range…)
+# are already translated by the Validator component.
+slug:
+    invalid: 'The slug may only contain lowercase letters, digits and dashes.'
+    taken:
+        series: 'This slug is already used by another series.'
+        author: 'This slug is already used by another author.'
+        genre: 'This slug is already used by another genre.'
+        tag: 'This slug is already used by another tag.'
+chapter:
+    number:
+        invalid: 'The chapter number must be a positive number (at most two decimals).'
+        taken: 'Chapter {{ number }} already exists in "{{ language }}" for this series.'
+    language:
+        invalid: 'The language must be a code such as "fr", "en" or "pt-BR".'
+        unknown: 'The language {{ value }} does not exist.'
+    published_at:
+        required: 'A scheduled or published chapter must have a publication date.'
+page:
+    hash:
+        invalid: 'The hash must be a hexadecimal SHA-256 (64 characters).'
+    position:
+        taken: 'This position is already taken in this chapter.'
+    segment:
+        image_required: 'Each segment must have an image.'
+        height_positive: 'A segment height must be positive.'
+        total_mismatch: 'The segments are {{ total }} px high in total, the page {{ height }} px.'

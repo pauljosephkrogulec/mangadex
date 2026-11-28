@@ -15,7 +15,8 @@ use Symfony\Component\Validator\Constraint;
 #[\Attribute(\Attribute::TARGET_CLASS)]
 final class UniqueChapterNumber extends Constraint
 {
-    public string $message = 'Le chapitre {{ number }} existe déjà en « {{ language }} » pour cette série.';
+    /** Clé du domaine `validators` (translations/validators.*.yaml). */
+    public string $message = 'chapter.number.taken';
 
     public function __construct(?string $message = null, ?array $groups = null, mixed $payload = null)
     {
