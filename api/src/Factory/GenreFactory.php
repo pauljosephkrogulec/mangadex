@@ -14,8 +14,6 @@ use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
  */
 final class GenreFactory extends PersistentObjectFactory
 {
-    use DerivesSlug;
-
     public static function class(): string
     {
         return Genre::class;
@@ -29,10 +27,5 @@ final class GenreFactory extends PersistentObjectFactory
         return [
             'name' => mb_ucfirst(self::faker()->unique()->word()),
         ];
-    }
-
-    protected function initialize(): static
-    {
-        return $this->deriveSlugFrom('name');
     }
 }

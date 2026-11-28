@@ -21,7 +21,7 @@ final class SeriesTest extends TestCase
 {
     public function testDefaultsToAnOngoingMangaWithoutAlternativeTitles(): void
     {
-        $series = new Series('Berserk', 'berserk');
+        $series = new Series('Berserk');
 
         self::assertSame(SeriesType::Manga, $series->getType());
         self::assertSame([], $series->getAlternativeTitles());
@@ -31,7 +31,7 @@ final class SeriesTest extends TestCase
 
     public function testAlternativeTitlesAreTrimmedDeduplicatedAndExcludeTheMainTitle(): void
     {
-        $series = new Series('Berserk', 'berserk');
+        $series = new Series('Berserk');
 
         $series->setAlternativeTitles(['  ベルセルク ', '', 'berserk', 'Berserk: The Black Swordsman', 'ベルセルク', '   ']);
 
@@ -40,7 +40,7 @@ final class SeriesTest extends TestCase
 
     public function testRenamingRemovesTheNewTitleFromAlternativeTitles(): void
     {
-        $series = new Series('Shingeki no Kyojin', 'shingeki-no-kyojin');
+        $series = new Series('Shingeki no Kyojin');
         $series->setAlternativeTitles(['Attack on Titan', "L'Attaque des Titans"]);
 
         $series->setTitle('Attack on Titan');
@@ -50,10 +50,10 @@ final class SeriesTest extends TestCase
 
     public function testRelationsIgnoreDuplicatesAndCanBeRemoved(): void
     {
-        $series = new Series('Berserk', 'berserk');
-        $miura = new Author('Kentarō Miura', 'kentaro-miura');
-        $fantasy = new Genre('Dark fantasy', 'dark-fantasy');
-        $mercenaries = new Tag('Mercenaires', 'mercenaires');
+        $series = new Series('Berserk');
+        $miura = new Author('Kentarō Miura');
+        $fantasy = new Genre('Dark fantasy');
+        $mercenaries = new Tag('Mercenaires');
 
         $series->addAuthor($miura)->addAuthor($miura)->addArtist($miura);
         $series->addGenre($fantasy)->addGenre($fantasy);
@@ -72,7 +72,7 @@ final class SeriesTest extends TestCase
 
     public function testValidSeriesHasNoViolation(): void
     {
-        $series = new Series('Berserk', 'berserk')->setYear(1989)->setAlternativeTitles(['ベルセルク']);
+        $series = new Series('Berserk')->setYear(1989)->setAlternativeTitles(['ベルセルク']);
 
         self::assertCount(0, $this->validator()->validate($series));
     }
@@ -92,7 +92,7 @@ final class SeriesTest extends TestCase
     #[DataProvider('invalidSlugs')]
     public function testInvalidSlugIsRejected(string $slug): void
     {
-        $violations = $this->validator()->validate(new Series('Berserk', $slug));
+        $violations = $this->validator()->validate(new Series('Berserk')->setSlug($slug));
 
         self::assertGreaterThan(0, \count($violations));
         self::assertSame('slug', $violations->get(0)->getPropertyPath());
@@ -100,7 +100,7 @@ final class SeriesTest extends TestCase
 
     public function testYearOutOfRangeIsRejected(): void
     {
-        $violations = $this->validator()->validate(new Series('Berserk', 'berserk')->setYear(1850));
+        $violations = $this->validator()->validate(new Series('Berserk')->setYear(1850));
 
         self::assertCount(1, $violations);
         self::assertSame('year', $violations->get(0)->getPropertyPath());

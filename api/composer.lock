@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8efe2034aac29fd63078ca82c44238e8",
+    "content-hash": "5bc1b8f73f54ccf13474a8bdda332333",
     "packages": [
         {
             "name": "api-platform/doctrine-common",
@@ -6353,16 +6353,16 @@
         },
         {
             "name": "symfony/string",
-            "version": "v8.1.12",
+            "version": "v8.1.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "b3f937ce8203f33efea3cce084ad4a9f0cce97c5"
+                "reference": "ff6a90fe4c4e0e4de484d07189aa25d6d7f447be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/b3f937ce8203f33efea3cce084ad4a9f0cce97c5",
-                "reference": "b3f937ce8203f33efea3cce084ad4a9f0cce97c5",
+                "url": "https://api.github.com/repos/symfony/string/zipball/ff6a90fe4c4e0e4de484d07189aa25d6d7f447be",
+                "reference": "ff6a90fe4c4e0e4de484d07189aa25d6d7f447be",
                 "shasum": ""
             },
             "require": {
@@ -6419,7 +6419,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https://github.com/symfony/string/tree/v8.1.12"
+                "source": "https://github.com/symfony/string/tree/v8.1.13"
             },
             "funding": [
                 {
@@ -6439,8 +6439,8 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-11-24T15:59:55+00:00",
-            "published-time": "2026-11-25T09:30:00+00:00"
+            "time": "2026-11-27T13:27:33+00:00",
+            "published-time": "2026-11-27T14:50:30+00:00"
         },
         {
             "name": "symfony/translation-contracts",

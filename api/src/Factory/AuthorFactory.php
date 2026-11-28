@@ -14,8 +14,6 @@ use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
  */
 final class AuthorFactory extends PersistentObjectFactory
 {
-    use DerivesSlug;
-
     public static function class(): string
     {
         return Author::class;
@@ -29,10 +27,5 @@ final class AuthorFactory extends PersistentObjectFactory
         return [
             'name' => self::faker()->unique()->name(),
         ];
-    }
-
-    protected function initialize(): static
-    {
-        return $this->deriveSlugFrom('name');
     }
 }

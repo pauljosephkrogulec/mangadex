@@ -29,9 +29,8 @@ class Genre implements SluggableInterface, TimestampableInterface
     use Timestampable;
     use UuidV7Id;
 
-    public function __construct(string $name, string $slug)
+    public function __construct(string $name)
     {
         $this->name = $name;
-        $this->slug = $slug;
     }
 }
