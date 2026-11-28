@@ -6,7 +6,9 @@ namespace App\Tests\Api;
 
 use App\Entity\Series;
 use App\Enum\SeriesStatus;
+use App\Enum\SeriesType;
 use App\Factory\SeriesFactory;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -16,7 +18,8 @@ use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
 /**
- * Ressource Series (issue #21) : persistance Doctrine, identifiant UUID v7, pagination et formats.
+ * Ressource Series (issues #21 et #27) : persistance Doctrine, identifiant UUID v7, champs du catalogue,
+ * pagination et formats.
  */
 final class SeriesTest extends WebTestCase
 {
@@ -39,6 +42,36 @@ final class SeriesTest extends WebTestCase
         self::assertSame('Berserk', $data['title']);
         self::assertSame('hiatus', $data['status']);
         self::assertSame('2026-02-01T08:30:00+00:00', $data['createdAt']);
+    }
+
+    public function testGetOneSeriesExposesCatalogueFields(): void
+    {
+        $client = self::createClient();
+        $series = SeriesFactory::createOne([
+            'title' => 'Solo Leveling',
+            'alternativeTitles' => ['나 혼자만 레벨업', 'Only I Level Up'],
+            'synopsis' => 'Le chasseur le plus faible du monde.',
+            'type' => SeriesType::Manhwa,
+            'year' => 2018,
+            'coverImage' => 'covers/solo-leveling.webp',
+        ]);
+
+        $data = $this->getJson($client, '/api/series/'.$series->getId());
+
+        self::assertSame('solo-leveling', $data['slug']);
+        self::assertSame(['나 혼자만 레벨업', 'Only I Level Up'], $data['alternativeTitles']);
+        self::assertSame('Le chasseur le plus faible du monde.', $data['synopsis']);
+        self::assertSame('manhwa', $data['type']);
+        self::assertSame(2018, $data['year']);
+        self::assertSame('covers/solo-leveling.webp', $data['coverImage']);
+    }
+
+    public function testSlugIsUniqueInDatabase(): void
+    {
+        SeriesFactory::createOne(['title' => 'One Piece', 'slug' => 'one-piece']);
+
+        $this->expectException(UniqueConstraintViolationException::class);
+        SeriesFactory::createOne(['title' => 'One Piece (réédition)', 'slug' => 'one-piece']);
     }
 
     public function testUnknownSeriesReturns404(): void
