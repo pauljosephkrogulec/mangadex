@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Entity;
 
+use App\Entity\Author;
+use App\Entity\Genre;
 use App\Entity\Series;
+use App\Entity\Tag;
 use App\Enum\SeriesType;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -12,7 +15,7 @@ use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
- * Règles portées par l'entité Series (issue #27), sans base de données.
+ * Règles portées par l'entité Series (issues #27 et #28), sans base de données.
  */
 final class SeriesTest extends TestCase
 {
@@ -43,6 +46,28 @@ final class SeriesTest extends TestCase
         $series->setTitle('Attack on Titan');
 
         self::assertSame(["L'Attaque des Titans"], $series->getAlternativeTitles());
+    }
+
+    public function testRelationsIgnoreDuplicatesAndCanBeRemoved(): void
+    {
+        $series = new Series('Berserk', 'berserk');
+        $miura = new Author('Kentarō Miura', 'kentaro-miura');
+        $fantasy = new Genre('Dark fantasy', 'dark-fantasy');
+        $mercenaries = new Tag('Mercenaires', 'mercenaires');
+
+        $series->addAuthor($miura)->addAuthor($miura)->addArtist($miura);
+        $series->addGenre($fantasy)->addGenre($fantasy);
+        $series->addTag($mercenaries);
+
+        self::assertCount(1, $series->getAuthors());
+        self::assertSame([$miura], $series->getArtists()->getValues());
+        self::assertCount(1, $series->getGenres());
+
+        $series->removeTag($mercenaries)->removeArtist($miura);
+
+        self::assertCount(0, $series->getTags());
+        self::assertCount(0, $series->getArtists());
+        self::assertCount(1, $series->getAuthors(), 'Retirer un artiste ne retire pas l\'auteur.');
     }
 
     public function testValidSeriesHasNoViolation(): void

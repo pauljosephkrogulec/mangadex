@@ -7,7 +7,6 @@ namespace App\Factory;
 use App\Entity\Series;
 use App\Enum\SeriesStatus;
 use App\Enum\SeriesType;
-use Symfony\Component\String\Slugger\AsciiSlugger;
 use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
@@ -17,6 +16,8 @@ use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
  */
 final class SeriesFactory extends PersistentObjectFactory
 {
+    use DerivesSlug;
+
     public static function class(): string
     {
         return Series::class;
@@ -40,14 +41,6 @@ final class SeriesFactory extends PersistentObjectFactory
 
     protected function initialize(): static
     {
-        // Provisoire : le slug sera généré par le service de slug avec #33. D'ici là, il est
-        // dérivé du titre quand le test ne le fixe pas.
-        return $this->beforeInstantiate(static function (array $parameters): array {
-            if (!isset($parameters['slug']) && \is_string($parameters['title'] ?? null)) {
-                $parameters['slug'] = new AsciiSlugger()->slug($parameters['title'])->lower()->toString();
-            }
-
-            return $parameters;
-        });
+        return $this->deriveSlugFrom('title');
     }
 }
