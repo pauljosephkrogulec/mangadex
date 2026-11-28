@@ -22,6 +22,7 @@ use Zenstruck\Foundry\Test\ResetDatabase;
  */
 final class CatalogTermTest extends WebTestCase
 {
+    use ApiTestHelpers;
     use Factories;
     use ResetDatabase;
 
@@ -73,7 +74,7 @@ final class CatalogTermTest extends WebTestCase
         $factory::createOne(['name' => 'Shonen', 'slug' => 'shonen']);
     }
 
-    public function testSeriesExposesItsRelationsAsIris(): void
+    public function testSeriesEmbedsTheNameAndSlugOfItsRelations(): void
     {
         $client = self::createClient();
         $oda = AuthorFactory::createOne(['name' => 'Eiichirō Oda']);
@@ -89,10 +90,18 @@ final class CatalogTermTest extends WebTestCase
 
         $data = $this->getJson($client, '/api/series/'.$series->getId());
 
-        self::assertSame(['/api/authors/'.$oda->getId()], $data['authors']);
-        self::assertSame(['/api/authors/'.$oda->getId()], $data['artists']);
-        self::assertSame(['/api/genres/'.$action->getId()], $data['genres']);
-        self::assertSame(['/api/tags/'.$pirates->getId()], $data['tags']);
+        $expected = [
+            'authors' => ['/api/authors/'.$oda->getId(), 'Eiichirō Oda', 'eiichiro-oda'],
+            'artists' => ['/api/authors/'.$oda->getId(), 'Eiichirō Oda', 'eiichiro-oda'],
+            'genres' => ['/api/genres/'.$action->getId(), 'Action', 'action'],
+            'tags' => ['/api/tags/'.$pirates->getId(), 'Pirates', 'pirates'],
+        ];
+        foreach ($expected as $relation => [$iri, $name, $slug]) {
+            self::assertIsArray($data[$relation]);
+            self::assertCount(1, $data[$relation]);
+            $term = self::firstOf($data, $relation);
+            self::assertSame([$iri, $name, $slug], [$term['@id'], $term['name'], $term['slug']]);
+        }
     }
 
     public function testDeletingAGenreDetachesItFromSeries(): void

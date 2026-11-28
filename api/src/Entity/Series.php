@@ -4,19 +4,30 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Common\Filter\OrderFilterInterface;
+use ApiPlatform\Doctrine\Orm\Filter\ExactFilter;
+use ApiPlatform\Doctrine\Orm\Filter\PartialSearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SortFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use App\Entity\Trait\Timestampable;
 use App\Entity\Trait\UuidV7Id;
 use App\Enum\SeriesStatus;
 use App\Enum\SeriesType;
 use App\HtmlSanitizer\SanitizeHtml;
 use App\Repository\SeriesRepository;
+use App\Security\AccessRule;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -28,9 +39,31 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(name: 'series_created_at_idx', columns: ['created_at'])]
 #[ORM\UniqueConstraint(name: 'series_slug_uniq', columns: ['slug'])]
 #[ApiResource(
-    operations: [new GetCollection(), new Get()],
+    operations: [
+        new GetCollection(parameters: [
+            // Recherche insensible à la casse dans le titre : `?title=piece`.
+            'title' => new QueryParameter(filter: new PartialSearchFilter(), property: 'title'),
+            'type' => new QueryParameter(filter: new ExactFilter(), property: 'type'),
+            'status' => new QueryParameter(filter: new ExactFilter(), property: 'status'),
+            // Par slug, plusieurs valeurs possibles : `?genre[]=action&genre[]=drame` (l'une OU l'autre).
+            'genre' => new QueryParameter(filter: new ExactFilter(), property: 'genres.slug'),
+            'tag' => new QueryParameter(filter: new ExactFilter(), property: 'tags.slug'),
+            'author' => new QueryParameter(filter: new ExactFilter(), property: 'authors.slug'),
+            'order[title]' => new QueryParameter(filter: new SortFilter(), property: 'title'),
+            'order[year]' => new QueryParameter(filter: new SortFilter(nullsComparison: OrderFilterInterface::NULLS_ALWAYS_LAST), property: 'year'),
+            'order[createdAt]' => new QueryParameter(filter: new SortFilter(), property: 'createdAt'),
+        ]),
+        new Get(normalizationContext: ['groups' => ['common:read', 'timestamps:read', 'series:read', 'series:item']]),
+        new Post(normalizationContext: ['groups' => ['common:read', 'timestamps:read', 'series:read', 'series:item']], security: AccessRule::ADMIN),
+        new Patch(normalizationContext: ['groups' => ['common:read', 'timestamps:read', 'series:read', 'series:item']], security: AccessRule::ADMIN),
+        new Delete(security: AccessRule::ADMIN),
+    ],
+    // Liste : champs essentiels ; fiche (Get) : synopsis, titres alternatifs, auteurs, artistes et tags en plus.
+    normalizationContext: ['groups' => ['common:read', 'series:read']],
+    denormalizationContext: ['groups' => ['series:write']],
     order: ['createdAt' => 'DESC'],
 )]
+#[UniqueEntity(fields: ['slug'], message: 'Ce slug est déjà utilisé par une autre série.')]
 class Series implements SluggableInterface, TimestampableInterface
 {
     use Timestampable;
@@ -46,27 +79,33 @@ class Series implements SluggableInterface, TimestampableInterface
      */
     #[ORM\Column(type: Types::JSON, options: ['jsonb' => true, 'default' => '[]'])]
     #[Assert\All([new Assert\NotBlank(), new Assert\Length(max: 255)])]
+    #[Groups(['series:item', 'series:write'])]
     private array $alternativeTitles = [];
 
     /** HTML limité (paragraphes, emphase, listes, liens externes), nettoyé avant l'écriture en base. */
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[SanitizeHtml]
+    #[Groups(['series:item', 'series:write'])]
     private ?string $synopsis = null;
 
     #[ORM\Column(length: 16, enumType: SeriesType::class)]
+    #[Groups(['series:read', 'series:write'])]
     private SeriesType $type = SeriesType::Manga;
 
     #[ORM\Column(length: 16, enumType: SeriesStatus::class)]
+    #[Groups(['series:read', 'series:write'])]
     private SeriesStatus $status = SeriesStatus::Ongoing;
 
     /** Année de première publication. */
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
     #[Assert\Range(min: self::MIN_YEAR, max: self::MAX_YEAR)]
+    #[Groups(['series:read', 'series:write'])]
     private ?int $year = null;
 
     /** Clé de l'image de couverture dans le stockage objet (S3). */
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
+    #[Groups(['series:read', 'series:write'])]
     private ?string $coverImage = null;
 
     /** Généré à partir du titre à la première persistance s'il n'est pas fourni (SlugListener). */
@@ -74,6 +113,7 @@ class Series implements SluggableInterface, TimestampableInterface
     #[Assert\NotBlank(allowNull: true)]
     #[Assert\Length(max: 255)]
     #[Assert\Regex(pattern: self::SLUG_PATTERN, message: 'Le slug ne contient que des minuscules, chiffres et tirets.')]
+    #[Groups(['series:read', 'series:write'])]
     private ?string $slug = null;
 
     /**
@@ -84,6 +124,7 @@ class Series implements SluggableInterface, TimestampableInterface
     #[ORM\ManyToMany(targetEntity: Author::class)]
     #[ORM\JoinTable(name: 'series_author')]
     #[ORM\OrderBy(['name' => 'ASC'])]
+    #[Groups(['series:item', 'series:write'])]
     private Collection $authors;
 
     /**
@@ -94,6 +135,7 @@ class Series implements SluggableInterface, TimestampableInterface
     #[ORM\ManyToMany(targetEntity: Author::class)]
     #[ORM\JoinTable(name: 'series_artist')]
     #[ORM\OrderBy(['name' => 'ASC'])]
+    #[Groups(['series:item', 'series:write'])]
     private Collection $artists;
 
     /**
@@ -102,6 +144,7 @@ class Series implements SluggableInterface, TimestampableInterface
     #[ORM\ManyToMany(targetEntity: Genre::class)]
     #[ORM\JoinTable(name: 'series_genre')]
     #[ORM\OrderBy(['name' => 'ASC'])]
+    #[Groups(['series:read', 'series:write'])]
     private Collection $genres;
 
     /**
@@ -110,12 +153,14 @@ class Series implements SluggableInterface, TimestampableInterface
     #[ORM\ManyToMany(targetEntity: Tag::class)]
     #[ORM\JoinTable(name: 'series_tag')]
     #[ORM\OrderBy(['name' => 'ASC'])]
+    #[Groups(['series:item', 'series:write'])]
     private Collection $tags;
 
     public function __construct(
         #[ORM\Column(length: 255)]
         #[Assert\NotBlank]
         #[Assert\Length(max: 255)]
+        #[Groups(['series:read', 'series:write'])]
         private string $title,
     ) {
         $this->authors = new ArrayCollection();

@@ -11,14 +11,14 @@ use App\Entity\Tag;
 use App\Enum\SeriesType;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Validator\Validation;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Règles portées par l'entité Series (issues #27 et #28), sans base de données.
  */
 final class SeriesTest extends TestCase
 {
+    use ValidatesWithoutDatabase;
+
     public function testDefaultsToAnOngoingMangaWithoutAlternativeTitles(): void
     {
         $series = new Series('Berserk');
@@ -104,10 +104,5 @@ final class SeriesTest extends TestCase
 
         self::assertCount(1, $violations);
         self::assertSame('year', $violations->get(0)->getPropertyPath());
-    }
-
-    private function validator(): ValidatorInterface
-    {
-        return Validation::createValidatorBuilder()->enableAttributeMapping()->getValidator();
     }
 }
