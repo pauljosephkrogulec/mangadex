@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Story;
 
 use App\Factory\AuthorFactory;
+use App\Factory\ChapterFactory;
 use App\Factory\GenreFactory;
 use App\Factory\SeriesFactory;
 use App\Factory\TagFactory;
@@ -32,5 +33,15 @@ final class AppStory extends Story
             'genres' => GenreFactory::randomRange(1, 3),
             'tags' => TagFactory::randomRange(0, 4),
         ]);
+
+        // Quelques chapitres, en français et en anglais, sur un tiers des séries.
+        foreach (SeriesFactory::randomSet(15) as $series) {
+            foreach (['fr', 'en'] as $language) {
+                ChapterFactory::createSequence(array_map(
+                    static fn (int $number): array => ['series' => $series, 'language' => $language, 'number' => (string) $number],
+                    range(1, random_int(3, 12)),
+                ));
+            }
+        }
     }
 }
