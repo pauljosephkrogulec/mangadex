@@ -104,7 +104,7 @@ final class ChapterTest extends TestCase
 
     private function chapter(string $number, string $language): Chapter
     {
-        return new Chapter(new Series('Berserk', 'berserk'), $number, $language);
+        return new Chapter(new Series('Berserk'), $number, $language);
     }
 
     private function validator(): ValidatorInterface

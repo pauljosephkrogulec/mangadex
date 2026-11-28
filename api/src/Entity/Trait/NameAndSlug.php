@@ -21,11 +21,12 @@ trait NameAndSlug
     #[Assert\Length(max: 255)]
     private string $name;
 
+    /** Généré à la première persistance s'il n'est pas fourni (SlugListener). */
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(allowNull: true)]
     #[Assert\Length(max: 255)]
     #[Assert\Regex(pattern: SluggableInterface::SLUG_PATTERN, message: 'Le slug ne contient que des minuscules, chiffres et tirets.')]
-    private string $slug;
+    private ?string $slug = null;
 
     public function getName(): string
     {
@@ -39,7 +40,7 @@ trait NameAndSlug
         return $this;
     }
 
-    public function getSlug(): string
+    public function getSlug(): ?string
     {
         return $this->slug;
     }
@@ -49,5 +50,10 @@ trait NameAndSlug
         $this->slug = $slug;
 
         return $this;
+    }
+
+    public function getSlugSource(): string
+    {
+        return $this->name;
     }
 }

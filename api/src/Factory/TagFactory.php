@@ -14,8 +14,6 @@ use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
  */
 final class TagFactory extends PersistentObjectFactory
 {
-    use DerivesSlug;
-
     public static function class(): string
     {
         return Tag::class;
@@ -29,10 +27,5 @@ final class TagFactory extends PersistentObjectFactory
         return [
             'name' => mb_ucfirst(self::faker()->unique()->word().' '.self::faker()->word()),
         ];
-    }
-
-    protected function initialize(): static
-    {
-        return $this->deriveSlugFrom('name');
     }
 }

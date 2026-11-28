@@ -117,7 +117,7 @@ final class PageTest extends TestCase
 
     private function chapter(): Chapter
     {
-        return new Chapter(new Series('Tower of God', 'tower-of-god'), '1', 'fr');
+        return new Chapter(new Series('Tower of God'), '1', 'fr');
     }
 
     private function validator(): ValidatorInterface

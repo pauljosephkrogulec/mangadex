@@ -16,8 +16,6 @@ use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
  */
 final class SeriesFactory extends PersistentObjectFactory
 {
-    use DerivesSlug;
-
     public static function class(): string
     {
         return Series::class;
@@ -37,10 +35,5 @@ final class SeriesFactory extends PersistentObjectFactory
             'year' => self::faker()->optional(0.9)->numberBetween(1970, 2026),
             'coverImage' => self::faker()->boolean(70) ? 'covers/'.self::faker()->uuid().'.webp' : null,
         ];
-    }
-
-    protected function initialize(): static
-    {
-        return $this->deriveSlugFrom('title');
     }
 }

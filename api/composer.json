@@ -23,6 +23,7 @@
         "symfony/monolog-bundle": "^4.1",
         "symfony/options-resolver": "8.1.*",
         "symfony/runtime": "8.1.*",
+        "symfony/string": "8.1.*",
         "symfony/twig-bundle": "8.1.*",
         "symfony/uid": "8.1.*",
         "symfony/yaml": "8.1.*"

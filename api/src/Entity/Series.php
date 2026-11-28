@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Série (manga, manhwa, manhua, webtoon), avec ses auteurs, artistes, genres et tags (relations N-N
- * unidirectionnelles). La génération automatique du slug arrive avec #33, l'écriture (CRUD) avec #31.
+ * unidirectionnelles). Le slug est généré à partir du titre à la première persistance (SlugListener).
  */
 #[ORM\Entity(repositoryClass: SeriesRepository::class)]
 // Tri par défaut de la collection (plus récents d'abord).
@@ -66,6 +66,13 @@ class Series implements SluggableInterface, TimestampableInterface
     #[Assert\Length(max: 255)]
     private ?string $coverImage = null;
 
+    /** Généré à partir du titre à la première persistance s'il n'est pas fourni (SlugListener). */
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(allowNull: true)]
+    #[Assert\Length(max: 255)]
+    #[Assert\Regex(pattern: self::SLUG_PATTERN, message: 'Le slug ne contient que des minuscules, chiffres et tirets.')]
+    private ?string $slug = null;
+
     /**
      * Scénaristes.
      *
@@ -107,11 +114,6 @@ class Series implements SluggableInterface, TimestampableInterface
         #[Assert\NotBlank]
         #[Assert\Length(max: 255)]
         private string $title,
-        #[ORM\Column(length: 255)]
-        #[Assert\NotBlank]
-        #[Assert\Length(max: 255)]
-        #[Assert\Regex(pattern: self::SLUG_PATTERN, message: 'Le slug ne contient que des minuscules, chiffres et tirets.')]
-        private string $slug,
     ) {
         $this->authors = new ArrayCollection();
         $this->artists = new ArrayCollection();
@@ -132,7 +134,7 @@ class Series implements SluggableInterface, TimestampableInterface
         return $this;
     }
 
-    public function getSlug(): string
+    public function getSlug(): ?string
     {
         return $this->slug;
     }
@@ -142,6 +144,11 @@ class Series implements SluggableInterface, TimestampableInterface
         $this->slug = $slug;
 
         return $this;
+    }
+
+    public function getSlugSource(): string
+    {
+        return $this->title;
     }
 
     /**
