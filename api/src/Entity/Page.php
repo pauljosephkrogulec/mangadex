@@ -48,7 +48,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
     denormalizationContext: ['groups' => ['page:write']],
     order: ['chapter' => 'ASC', 'position' => 'ASC'],
 )]
-#[UniqueEntity(fields: ['chapter', 'position'], message: 'Cette position est déjà occupée dans ce chapitre.', errorPath: 'position')]
+#[UniqueEntity(fields: ['chapter', 'position'], message: 'page.position.taken', errorPath: 'position')]
 class Page implements TimestampableInterface
 {
     use Timestampable;
@@ -93,7 +93,7 @@ class Page implements TimestampableInterface
         #[Groups(['page:read', 'page:write'])]
         private int $height,
         #[ORM\Column(length: 64)]
-        #[Assert\Regex(pattern: self::HASH_PATTERN, message: "L'empreinte est un SHA-256 hexadécimal (64 caractères).")]
+        #[Assert\Regex(pattern: self::HASH_PATTERN, message: 'page.hash.invalid')]
         #[Groups(['page:read', 'page:write'])]
         private string $hash,
     ) {
@@ -189,13 +189,13 @@ class Page implements TimestampableInterface
         $total = 0;
         foreach ($this->segments as $index => $segment) {
             if ('' === mb_trim($segment['image'])) {
-                $context->buildViolation('Chaque segment doit avoir une image.')
+                $context->buildViolation('page.segment.image_required')
                     ->atPath(\sprintf('segments[%d].image', $index))
                     ->addViolation();
             }
 
             if ($segment['height'] <= 0) {
-                $context->buildViolation('La hauteur d\'un segment doit être positive.')
+                $context->buildViolation('page.segment.height_positive')
                     ->atPath(\sprintf('segments[%d].height', $index))
                     ->addViolation();
             }
@@ -204,7 +204,7 @@ class Page implements TimestampableInterface
         }
 
         if ($total !== $this->height) {
-            $context->buildViolation('Les segments mesurent {{ total }} px au total, la page {{ height }} px.')
+            $context->buildViolation('page.segment.total_mismatch')
                 ->setParameter('{{ total }}', (string) $total)
                 ->setParameter('{{ height }}', (string) $this->height)
                 ->atPath('segments')

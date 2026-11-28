@@ -1,0 +1,12 @@
+# API multilingue (issue #34) : la locale de chaque requête est négociée à partir de `Accept-Language`
+# parmi les locales activées (repli sur le français), et renvoyée dans `Content-Language`.
+# Elle traduit les messages de validation (domaine `validators`) et les noms de langue (Intl).
+framework:
+    default_locale: fr
+    enabled_locales: ['fr', 'en']
+    set_locale_from_accept_language: true
+    set_content_language_from_locale: true
+    translator:
+        default_path: '%kernel.project_dir%/translations'
+        fallbacks: ['fr']
+        providers:

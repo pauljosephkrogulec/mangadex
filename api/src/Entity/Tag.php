@@ -40,7 +40,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
     denormalizationContext: ['groups' => ['term:write']],
     order: ['name' => 'ASC'],
 )]
-#[UniqueEntity(fields: ['slug'], message: 'Ce slug est déjà utilisé par un autre tag.')]
+#[UniqueEntity(fields: ['slug'], message: 'slug.taken.tag')]
 class Tag implements SluggableInterface, TimestampableInterface
 {
     use NameAndSlug;

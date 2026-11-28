@@ -27,7 +27,7 @@ trait NameAndSlug
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(allowNull: true)]
     #[Assert\Length(max: 255)]
-    #[Assert\Regex(pattern: SluggableInterface::SLUG_PATTERN, message: 'Le slug ne contient que des minuscules, chiffres et tirets.')]
+    #[Assert\Regex(pattern: SluggableInterface::SLUG_PATTERN, message: 'slug.invalid')]
     #[Groups(['term:read', 'term:write', 'series:read'])]
     private ?string $slug = null;
 
