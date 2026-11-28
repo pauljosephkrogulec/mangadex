@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Story;
 
+use App\Enum\SeriesType;
 use App\Factory\AuthorFactory;
 use App\Factory\ChapterFactory;
 use App\Factory\GenreFactory;
+use App\Factory\PageFactory;
 use App\Factory\SeriesFactory;
 use App\Factory\TagFactory;
 use Zenstruck\Foundry\Story;
@@ -37,10 +39,19 @@ final class AppStory extends Story
         // Quelques chapitres, en français et en anglais, sur un tiers des séries.
         foreach (SeriesFactory::randomSet(15) as $series) {
             foreach (['fr', 'en'] as $language) {
-                ChapterFactory::createSequence(array_map(
+                $chapters = ChapterFactory::createSequence(array_map(
                     static fn (int $number): array => ['series' => $series, 'language' => $language, 'number' => (string) $number],
                     range(1, random_int(3, 12)),
                 ));
+
+                // Pages : planches classiques, ou longues bandes segmentées pour les webtoons.
+                $pages = SeriesType::Webtoon === $series->getType() ? PageFactory::new()->webtoonStrip() : PageFactory::new();
+                foreach ($chapters as $chapter) {
+                    $pages->sequence(array_map(
+                        static fn (int $position): array => ['chapter' => $chapter, 'position' => $position],
+                        range(1, SeriesType::Webtoon === $series->getType() ? 3 : random_int(4, 8)),
+                    ))->create();
+                }
             }
         }
     }
