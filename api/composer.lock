@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5bc1b8f73f54ccf13474a8bdda332333",
+    "content-hash": "0b99010643db844092704dd7716fbc2f",
     "packages": [
         {
             "name": "api-platform/doctrine-common",
@@ -6883,16 +6883,16 @@
         },
         {
             "name": "symfony/validator",
-            "version": "v8.1.12",
+            "version": "v8.1.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/validator.git",
-                "reference": "840a10ad8c0c7d77c922043b4bae22201f441926"
+                "reference": "97b6f185ada4de7f8da1e03b9bb2a3aa69e2dedf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/validator/zipball/840a10ad8c0c7d77c922043b4bae22201f441926",
-                "reference": "840a10ad8c0c7d77c922043b4bae22201f441926",
+                "url": "https://api.github.com/repos/symfony/validator/zipball/97b6f185ada4de7f8da1e03b9bb2a3aa69e2dedf",
+                "reference": "97b6f185ada4de7f8da1e03b9bb2a3aa69e2dedf",
                 "shasum": ""
             },
             "require": {
@@ -6956,7 +6956,7 @@
             "description": "Provides tools to validate values",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/validator/tree/v8.1.12"
+                "source": "https://github.com/symfony/validator/tree/v8.1.13"
             },
             "funding": [
                 {
@@ -6976,8 +6976,8 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-11-25T08:05:05+00:00",
-            "published-time": "2026-11-25T09:30:16+00:00"
+            "time": "2026-11-25T12:51:26+00:00",
+            "published-time": "2026-11-27T14:50:56+00:00"
         },
         {
             "name": "symfony/var-dumper",

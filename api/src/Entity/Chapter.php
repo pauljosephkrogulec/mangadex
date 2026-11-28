@@ -11,6 +11,7 @@ use App\Entity\Trait\Timestampable;
 use App\Entity\Trait\UuidV7Id;
 use App\Enum\ChapterStatus;
 use App\Repository\ChapterRepository;
+use App\Validator\UniqueChapterNumber;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -20,12 +21,13 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  * Chapitre d'une série, dans une langue donnée (issue #29).
  *
  * Le numéro est décimal (10.5 pour un chapitre bonus) et unique par série et par langue :
- * contrainte en base ici, validateur dédié avec #32.
+ * contrainte UNIQUE en base, vérifiée en amont par le validateur UniqueChapterNumber (#32).
  */
 #[ORM\Entity(repositoryClass: ChapterRepository::class)]
 #[ORM\UniqueConstraint(name: 'chapter_series_language_number_uniq', columns: ['series_id', 'language', 'number'])]
 // Flux « derniers chapitres parus ».
 #[ORM\Index(name: 'chapter_published_at_idx', columns: ['published_at'])]
+#[UniqueChapterNumber]
 #[ApiResource(
     operations: [new GetCollection(), new Get()],
     order: ['publishedAt' => 'DESC'],
