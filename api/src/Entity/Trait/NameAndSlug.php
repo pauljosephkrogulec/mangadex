@@ -6,6 +6,7 @@ namespace App\Entity\Trait;
 
 use App\Entity\SluggableInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -19,6 +20,7 @@ trait NameAndSlug
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
+    #[Groups(['term:read', 'term:write', 'series:read'])]
     private string $name;
 
     /** Généré à la première persistance s'il n'est pas fourni (SlugListener). */
@@ -26,6 +28,7 @@ trait NameAndSlug
     #[Assert\NotBlank(allowNull: true)]
     #[Assert\Length(max: 255)]
     #[Assert\Regex(pattern: SluggableInterface::SLUG_PATTERN, message: 'Le slug ne contient que des minuscules, chiffres et tirets.')]
+    #[Groups(['term:read', 'term:write', 'series:read'])]
     private ?string $slug = null;
 
     public function getName(): string

@@ -4,14 +4,21 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\PartialSearchFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use App\Entity\Trait\NameAndSlug;
 use App\Entity\Trait\Timestampable;
 use App\Entity\Trait\UuidV7Id;
 use App\Repository\AuthorRepository;
+use App\Security\AccessRule;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Auteur ou artiste d'une série (scénario et/ou dessin).
@@ -20,9 +27,20 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: AuthorRepository::class)]
 #[ORM\UniqueConstraint(name: 'author_slug_uniq', columns: ['slug'])]
 #[ApiResource(
-    operations: [new GetCollection(), new Get()],
+    operations: [
+        new GetCollection(parameters: [
+            'name' => new QueryParameter(filter: new PartialSearchFilter(), property: 'name'),
+        ]),
+        new Get(),
+        new Post(security: AccessRule::ADMIN),
+        new Patch(security: AccessRule::ADMIN),
+        new Delete(security: AccessRule::ADMIN),
+    ],
+    normalizationContext: ['groups' => ['common:read', 'timestamps:read', 'term:read']],
+    denormalizationContext: ['groups' => ['term:write']],
     order: ['name' => 'ASC'],
 )]
+#[UniqueEntity(fields: ['slug'], message: 'Ce slug est déjà utilisé par un autre auteur.')]
 class Author implements SluggableInterface, TimestampableInterface
 {
     use NameAndSlug;

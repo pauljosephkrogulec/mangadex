@@ -10,14 +10,14 @@ use App\Entity\Series;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\ConstraintViolationInterface;
-use Symfony\Component\Validator\Validation;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Règles portées par l'entité Page (issue #30), sans base de données.
  */
 final class PageTest extends TestCase
 {
+    use ValidatesWithoutDatabase;
+
     private const string HASH = 'b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9';
 
     public function testPageWithoutSegmentsIsValid(): void
@@ -118,10 +118,5 @@ final class PageTest extends TestCase
     private function chapter(): Chapter
     {
         return new Chapter(new Series('Tower of God'), '1', 'fr');
-    }
-
-    private function validator(): ValidatorInterface
-    {
-        return Validation::createValidatorBuilder()->enableAttributeMapping()->getValidator();
     }
 }

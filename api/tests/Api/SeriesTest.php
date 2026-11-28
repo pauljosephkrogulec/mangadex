@@ -149,12 +149,13 @@ final class SeriesTest extends WebTestCase
         self::assertStringStartsWith($mimeType, (string) $client->getResponse()->headers->get('Content-Type'));
     }
 
-    public function testSeriesIsReadOnlyForNow(): void
+    public function testAnonymousVisitorCannotCreateASeries(): void
     {
         $client = self::createClient();
         $client->request('POST', '/api/series', server: ['CONTENT_TYPE' => 'application/ld+json'], content: '{"title":"X"}');
 
-        self::assertResponseStatusCodeSame(405);
+        self::assertResponseStatusCodeSame(401);
+        SeriesFactory::assert()->empty();
     }
 
     public function testFactoryPersistsASeriesWithItsTimestamps(): void

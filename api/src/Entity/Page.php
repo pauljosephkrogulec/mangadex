@@ -4,14 +4,23 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\IriFilter;
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use App\Entity\Trait\Timestampable;
 use App\Entity\Trait\UuidV7Id;
 use App\Repository\PageRepository;
+use App\Security\AccessRule;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
@@ -25,9 +34,21 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 #[ORM\UniqueConstraint(name: 'page_chapter_position_uniq', columns: ['chapter_id', 'position'])]
 #[ORM\Index(name: 'page_hash_idx', columns: ['hash'])]
 #[ApiResource(
-    operations: [new GetCollection(), new Get()],
+    operations: [
+        new GetCollection(parameters: [
+            // Pages d'un chapitre, dans l'ordre de lecture : `?chapter=/api/chapters/<uuid>`.
+            'chapter' => new QueryParameter(filter: new IriFilter(), property: 'chapter'),
+        ]),
+        new Get(),
+        new Post(security: AccessRule::ADMIN),
+        new Patch(security: AccessRule::ADMIN),
+        new Delete(security: AccessRule::ADMIN),
+    ],
+    normalizationContext: ['groups' => ['common:read', 'timestamps:read', 'page:read']],
+    denormalizationContext: ['groups' => ['page:write']],
     order: ['chapter' => 'ASC', 'position' => 'ASC'],
 )]
+#[UniqueEntity(fields: ['chapter', 'position'], message: 'Cette position est déjà occupée dans ce chapitre.', errorPath: 'position')]
 class Page implements TimestampableInterface
 {
     use Timestampable;
@@ -42,29 +63,38 @@ class Page implements TimestampableInterface
      * @var list<array{image: string, height: int}>
      */
     #[ORM\Column(type: Types::JSON, options: ['jsonb' => true, 'default' => '[]'])]
+    #[Groups(['page:read', 'page:write'])]
     private array $segments = [];
 
     public function __construct(
+        // Toujours un IRI, jamais l'objet embarqué.
+        #[ApiProperty(readableLink: false, writableLink: false)]
         #[ORM\ManyToOne]
         #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+        #[Groups(['page:read', 'page:write'])]
         private Chapter $chapter,
         /** Ordre de lecture dans le chapitre, à partir de 1. */
         #[ORM\Column(type: Types::SMALLINT)]
         #[Assert\Positive]
+        #[Groups(['page:read', 'page:write'])]
         private int $position,
         /** Clé de l'image dans le stockage objet (S3). */
         #[ORM\Column(length: 255)]
         #[Assert\NotBlank]
         #[Assert\Length(max: 255)]
+        #[Groups(['page:read', 'page:write'])]
         private string $image,
         #[ORM\Column]
         #[Assert\Positive]
+        #[Groups(['page:read', 'page:write'])]
         private int $width,
         #[ORM\Column]
         #[Assert\Positive]
+        #[Groups(['page:read', 'page:write'])]
         private int $height,
         #[ORM\Column(length: 64)]
         #[Assert\Regex(pattern: self::HASH_PATTERN, message: "L'empreinte est un SHA-256 hexadécimal (64 caractères).")]
+        #[Groups(['page:read', 'page:write'])]
         private string $hash,
     ) {
     }
@@ -139,6 +169,7 @@ class Page implements TimestampableInterface
         return $this;
     }
 
+    #[Groups(['page:read'])]
     public function isSegmented(): bool
     {
         return [] !== $this->segments;

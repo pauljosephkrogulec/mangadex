@@ -4,16 +4,26 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\ExactFilter;
+use ApiPlatform\Doctrine\Orm\Filter\IriFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SortFilter;
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use App\Entity\Trait\Timestampable;
 use App\Entity\Trait\UuidV7Id;
 use App\Enum\ChapterStatus;
 use App\Repository\ChapterRepository;
+use App\Security\AccessRule;
 use App\Validator\UniqueChapterNumber;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
@@ -29,7 +39,22 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 #[ORM\Index(name: 'chapter_published_at_idx', columns: ['published_at'])]
 #[UniqueChapterNumber]
 #[ApiResource(
-    operations: [new GetCollection(), new Get()],
+    operations: [
+        new GetCollection(parameters: [
+            // Chapitres d'une série : `?series=/api/series/<uuid>`.
+            'series' => new QueryParameter(filter: new IriFilter(), property: 'series'),
+            'language' => new QueryParameter(filter: new ExactFilter(), property: 'language'),
+            'status' => new QueryParameter(filter: new ExactFilter(), property: 'status'),
+            'order[number]' => new QueryParameter(filter: new SortFilter(), property: 'number'),
+            'order[publishedAt]' => new QueryParameter(filter: new SortFilter(), property: 'publishedAt'),
+        ]),
+        new Get(),
+        new Post(security: AccessRule::ADMIN),
+        new Patch(security: AccessRule::ADMIN),
+        new Delete(security: AccessRule::ADMIN),
+    ],
+    normalizationContext: ['groups' => ['common:read', 'timestamps:read', 'chapter:read']],
+    denormalizationContext: ['groups' => ['chapter:write']],
     order: ['publishedAt' => 'DESC'],
 )]
 class Chapter implements TimestampableInterface
@@ -45,30 +70,39 @@ class Chapter implements TimestampableInterface
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
+    #[Groups(['chapter:read', 'chapter:write'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]
     #[Assert\Positive]
+    #[Groups(['chapter:read', 'chapter:write'])]
     private ?int $volume = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[Groups(['chapter:read', 'chapter:write'])]
     private ?\DateTimeImmutable $publishedAt = null;
 
     #[ORM\Column(length: 16, enumType: ChapterStatus::class)]
+    #[Groups(['chapter:read', 'chapter:write'])]
     private ChapterStatus $status = ChapterStatus::Draft;
 
     public function __construct(
+        // Toujours un IRI, jamais l'objet embarqué.
+        #[ApiProperty(readableLink: false, writableLink: false)]
         #[ORM\ManyToOne]
         #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+        #[Groups(['chapter:read', 'chapter:write'])]
         private Series $series,
         /** Chaîne numérique (DECIMAL côté PostgreSQL) : évite les arrondis des flottants. */
         #[ORM\Column(type: Types::DECIMAL, precision: 8, scale: 2)]
         #[Assert\NotBlank]
         #[Assert\Regex(pattern: self::NUMBER_PATTERN, message: 'Le numéro de chapitre est un nombre positif (deux décimales au plus).')]
+        #[Groups(['chapter:read', 'chapter:write'])]
         private string $number,
         #[ORM\Column(length: 8)]
         #[Assert\NotBlank]
         #[Assert\Regex(pattern: self::LANGUAGE_PATTERN, message: 'La langue est un code comme « fr », « en » ou « pt-BR ».')]
+        #[Groups(['chapter:read', 'chapter:write'])]
         private string $language,
     ) {
     }

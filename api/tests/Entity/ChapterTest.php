@@ -7,20 +7,16 @@ namespace App\Tests\Entity;
 use App\Entity\Chapter;
 use App\Entity\Series;
 use App\Enum\ChapterStatus;
-use App\Validator\UniqueChapterNumberValidator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\Validator\ConstraintValidatorFactory;
-use Symfony\Component\Validator\Validation;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Règles portées par l'entité Chapter (issue #29), sans base de données.
  */
 final class ChapterTest extends TestCase
 {
+    use ValidatesWithoutDatabase;
+
     public function testNewChapterIsADraft(): void
     {
         $chapter = $this->chapter('1', 'fr');
@@ -109,23 +105,5 @@ final class ChapterTest extends TestCase
     private function chapter(string $number, string $language): Chapter
     {
         return new Chapter(new Series('Berserk'), $number, $language);
-    }
-
-    /**
-     * Sans base de données : l'unicité du numéro (UniqueChapterNumber) est testée dans
-     * App\Tests\Validator\UniqueChapterNumberValidatorTest.
-     */
-    private function validator(): ValidatorInterface
-    {
-        $withoutDatabase = new class extends ConstraintValidator {
-            public function validate(mixed $value, Constraint $constraint): void
-            {
-            }
-        };
-
-        return Validation::createValidatorBuilder()
-            ->enableAttributeMapping()
-            ->setConstraintValidatorFactory(new ConstraintValidatorFactory([UniqueChapterNumberValidator::class => $withoutDatabase]))
-            ->getValidator();
     }
 }
