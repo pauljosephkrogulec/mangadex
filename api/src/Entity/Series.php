@@ -11,6 +11,7 @@ use App\Entity\Trait\Timestampable;
 use App\Entity\Trait\UuidV7Id;
 use App\Enum\SeriesStatus;
 use App\Enum\SeriesType;
+use App\HtmlSanitizer\SanitizeHtml;
 use App\Repository\SeriesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -47,7 +48,9 @@ class Series implements SluggableInterface, TimestampableInterface
     #[Assert\All([new Assert\NotBlank(), new Assert\Length(max: 255)])]
     private array $alternativeTitles = [];
 
+    /** HTML limité (paragraphes, emphase, listes, liens externes), nettoyé avant l'écriture en base. */
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[SanitizeHtml]
     private ?string $synopsis = null;
 
     #[ORM\Column(length: 16, enumType: SeriesType::class)]

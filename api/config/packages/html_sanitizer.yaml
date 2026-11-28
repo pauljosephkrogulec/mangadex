@@ -1,0 +1,30 @@
+# Nettoyage du HTML saisi ou importé (issue #35) : anti-XSS sur les synopsis, puis les commentaires.
+# Liste blanche stricte : tout ce qui n'est pas listé est retiré, sans le contenu pour script/style/iframe.
+framework:
+    html_sanitizer:
+        sanitizers:
+            app.rich_text:
+                allow_elements:
+                    p: []
+                    br: []
+                    strong: []
+                    b: []
+                    em: []
+                    i: []
+                    u: []
+                    s: []
+                    ul: []
+                    ol: []
+                    li: []
+                    blockquote: []
+                    a: ['href', 'title']
+                drop_elements: ['script', 'style', 'iframe', 'object', 'embed', 'template', 'noscript']
+                # Liens externes uniquement : pas de javascript:, data:, ni de lien relatif.
+                allowed_link_schemes: ['https', 'http', 'mailto']
+                allow_relative_links: false
+                force_https_urls: true
+                force_attributes:
+                    a:
+                        rel: 'noopener noreferrer nofollow ugc'
+                # Au-delà, l'entrée est tronquée avant analyse (protection contre les entrées géantes).
+                max_input_length: 20000
